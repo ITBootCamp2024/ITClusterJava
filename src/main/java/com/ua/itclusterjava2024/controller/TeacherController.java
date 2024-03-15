@@ -7,7 +7,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @CrossOrigin
@@ -18,6 +20,14 @@ public class TeacherController {
 
     public TeacherController(TeacherService teacherService) {
         this.teacherService = teacherService;
+    }
+
+    @GetMapping ("/getPage")
+    public Object hello(){
+        Map<String,String> object = new HashMap<>();
+        object.put("name", "ItCluster");
+        object.put("hello, World", "!");
+        return object;
     }
 
     @GetMapping(value = "/getTeachers")
