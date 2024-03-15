@@ -17,4 +17,11 @@ public class TeacherService {
         List<Teacher> teachers = teacherDAO.findAll();
         return teachers;
     }
+    public Teacher update(Teacher teacher){
+        return teacherDAO.update(teacher);
+    }
+    public Teacher add(Teacher teacher){return teacherDAO.add(teacher);}
+    public void delete(long id){
+        teacherDAO.delete(id);
+    }
 }

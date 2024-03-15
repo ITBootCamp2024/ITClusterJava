@@ -11,4 +11,9 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode
 public class Teacher {
     long id;
+    String name;
+    String role;
+    String status;
+    String email;
+    String details;
 }
