@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
 @RestController
 @RequestMapping("/teacher")
 public class TeacherController {
@@ -30,7 +29,7 @@ public class TeacherController {
         object.put("hello, World", "!");
         return object;
     }
-
+  
     @GetMapping
     public List<Teacher> getTeachers() {
         return service.findAll();
