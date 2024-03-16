@@ -7,50 +7,50 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 
 @RestController
-@CrossOrigin
+@RequestMapping("/teacher")
 public class TeacherController {
 
+    private final TeacherService service;
+
     @Autowired
-    private TeacherService teacherService;
-
-    public TeacherController(TeacherService teacherService) {
-        this.teacherService = teacherService;
+    public TeacherController(TeacherService service) {
+        this.service = service;
     }
 
-    @GetMapping(value = "/getTeachers")
-    public ResponseEntity<List<Teacher>> getAll() {
-        List<Teacher> teachers = teacherService.findAll();
-        return ResponseEntity.ok(teachers);
+    @GetMapping("/getPage")
+    public Object hello() {
+        Map<String, String> object = new HashMap<>();
+        object.put("name", "ItCluster");
+        object.put("hello, World", "!");
+        return object;
     }
 
-    @PutMapping(value = "/updateTeachers")
-    public ResponseEntity<Teacher> update(@RequestBody Teacher teacher) {
-        Teacher updatedTeacher = teacherService.update(teacher);
-        if (updatedTeacher != null) {
-            return ResponseEntity.ok(updatedTeacher);
-        } else {
-            return ResponseEntity.notFound().build();
+    @GetMapping
+    public List<Teacher> getTeachers() {
+        return service.findAll();
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<String> updateEntity(@PathVariable int id, @RequestBody Teacher updatedTeacher) {
+        try {
+            service.update(id, updatedTeacher);
+            return ResponseEntity.ok("Entity updated successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update entity: " + e.getMessage());
         }
     }
 
-
-    @DeleteMapping(value = "/deleteTeachers/{id}")
-    public ResponseEntity<Object> delete(@PathVariable long id) {
-        teacherService.delete(id);
-        return ResponseEntity.noContent().build();
+    @PostMapping
+    public ResponseEntity<Void> addTeacher(@RequestBody Teacher newTeacher) {
+        service.add(newTeacher);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
-
-    @PostMapping(value = "/addTeacher")
-    public ResponseEntity<Teacher> add(@RequestBody Teacher teacher) {
-        Teacher createdTeacher = teacherService.add(teacher);
-        if (createdTeacher != null) {
-            return ResponseEntity.status(HttpStatus.CREATED).body(createdTeacher);
-        } else {
-            return ResponseEntity.badRequest().build();
-        }
-    }
-
 }
+
+
