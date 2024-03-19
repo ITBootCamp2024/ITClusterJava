@@ -2,7 +2,7 @@ package com.ua.itclusterjava2024.service.implementation;
 
 import com.ua.itclusterjava2024.entity.Specialty;
 import com.ua.itclusterjava2024.repository.SpecialtyRepository;
-import com.ua.itclusterjava2024.service.SpecialtyService;
+import com.ua.itclusterjava2024.service.interfaces.SpecialtyService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,8 +27,8 @@ public class SpecialtyServiceImpl implements SpecialtyService {
     }
 
     @Override
-    public Specialty update(Specialty specialty) {
-        return specialtyRepository.save(specialty);
+    public Specialty update(Specialty t) {
+        return specialtyRepository.save(t);
     }
 
     @Override

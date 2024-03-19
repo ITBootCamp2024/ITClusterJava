@@ -2,7 +2,7 @@ package com.ua.itclusterjava2024.service.implementation;
 
 import com.ua.itclusterjava2024.entity.Programs;
 import com.ua.itclusterjava2024.repository.ProgramsRepository;
-import com.ua.itclusterjava2024.service.ProgramsService;
+import com.ua.itclusterjava2024.service.interfaces.ProgramsService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,8 +27,8 @@ public class ProgramsServiceImpl implements ProgramsService {
     }
 
     @Override
-    public Programs update(Programs program) {
-        return programsRepository.save(program);
+    public Programs update(Programs t) {
+        return programsRepository.save(t);
     }
 
     @Override
