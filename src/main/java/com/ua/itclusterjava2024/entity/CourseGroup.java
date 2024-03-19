@@ -1,23 +1,27 @@
 package com.ua.itclusterjava2024.entity;
 
+import jakarta.persistence.Access;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
-@Table(name="course_blocks")
-public class CourseBlock {
+@Table(name="course_groupes")
+public class CourseGroup {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     Long id;
 
-    @Column(name="name", nullable = false)
+    @Column(name="name")
     String name;
 
-    @Column(name="description")
+    @Column(name = "description")
     String description;
+
+    @Column(name = "type_id")
+    Long typeId;
 }

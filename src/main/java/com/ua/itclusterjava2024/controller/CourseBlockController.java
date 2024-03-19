@@ -1,43 +1,48 @@
 package com.ua.itclusterjava2024.controller;
 
 import com.ua.itclusterjava2024.entity.CourseBlock;
-import com.ua.itclusterjava2024.service.CourseBlockServiceImpl;
+import com.ua.itclusterjava2024.service.implementation.CourseBlockServiceImpl;
+import com.ua.itclusterjava2024.service.interfaces.CourseBlockService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller
+@RestController
+//@RequestMapping("/course_blocks")
 public class CourseBlockController {
-    private final CourseBlockServiceImpl courseBlockService;
+    private final CourseBlockService courseBlockService;
 
-    public CourseBlockController(CourseBlockServiceImpl courseBlockService) {
+    public CourseBlockController(CourseBlockService courseBlockService) {
         this.courseBlockService = courseBlockService;
     }
     @GetMapping("/course_blocks")
-    public List<CourseBlock> showCourseBlockList(Model model){
-        return courseBlockService.findAll();
+    public List<CourseBlock> showCourseBlockList(){
+        return courseBlockService.getAll();
     }
 
     // Need to complete
     @PostMapping("/course_blocks/save")
     public CourseBlock saveCourseBlock(@RequestBody CourseBlock courseBlock){
-        return courseBlockService.saveCourseBlock(courseBlock);
+        return courseBlockService.create(courseBlock);
     }
 
     // Need to complete
     @PostMapping("/course_blocks/{id}")
-    public CourseBlock updateCourseBlock(@PathVariable Long id, @RequestBody CourseBlock courseBlock){
-        return courseBlockService.updateCourseBlock(id, courseBlock);
+    public CourseBlock updateCourseBlock(//@PathVariable Long id,
+                                         @RequestBody CourseBlock courseBlock){
+        return courseBlockService.update(courseBlock);
+    }
+
+    @GetMapping("/course_blocks/{id}")
+    public CourseBlock findById(@PathVariable Long id){
+        return courseBlockService.readById(id);
     }
 
     @PostMapping("/course_blocks/delete/{id}")
     public String deleteCourseBlock(@PathVariable Long id){
-        courseBlockService.deleteCourseBlockById(id);
+        courseBlockService.delete(id);
         return "Successfully deleted";
     }
 }
