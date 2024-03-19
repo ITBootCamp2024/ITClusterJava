@@ -18,7 +18,6 @@ public class CourseBlockController {
     public CourseBlockController(CourseBlockServiceImpl courseBlockService) {
         this.courseBlockService = courseBlockService;
     }
-
     @GetMapping("/course_blocks")
     public List<CourseBlock> showCourseBlockList(Model model){
         return courseBlockService.findAll();
