@@ -1,7 +1,7 @@
 package com.ua.itclusterjava2024.controller;
 
-import com.ua.itclusterjava2024.entity.Teacher;
-import com.ua.itclusterjava2024.service.TeacherService;
+import com.ua.itclusterjava2024.entity.Teachers;
+import com.ua.itclusterjava2024.service.implementation.TeachersServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,13 +12,13 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/teacher")
-public class TeacherController {
+@RequestMapping("/teachers")
+public class TeachersController {
 
-    private final TeacherService service;
+    private final TeachersServiceImpl service;
 
     @Autowired
-    public TeacherController(TeacherService service) {
+    public TeachersController(TeachersServiceImpl service) {
         this.service = service;
     }
 
@@ -31,14 +31,14 @@ public class TeacherController {
     }
   
     @GetMapping
-    public List<Teacher> getTeachers() {
-        return service.findAll();
+    public List<Teachers> getTeachers() {
+        return service.getAll();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateEntity(@PathVariable int id, @RequestBody Teacher updatedTeacher) {
+    public ResponseEntity<String> updateEntity(@RequestBody Teachers updatedTeachers) {
         try {
-            service.update(id, updatedTeacher);
+            service.update(updatedTeachers);
             return ResponseEntity.ok("Entity updated successfully");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update entity: " + e.getMessage());
@@ -46,8 +46,8 @@ public class TeacherController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> addTeacher(@RequestBody Teacher newTeacher) {
-        service.add(newTeacher);
+    public ResponseEntity<Void> addTeacher(@RequestBody Teachers newTeachers) {
+        service.create(newTeachers);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }

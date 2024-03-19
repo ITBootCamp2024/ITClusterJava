@@ -1,8 +1,7 @@
 package com.ua.itclusterjava2024.controller;
 
-import com.ua.itclusterjava2024.entity.Programs;
 import com.ua.itclusterjava2024.entity.University;
-import com.ua.itclusterjava2024.service.UniversityService;
+import com.ua.itclusterjava2024.service.interfaces.UniversityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

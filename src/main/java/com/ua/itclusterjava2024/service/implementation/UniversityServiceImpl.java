@@ -2,7 +2,7 @@ package com.ua.itclusterjava2024.service.implementation;
 
 import com.ua.itclusterjava2024.entity.University;
 import com.ua.itclusterjava2024.repository.UniversityRepository;
-import com.ua.itclusterjava2024.service.UniversityService;
+import com.ua.itclusterjava2024.service.interfaces.UniversityService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,8 +26,8 @@ public class UniversityServiceImpl implements UniversityService {
     }
 
     @Override
-    public University update(University university) {
-        return universityRepository.save(university);
+    public University update(University t) {
+        return universityRepository.save(t);
     }
 
     @Override
