@@ -27,7 +27,7 @@ public class CourseGroupController {
     }
 
     // Need to complete
-    @PostMapping("/{id}")
+    @PutMapping("/{id}")
     public CourseGroup updateCourseGroup(//@PathVariable Long id,
                                            @RequestBody CourseGroup courseGroup){
         return courseGroupService.update(courseGroup);
@@ -38,7 +38,7 @@ public class CourseGroupController {
         return courseGroupService.readById(id);
     }
 
-    @PostMapping("/delete/{id}")
+    @DeleteMapping("/delete/{id}")
     public String deleteCourseGroup(@PathVariable Long id){
         courseGroupService.delete(id);
         return "Successfully deleted";
