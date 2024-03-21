@@ -20,13 +20,11 @@ public class CourseGroupController {
         return courseGroupService.getAll();
     }
 
-    // Need to complete
-    @PostMapping("/save")
+    @PostMapping
     public CourseGroup saveCourseGroup(@RequestBody CourseGroup courseGroup){
         return courseGroupService.create(courseGroup);
     }
 
-    // Need to complete
     @PutMapping("/{id}")
     public CourseGroup updateCourseGroup(//@PathVariable Long id,
                                            @RequestBody CourseGroup courseGroup){
@@ -38,7 +36,7 @@ public class CourseGroupController {
         return courseGroupService.readById(id);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public String deleteCourseGroup(@PathVariable Long id){
         courseGroupService.delete(id);
         return "Successfully deleted";

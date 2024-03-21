@@ -20,13 +20,11 @@ public class CourseStatusController {
         return courseStatusService.getAll();
     }
 
-    // Need to complete
-    @PostMapping("/save")
+    @PostMapping
     public CourseStatus saveCourseStatus(@RequestBody CourseStatus courseStatus){
         return courseStatusService.create(courseStatus);
     }
 
-    // Need to complete
     @PutMapping("/{id}")
     public CourseStatus updateCourseStatus(//@PathVariable Long id,
                                          @RequestBody CourseStatus courseStatus){
@@ -38,7 +36,7 @@ public class CourseStatusController {
         return courseStatusService.readById(id);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public String deleteCourseStatus(@PathVariable Long id){
         courseStatusService.delete(id);
         return "Successfully deleted";
