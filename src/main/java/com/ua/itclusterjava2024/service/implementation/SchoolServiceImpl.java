@@ -7,9 +7,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
-@Transactional(readOnly = true)
 public class SchoolServiceImpl implements SchoolService {
     private final SchoolRepository schoolRepository;
 
@@ -17,7 +17,6 @@ public class SchoolServiceImpl implements SchoolService {
         this.schoolRepository = schoolRepository;
     }
 
-    @Transactional
     @Override
     public School create(School school) {
         return schoolRepository.save(school);
@@ -25,10 +24,10 @@ public class SchoolServiceImpl implements SchoolService {
 
     @Override
     public School readById(long id) {
-        return schoolRepository.getById(id);
+        Optional<School> foundSchool = schoolRepository.findById(id);
+        return foundSchool.orElse(null);
     }
 
-    @Transactional
     @Override
     public School update(School school) {
         return schoolRepository.save(school);

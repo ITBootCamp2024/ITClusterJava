@@ -1,11 +1,13 @@
 package com.ua.itclusterjava2024.service.implementation;
 
 import com.ua.itclusterjava2024.entity.Programs;
+import com.ua.itclusterjava2024.entity.School;
 import com.ua.itclusterjava2024.repository.ProgramsRepository;
 import com.ua.itclusterjava2024.service.interfaces.ProgramsService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProgramsServiceImpl implements ProgramsService {
@@ -23,7 +25,8 @@ public class ProgramsServiceImpl implements ProgramsService {
 
     @Override
     public Programs readById(long id) {
-        return programsRepository.getOne(id);
+        Optional<Programs> foundSchool = programsRepository.findById(id);
+        return foundSchool.orElse(null);
     }
 
     @Override

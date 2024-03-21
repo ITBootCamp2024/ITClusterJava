@@ -1,11 +1,13 @@
 package com.ua.itclusterjava2024.service.implementation;
 
 import com.ua.itclusterjava2024.entity.CourseStatus;
+import com.ua.itclusterjava2024.entity.School;
 import com.ua.itclusterjava2024.repository.CourseStatusRepository;
 import com.ua.itclusterjava2024.service.interfaces.CourseStatusService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CourseStatusServiceImpl implements CourseStatusService {
@@ -23,7 +25,8 @@ public class CourseStatusServiceImpl implements CourseStatusService {
 
     @Override
     public CourseStatus readById(long id) {
-        return courseStatusRepository.findCourseStatusById(id);
+        Optional<CourseStatus> foundSchool = courseStatusRepository.findById(id);
+        return foundSchool.orElse(null);
     }
 
     @Override

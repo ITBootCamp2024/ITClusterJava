@@ -1,11 +1,13 @@
 package com.ua.itclusterjava2024.service.implementation;
 
+import com.ua.itclusterjava2024.entity.School;
 import com.ua.itclusterjava2024.entity.University;
 import com.ua.itclusterjava2024.repository.UniversityRepository;
 import com.ua.itclusterjava2024.service.interfaces.UniversityService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UniversityServiceImpl implements UniversityService {
@@ -22,7 +24,8 @@ public class UniversityServiceImpl implements UniversityService {
 
     @Override
     public University readById(long id) {
-        return universityRepository.getById(id);
+        Optional<University> foundSchool = universityRepository.findById(id);
+        return foundSchool.orElse(null);
     }
 
     @Override

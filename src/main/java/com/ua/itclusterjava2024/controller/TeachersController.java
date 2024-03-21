@@ -1,6 +1,7 @@
 package com.ua.itclusterjava2024.controller;
 
 import com.ua.itclusterjava2024.entity.Teachers;
+import com.ua.itclusterjava2024.entity.University;
 import com.ua.itclusterjava2024.service.implementation.TeachersServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,7 +30,7 @@ public class TeachersController {
         object.put("hello, World", "!");
         return object;
     }
-  
+
     @GetMapping
     public List<Teachers> getTeachers() {
         return service.getAll();
@@ -45,11 +46,16 @@ public class TeachersController {
         }
     }
 
-    @PostMapping
-    public ResponseEntity<Void> addTeacher(@RequestBody Teachers newTeachers) {
-        service.create(newTeachers);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable long id) {
+        service.delete(id);
     }
+
+    @GetMapping("/{id}")
+    public Teachers findById(@PathVariable long id) {
+        return service.readById(id);
+    }
+
 }
 
 

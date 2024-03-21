@@ -1,11 +1,13 @@
 package com.ua.itclusterjava2024.service.implementation;
 
+import com.ua.itclusterjava2024.entity.School;
 import com.ua.itclusterjava2024.entity.Specialty;
 import com.ua.itclusterjava2024.repository.SpecialtyRepository;
 import com.ua.itclusterjava2024.service.interfaces.SpecialtyService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class SpecialtyServiceImpl implements SpecialtyService {
@@ -23,7 +25,8 @@ public class SpecialtyServiceImpl implements SpecialtyService {
 
     @Override
     public Specialty readById(long id) {
-        return specialtyRepository.getById(id);
+        Optional<Specialty> foundSchool = specialtyRepository.findById(id);
+        return foundSchool.orElse(null);
     }
 
     @Override
