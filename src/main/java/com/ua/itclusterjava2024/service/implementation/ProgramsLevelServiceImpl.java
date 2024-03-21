@@ -1,11 +1,13 @@
 package com.ua.itclusterjava2024.service.implementation;
 
 import com.ua.itclusterjava2024.entity.ProgramsLevel;
+import com.ua.itclusterjava2024.entity.School;
 import com.ua.itclusterjava2024.repository.ProgramsLevelRepository;
 import com.ua.itclusterjava2024.service.interfaces.ProgramsLevelService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProgramsLevelServiceImpl implements ProgramsLevelService {
@@ -23,7 +25,8 @@ public class ProgramsLevelServiceImpl implements ProgramsLevelService {
 
     @Override
     public ProgramsLevel readById(long id) {
-        return programsLevelRepository.getById(id);
+        Optional<ProgramsLevel> foundSchool = programsLevelRepository.findById(id);
+        return foundSchool.orElse(null);
     }
 
     @Override

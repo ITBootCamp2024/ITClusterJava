@@ -1,11 +1,13 @@
 package com.ua.itclusterjava2024.service.implementation;
 
 import com.ua.itclusterjava2024.entity.CourseGroup;
+import com.ua.itclusterjava2024.entity.School;
 import com.ua.itclusterjava2024.repository.CourseGroupRepository;
 import com.ua.itclusterjava2024.service.interfaces.CourseGroupService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CourseGroupServiceImpl implements CourseGroupService {
@@ -23,7 +25,8 @@ public class CourseGroupServiceImpl implements CourseGroupService {
 
     @Override
     public CourseGroup readById(long id) {
-        return courseGroupRepository.findCourseGroupById(id);
+        Optional<CourseGroup> foundSchool = courseGroupRepository.findById(id);
+        return foundSchool.orElse(null);
     }
 
     @Override
