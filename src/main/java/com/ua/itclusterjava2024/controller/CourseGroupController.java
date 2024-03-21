@@ -21,14 +21,16 @@ public class CourseGroupController {
     }
 
     @PostMapping
-    public CourseGroup saveCourseGroup(@RequestBody CourseGroup courseGroup){
-        return courseGroupService.create(courseGroup);
+    public List<CourseGroup> saveCourseGroup(@RequestBody CourseGroup courseGroup){
+        courseGroupService.create(courseGroup);
+        return courseGroupService.getAll();
     }
 
     @PutMapping("/{id}")
-    public CourseGroup updateCourseGroup(//@PathVariable Long id,
+    public List<CourseGroup> updateCourseGroup(//@PathVariable Long id,
                                            @RequestBody CourseGroup courseGroup){
-        return courseGroupService.update(courseGroup);
+        courseGroupService.update(courseGroup);
+        return courseGroupService.getAll();
     }
 
     @GetMapping("/{id}")
@@ -37,8 +39,8 @@ public class CourseGroupController {
     }
 
     @DeleteMapping("/{id}")
-    public String deleteCourseGroup(@PathVariable Long id){
+    public List<CourseGroup> deleteCourseGroup(@PathVariable Long id){
         courseGroupService.delete(id);
-        return "Successfully deleted";
+        return courseGroupService.getAll();
     }
 }

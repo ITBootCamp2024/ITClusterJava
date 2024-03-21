@@ -29,19 +29,22 @@ public class CourseController {
     }
 
     @PostMapping
-    public Course save(@RequestBody Course course) {
-        return courseService.create(course);
+    public List<Course> save(@RequestBody Course course) {
+        courseService.create(course);
+        return courseService.getAll();
     }
 
     @PutMapping("/{id}")
-    public Course update(
+    public List<Course> update(
             @RequestBody Course course
     ) {
-        return courseService.update(course);
+        courseService.update(course);
+        return courseService.getAll();
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable long id) {
+    public List<Course> delete(@PathVariable long id) {
         courseService.delete(id);
+        return courseService.getAll();
     }
 }

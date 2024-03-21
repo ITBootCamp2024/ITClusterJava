@@ -30,19 +30,22 @@ public class ProgramsLevelController {
     }
 
     @PostMapping
-    public ProgramsLevel save(@RequestBody ProgramsLevel programsLevel) {
-        return programsLevelService.create(programsLevel);
+    public List<ProgramsLevel> save(@RequestBody ProgramsLevel programsLevel) {
+        programsLevelService.create(programsLevel);
+        return programsLevelService.getAll();
     }
 
     @PutMapping("/{id}")
-    public ProgramsLevel update(
+    public List<ProgramsLevel> update(
             @RequestBody ProgramsLevel programsLevel
     ) {
-        return programsLevelService.update(programsLevel);
+        programsLevelService.update(programsLevel);
+        return programsLevelService.getAll();
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable long id) {
+    public List<ProgramsLevel> delete(@PathVariable long id) {
         programsLevelService.delete(id);
+        return programsLevelService.getAll();
     }
 }

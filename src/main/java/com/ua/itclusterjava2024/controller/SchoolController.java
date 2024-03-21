@@ -29,17 +29,20 @@ public class SchoolController {
     }
 
     @PostMapping
-    public School save(@RequestBody School school) {
-        return schoolService.create(school);
+    public List<School> save(@RequestBody School school) {
+        schoolService.create(school);
+        return schoolService.getAll();
     }
 
     @PutMapping("/{id}")
-    public School update(@RequestBody School school) {
-        return schoolService.update(school);
+    public List<School> update(@RequestBody School school) {
+        schoolService.update(school);
+        return schoolService.getAll();
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable long id) {
+    public List<School> delete(@PathVariable long id) {
         schoolService.delete(id);
+        return schoolService.getAll();
     }
 }
