@@ -27,7 +27,7 @@ public class CourseStatusController {
     }
 
     // Need to complete
-    @PostMapping("/{id}")
+    @PutMapping("/{id}")
     public CourseStatus updateCourseStatus(//@PathVariable Long id,
                                          @RequestBody CourseStatus courseStatus){
         return courseStatusService.update(courseStatus);
@@ -38,7 +38,7 @@ public class CourseStatusController {
         return courseStatusService.readById(id);
     }
 
-    @PostMapping("/delete/{id}")
+    @DeleteMapping("/delete/{id}")
     public String deleteCourseStatus(@PathVariable Long id){
         courseStatusService.delete(id);
         return "Successfully deleted";

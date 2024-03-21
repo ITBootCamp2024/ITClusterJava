@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-//@RequestMapping("/course_blocks")
+@RequestMapping("/course_blocks")
 public class CourseBlockController {
     private final CourseBlockService courseBlockService;
 
@@ -29,7 +29,7 @@ public class CourseBlockController {
     }
 
     // Need to complete
-    @PostMapping("/course_blocks/{id}")
+    @PutMapping("/course_blocks/{id}")
     public CourseBlock updateCourseBlock(//@PathVariable Long id,
                                          @RequestBody CourseBlock courseBlock){
         return courseBlockService.update(courseBlock);
@@ -40,7 +40,7 @@ public class CourseBlockController {
         return courseBlockService.readById(id);
     }
 
-    @PostMapping("/course_blocks/delete/{id}")
+    @DeleteMapping("/course_blocks/delete/{id}")
     public String deleteCourseBlock(@PathVariable Long id){
         courseBlockService.delete(id);
         return "Successfully deleted";
