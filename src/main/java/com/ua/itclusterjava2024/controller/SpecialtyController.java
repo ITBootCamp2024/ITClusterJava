@@ -29,19 +29,22 @@ public class SpecialtyController {
     }
 
     @PostMapping
-    public Specialty save(@RequestBody Specialty specialty) {
-        return specialtyService.create(specialty);
+    public List<Specialty> save(@RequestBody Specialty specialty) {
+        specialtyService.create(specialty);
+        return specialtyService.getAll();
     }
 
     @PutMapping("/{id}")
-    public Specialty update(
+    public List<Specialty> update(
             @RequestBody Specialty specialty
     ) {
-        return specialtyService.update(specialty);
+         specialtyService.update(specialty);
+        return specialtyService.getAll();
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable long id) {
+    public List<Specialty> delete(@PathVariable long id) {
         specialtyService.delete(id);
+        return  specialtyService.getAll();
     }
 }
