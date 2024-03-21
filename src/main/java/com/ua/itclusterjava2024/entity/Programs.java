@@ -1,6 +1,8 @@
 package com.ua.itclusterjava2024.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,6 +22,8 @@ public class Programs {
     private Long id;
 
     @Column(name = "name", nullable = false)
+    @NotEmpty
+    @Size(max = 200, message = "Name of programs have to contain up to 200 symbols")
     private String name;
 
 
@@ -29,6 +33,8 @@ public class Programs {
     private Integer specialty_id;
 
     @Column(name = "program_link", nullable = false)
+    @NotEmpty
+    @Size(max = 200, message = "Program link have to contain up to 200 symbols")
     private String program_link;
 
     //TODO
@@ -40,14 +46,22 @@ public class Programs {
     private Integer level;
 
     @Column(name = "garant", nullable = false)
+    @NotEmpty
+    @Size(max = 100, message = "Garant have to contain up to 100 symbols")
     private String garant;
 
     @Column(name = "school_name", nullable = false)
+    @NotEmpty
+    @Size(max = 200, message = "School name have to contain up to 200 symbols")
     private String school_name;
 
     @Column(name = "school_link", nullable = false)
+    @NotEmpty
+    @Size(max = 200, message = "School link have to contain up to 200 symbols")
     private String school_link;
 
     @Column(name = "clabus_link", nullable = false)
+    @NotEmpty
+    @Size(max = 200, message = "Clabus link have to contain up to 200 symbols")
     private String clabus_link;
 }
