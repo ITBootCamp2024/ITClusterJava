@@ -28,19 +28,22 @@ public class ProgramsController {
     }
 
     @PostMapping
-    public Programs save(@RequestBody Programs programs) {
-        return programsService.create(programs);
+    public List<Programs> save(@RequestBody Programs programs) {
+        programsService.create(programs);
+        return programsService.getAll();
     }
 
     @PutMapping("/{id}")
-    public Programs update(
+    public List<Programs> update(
             @RequestBody Programs programs
     ) {
-        return programsService.update(programs);
+        programsService.update(programs);
+        return programsService.getAll();
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable long id) {
+    public List<Programs> delete(@PathVariable long id) {
         programsService.delete(id);
+        return programsService.getAll();
     }
 }

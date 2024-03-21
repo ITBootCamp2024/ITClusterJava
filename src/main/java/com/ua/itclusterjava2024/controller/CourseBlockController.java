@@ -20,14 +20,16 @@ public class CourseBlockController {
     }
 
     @PostMapping
-    public CourseBlock saveCourseBlock(@RequestBody CourseBlock courseBlock){
-        return courseBlockService.create(courseBlock);
+    public List<CourseBlock> saveCourseBlock(@RequestBody CourseBlock courseBlock){
+        courseBlockService.create(courseBlock);
+        return courseBlockService.getAll();
     }
 
     @PutMapping("/{id}")
-    public CourseBlock updateCourseBlock(//@PathVariable Long id,
+    public List<CourseBlock> updateCourseBlock(//@PathVariable Long id,
                                          @RequestBody CourseBlock courseBlock){
-        return courseBlockService.update(courseBlock);
+        courseBlockService.update(courseBlock);
+        return courseBlockService.getAll();
     }
 
     @GetMapping("/{id}")
@@ -36,8 +38,8 @@ public class CourseBlockController {
     }
 
     @DeleteMapping("/{id}")
-    public String deleteCourseBlock(@PathVariable Long id){
+    public List<CourseBlock> deleteCourseBlock(@PathVariable Long id){
         courseBlockService.delete(id);
-        return "Successfully deleted";
+        return courseBlockService.getAll();
     }
 }

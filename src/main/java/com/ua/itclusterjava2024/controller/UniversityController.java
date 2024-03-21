@@ -29,19 +29,22 @@ public class UniversityController {
     }
 
     @PostMapping
-    public University save(@RequestBody University university) {
-        return universityService.create(university);
+    public List<University> save(@RequestBody University university) {
+        universityService.create(university);
+        return universityService.getAll();
     }
 
     @PutMapping("/{id}")
-    public University update(
+    public List<University> update(
             @RequestBody University university
     ) {
-        return universityService.update(university);
+        universityService.update(university);
+        return universityService.getAll();
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable long id) {
+    public List<University> delete(@PathVariable long id) {
         universityService.delete(id);
+        return universityService.getAll();
     }
 }

@@ -21,14 +21,16 @@ public class CourseStatusController {
     }
 
     @PostMapping
-    public CourseStatus saveCourseStatus(@RequestBody CourseStatus courseStatus){
-        return courseStatusService.create(courseStatus);
+    public List<CourseStatus> saveCourseStatus(@RequestBody CourseStatus courseStatus){
+        courseStatusService.create(courseStatus);
+        return courseStatusService.getAll();
     }
 
     @PutMapping("/{id}")
-    public CourseStatus updateCourseStatus(//@PathVariable Long id,
+    public List<CourseStatus> updateCourseStatus(//@PathVariable Long id,
                                          @RequestBody CourseStatus courseStatus){
-        return courseStatusService.update(courseStatus);
+        courseStatusService.update(courseStatus);
+        return courseStatusService.getAll();
     }
 
     @GetMapping("/{id}")
@@ -37,8 +39,8 @@ public class CourseStatusController {
     }
 
     @DeleteMapping("/{id}")
-    public String deleteCourseStatus(@PathVariable Long id){
+    public List<CourseStatus> deleteCourseStatus(@PathVariable Long id){
         courseStatusService.delete(id);
-        return "Successfully deleted";
+        return courseStatusService.getAll();
     }
 }
