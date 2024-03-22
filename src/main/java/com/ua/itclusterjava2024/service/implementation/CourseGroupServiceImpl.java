@@ -30,7 +30,8 @@ public class CourseGroupServiceImpl implements CourseGroupService {
     }
 
     @Override
-    public CourseGroup update(CourseGroup courseGroup) {
+    public CourseGroup update(long id, CourseGroup courseGroup) {
+        courseGroup.setId(id);
         return courseGroupRepository.save(courseGroup);
     }
 

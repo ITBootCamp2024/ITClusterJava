@@ -31,7 +31,8 @@ public class CourseBlockServiceImpl implements CourseBlockService {
     }
 
     @Override
-    public CourseBlock update(CourseBlock courseBlock) {
+    public CourseBlock update(long id, CourseBlock courseBlock) {
+        courseBlock.setId(id);
         return courseBlockRepository.save(courseBlock);
     }
 

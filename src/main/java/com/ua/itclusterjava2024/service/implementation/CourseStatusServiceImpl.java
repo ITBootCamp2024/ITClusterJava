@@ -30,7 +30,8 @@ public class CourseStatusServiceImpl implements CourseStatusService {
     }
 
     @Override
-    public CourseStatus update(CourseStatus courseStatus) {
+    public CourseStatus update(long id, CourseStatus courseStatus) {
+        courseStatus.setId(id);
         return courseStatusRepository.save(courseStatus);
     }
 

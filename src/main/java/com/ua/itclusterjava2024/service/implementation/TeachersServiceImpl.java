@@ -30,7 +30,8 @@ public class TeachersServiceImpl implements TeachersService {
     }
 
     @Override
-    public Teachers update(Teachers t) {
+    public Teachers update(long id, Teachers t) {
+        t.setId(id);
         return teachersRepository.save(t);
     }
 

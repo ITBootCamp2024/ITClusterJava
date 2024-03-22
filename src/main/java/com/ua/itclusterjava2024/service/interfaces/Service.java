@@ -7,7 +7,7 @@ import java.util.List;
 public interface Service <T>{
     T create(T specialty);
     T readById(long id);
-    T update(T t);
+    T update(long id, T t);
     void delete(long id);
     List<T> getAll();
 }

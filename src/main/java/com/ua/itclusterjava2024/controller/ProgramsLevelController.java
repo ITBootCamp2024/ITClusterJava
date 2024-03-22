@@ -36,10 +36,10 @@ public class ProgramsLevelController {
     }
 
     @PutMapping("/{id}")
-    public List<ProgramsLevel> update(
+    public List<ProgramsLevel> update(@PathVariable("id") Long id,
             @RequestBody ProgramsLevel programsLevel
     ) {
-        programsLevelService.update(programsLevel);
+        programsLevelService.update(id, programsLevel);
         return programsLevelService.getAll();
     }
 

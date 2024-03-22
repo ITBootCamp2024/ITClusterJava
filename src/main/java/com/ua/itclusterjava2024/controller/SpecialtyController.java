@@ -35,10 +35,10 @@ public class SpecialtyController {
     }
 
     @PutMapping("/{id}")
-    public List<Specialty> update(
+    public List<Specialty> update(@PathVariable("id") Long id,
             @RequestBody Specialty specialty
     ) {
-         specialtyService.update(specialty);
+         specialtyService.update(id, specialty);
         return specialtyService.getAll();
     }
 

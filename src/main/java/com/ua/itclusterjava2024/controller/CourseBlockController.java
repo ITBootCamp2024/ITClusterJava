@@ -26,9 +26,9 @@ public class CourseBlockController {
     }
 
     @PutMapping("/{id}")
-    public List<CourseBlock> updateCourseBlock(//@PathVariable Long id,
+    public List<CourseBlock> updateCourseBlock(@PathVariable("id") Long id,
                                          @RequestBody CourseBlock courseBlock){
-        courseBlockService.update(courseBlock);
+        courseBlockService.update(id, courseBlock);
         return courseBlockService.getAll();
     }
 

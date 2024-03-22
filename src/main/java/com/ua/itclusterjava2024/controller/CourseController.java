@@ -35,10 +35,10 @@ public class CourseController {
     }
 
     @PutMapping("/{id}")
-    public List<Course> update(
+    public List<Course> update(@PathVariable("id") Long id,
             @RequestBody Course course
     ) {
-        courseService.update(course);
+        courseService.update(id, course);
         return courseService.getAll();
     }
 
