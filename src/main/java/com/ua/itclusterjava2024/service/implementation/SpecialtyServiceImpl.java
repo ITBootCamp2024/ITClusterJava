@@ -30,7 +30,8 @@ public class SpecialtyServiceImpl implements SpecialtyService {
     }
 
     @Override
-    public Specialty update(Specialty t) {
+    public Specialty update(long id, Specialty t) {
+        t.setId(id);
         return specialtyRepository.save(t);
     }
 

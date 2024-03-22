@@ -30,7 +30,8 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public Course update(Course course) {
+    public Course update(long id, Course course) {
+        course.setId(id);
         return courseRepository.save(course);
     }
 

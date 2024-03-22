@@ -27,9 +27,9 @@ public class CourseGroupController {
     }
 
     @PutMapping("/{id}")
-    public List<CourseGroup> updateCourseGroup(//@PathVariable Long id,
+    public List<CourseGroup> updateCourseGroup(@PathVariable("id") Long id,
                                            @RequestBody CourseGroup courseGroup){
-        courseGroupService.update(courseGroup);
+        courseGroupService.update(id, courseGroup);
         return courseGroupService.getAll();
     }
 

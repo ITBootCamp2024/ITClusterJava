@@ -35,8 +35,9 @@ public class SchoolController {
     }
 
     @PutMapping("/{id}")
-    public List<School> update(@RequestBody School school) {
-        schoolService.update(school);
+    public List<School> update(@PathVariable("id") Long id,
+                               @RequestBody School school) {
+        schoolService.update(id, school);
         return schoolService.getAll();
     }
 

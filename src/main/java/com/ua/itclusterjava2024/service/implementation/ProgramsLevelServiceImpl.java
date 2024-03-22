@@ -30,7 +30,8 @@ public class ProgramsLevelServiceImpl implements ProgramsLevelService {
     }
 
     @Override
-    public ProgramsLevel update(ProgramsLevel programsLevel) {
+    public ProgramsLevel update(long id, ProgramsLevel programsLevel) {
+        programsLevel.setId(id);
         return programsLevelRepository.save(programsLevel);
     }
 

@@ -30,7 +30,8 @@ public class ProgramsServiceImpl implements ProgramsService {
     }
 
     @Override
-    public Programs update(Programs t) {
+    public Programs update(long id, Programs t) {
+        t.setId(id);
         return programsRepository.save(t);
     }
 

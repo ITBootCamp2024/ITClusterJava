@@ -27,9 +27,9 @@ public class CourseStatusController {
     }
 
     @PutMapping("/{id}")
-    public List<CourseStatus> updateCourseStatus(//@PathVariable Long id,
+    public List<CourseStatus> updateCourseStatus(@PathVariable("id") Long id,
                                          @RequestBody CourseStatus courseStatus){
-        courseStatusService.update(courseStatus);
+        courseStatusService.update(id, courseStatus);
         return courseStatusService.getAll();
     }
 

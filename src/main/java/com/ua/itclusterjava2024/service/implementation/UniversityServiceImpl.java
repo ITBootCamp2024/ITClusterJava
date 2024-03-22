@@ -29,7 +29,8 @@ public class UniversityServiceImpl implements UniversityService {
     }
 
     @Override
-    public University update(University t) {
+    public University update(long id, University t) {
+        t.setId(id);
         return universityRepository.save(t);
     }
 

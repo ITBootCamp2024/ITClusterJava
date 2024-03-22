@@ -34,10 +34,10 @@ public class ProgramsController {
     }
 
     @PutMapping("/{id}")
-    public List<Programs> update(
+    public List<Programs> update(@PathVariable("id") Long id,
             @RequestBody Programs programs
     ) {
-        programsService.update(programs);
+        programsService.update(id, programs);
         return programsService.getAll();
     }
 

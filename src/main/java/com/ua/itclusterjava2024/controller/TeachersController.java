@@ -48,8 +48,9 @@ public class TeachersController {
 //    }
 
     @PutMapping("/{id}")
-    public List<Teachers> updateEntity(@RequestBody Teachers updatedTeachers) {
-            service.update(updatedTeachers);
+    public List<Teachers> updateEntity(@PathVariable("id") Long id,
+                                       @RequestBody Teachers updatedTeachers) {
+            service.update(id, updatedTeachers);
             return service.getAll();
     }
 
