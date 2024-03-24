@@ -4,6 +4,7 @@ import com.ua.itclusterjava2024.entity.University;
 import com.ua.itclusterjava2024.service.interfaces.UniversityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
@@ -29,22 +30,22 @@ public class UniversityController {
     }
 
     @PostMapping
-    public List<University> save(@RequestBody University university) {
+    public ModelAndView save(@RequestBody University university) {
         universityService.create(university);
-        return universityService.getAll();
+        return new ModelAndView("redirect:/course_blocks");
     }
 
     @PutMapping("/{id}")
-    public List<University> update(@PathVariable("id") Long id,
+    public ModelAndView update(@PathVariable("id") Long id,
             @RequestBody University university
     ) {
         universityService.update(id, university);
-        return universityService.getAll();
+        return new ModelAndView("redirect:/course_blocks");
     }
 
     @DeleteMapping("/{id}")
-    public List<University> delete(@PathVariable long id) {
+    public ModelAndView delete(@PathVariable long id) {
         universityService.delete(id);
-        return universityService.getAll();
+        return new ModelAndView("redirect:/course_blocks");
     }
 }

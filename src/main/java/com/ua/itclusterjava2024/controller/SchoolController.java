@@ -1,10 +1,10 @@
 package com.ua.itclusterjava2024.controller;
 
-import com.ua.itclusterjava2024.entity.Programs;
 import com.ua.itclusterjava2024.entity.School;
 import com.ua.itclusterjava2024.service.interfaces.SchoolService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
@@ -29,21 +29,21 @@ public class SchoolController {
     }
 
     @PostMapping
-    public List<School> save(@RequestBody School school) {
+    public ModelAndView save(@RequestBody School school) {
         schoolService.create(school);
-        return schoolService.getAll();
+        return new ModelAndView("redirect:/course_blocks");
     }
 
     @PutMapping("/{id}")
-    public List<School> update(@PathVariable("id") Long id,
+    public ModelAndView update(@PathVariable("id") Long id,
                                @RequestBody School school) {
         schoolService.update(id, school);
-        return schoolService.getAll();
+        return new ModelAndView("redirect:/course_blocks");
     }
 
     @DeleteMapping("/{id}")
-    public List<School> delete(@PathVariable long id) {
+    public ModelAndView delete(@PathVariable long id) {
         schoolService.delete(id);
-        return schoolService.getAll();
+        return new ModelAndView("redirect:/course_blocks");
     }
 }

@@ -3,6 +3,7 @@ package com.ua.itclusterjava2024.controller;
 import com.ua.itclusterjava2024.entity.CourseGroup;
 import com.ua.itclusterjava2024.service.interfaces.CourseGroupService;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
@@ -21,16 +22,16 @@ public class CourseGroupController {
     }
 
     @PostMapping
-    public List<CourseGroup> saveCourseGroup(@RequestBody CourseGroup courseGroup){
+    public ModelAndView saveCourseGroup(@RequestBody CourseGroup courseGroup){
         courseGroupService.create(courseGroup);
-        return courseGroupService.getAll();
+        return new ModelAndView("redirect:/course_blocks");
     }
 
     @PutMapping("/{id}")
-    public List<CourseGroup> updateCourseGroup(@PathVariable("id") Long id,
+    public ModelAndView updateCourseGroup(@PathVariable("id") Long id,
                                            @RequestBody CourseGroup courseGroup){
         courseGroupService.update(id, courseGroup);
-        return courseGroupService.getAll();
+        return new ModelAndView("redirect:/course_blocks");
     }
 
     @GetMapping("/{id}")
@@ -39,8 +40,8 @@ public class CourseGroupController {
     }
 
     @DeleteMapping("/{id}")
-    public List<CourseGroup> deleteCourseGroup(@PathVariable Long id){
+    public ModelAndView deleteCourseGroup(@PathVariable Long id){
         courseGroupService.delete(id);
-        return courseGroupService.getAll();
+        return new ModelAndView("redirect:/course_blocks");
     }
 }

@@ -3,7 +3,10 @@ package com.ua.itclusterjava2024.controller;
 import com.ua.itclusterjava2024.entity.Specialty;
 import com.ua.itclusterjava2024.service.interfaces.SpecialtyService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
@@ -19,8 +22,10 @@ public class SpecialtyController {
     }
 
     @GetMapping
-    public List<Specialty> findAll() {
-        return specialtyService.getAll();
+    public Page<Specialty> findAll(@RequestParam(defaultValue = "0") int page) {
+        int pageSize = 20;
+        PageRequest pageable = PageRequest.of(page, pageSize);
+        return specialtyService.getAll(pageable);
     }
 
     @GetMapping("/{id}")
@@ -29,22 +34,23 @@ public class SpecialtyController {
     }
 
     @PostMapping
-    public List<Specialty> save(@RequestBody Specialty specialty) {
+    public ModelAndView save(@RequestBody Specialty specialty) {
         specialtyService.create(specialty);
-        return specialtyService.getAll();
+        return new ModelAndView("redirect:/course_blocks");
     }
 
     @PutMapping("/{id}")
-    public List<Specialty> update(@PathVariable("id") Long id,
+    public ModelAndView update(@PathVariable("id") Long id,
             @RequestBody Specialty specialty
     ) {
          specialtyService.update(id, specialty);
-        return specialtyService.getAll();
+        return new ModelAndView("redirect:/course_blocks");
     }
 
     @DeleteMapping("/{id}")
-    public List<Specialty> delete(@PathVariable long id) {
+    public ModelAndView delete(@PathVariable long id) {
         specialtyService.delete(id);
-        return  specialtyService.getAll();
+        return new ModelAndView("redirect:/course_blocks");
+
     }
 }

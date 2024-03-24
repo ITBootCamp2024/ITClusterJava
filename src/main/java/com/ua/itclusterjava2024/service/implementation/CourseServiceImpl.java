@@ -1,9 +1,11 @@
 package com.ua.itclusterjava2024.service.implementation;
 
 import com.ua.itclusterjava2024.entity.Course;
-import com.ua.itclusterjava2024.entity.School;
 import com.ua.itclusterjava2024.repository.CourseRepository;
 import com.ua.itclusterjava2024.service.interfaces.CourseService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -43,5 +45,10 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public List<Course> getAll() {
         return courseRepository.findAll();
+    }
+
+    @Override
+    public Page<Course> getAll(Pageable pageable) {
+        return courseRepository.findAll(pageable);
     }
 }

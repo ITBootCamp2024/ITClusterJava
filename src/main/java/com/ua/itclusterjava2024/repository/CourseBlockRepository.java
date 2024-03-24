@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CourseBlockRepository extends JpaRepository<CourseBlock, Long> {
-    CourseBlock findCourseBlockById(Long id);
+
 }

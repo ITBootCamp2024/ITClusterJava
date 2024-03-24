@@ -1,10 +1,10 @@
 package com.ua.itclusterjava2024.controller;
 
-import com.ua.itclusterjava2024.entity.Course;
 import com.ua.itclusterjava2024.entity.ProgramsLevel;
 import com.ua.itclusterjava2024.service.interfaces.ProgramsLevelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
@@ -30,22 +30,22 @@ public class ProgramsLevelController {
     }
 
     @PostMapping
-    public List<ProgramsLevel> save(@RequestBody ProgramsLevel programsLevel) {
+    public ModelAndView save(@RequestBody ProgramsLevel programsLevel) {
         programsLevelService.create(programsLevel);
-        return programsLevelService.getAll();
+        return new ModelAndView("redirect:/course_blocks");
     }
 
     @PutMapping("/{id}")
-    public List<ProgramsLevel> update(@PathVariable("id") Long id,
+    public ModelAndView update(@PathVariable("id") Long id,
             @RequestBody ProgramsLevel programsLevel
     ) {
         programsLevelService.update(id, programsLevel);
-        return programsLevelService.getAll();
+        return new ModelAndView("redirect:/course_blocks");
     }
 
     @DeleteMapping("/{id}")
-    public List<ProgramsLevel> delete(@PathVariable long id) {
+    public ModelAndView delete(@PathVariable long id) {
         programsLevelService.delete(id);
-        return programsLevelService.getAll();
+        return new ModelAndView("redirect:/course_blocks");
     }
 }

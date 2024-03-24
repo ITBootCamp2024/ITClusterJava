@@ -1,9 +1,11 @@
 package com.ua.itclusterjava2024.service.implementation;
 
 import com.ua.itclusterjava2024.entity.CourseStatus;
-import com.ua.itclusterjava2024.entity.School;
 import com.ua.itclusterjava2024.repository.CourseStatusRepository;
 import com.ua.itclusterjava2024.service.interfaces.CourseStatusService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -38,6 +40,11 @@ public class CourseStatusServiceImpl implements CourseStatusService {
     @Override
     public void delete(long id) {
         courseStatusRepository.deleteById(id);
+    }
+
+    @Override
+    public Page<CourseStatus> getAll(Pageable pageable) {
+        return courseStatusRepository.findAll(pageable);
     }
 
     @Override

@@ -1,9 +1,11 @@
 package com.ua.itclusterjava2024.service.implementation;
 
-import com.ua.itclusterjava2024.entity.School;
 import com.ua.itclusterjava2024.entity.Specialty;
 import com.ua.itclusterjava2024.repository.SpecialtyRepository;
 import com.ua.itclusterjava2024.service.interfaces.SpecialtyService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -43,5 +45,10 @@ public class SpecialtyServiceImpl implements SpecialtyService {
     @Override
     public List<Specialty> getAll() {
         return specialtyRepository.findAll();
+    }
+
+    @Override
+    public Page<Specialty> getAll(Pageable pageable) {
+        return specialtyRepository.findAll(pageable);
     }
 }
