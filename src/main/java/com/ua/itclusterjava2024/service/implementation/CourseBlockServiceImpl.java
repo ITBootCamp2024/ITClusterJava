@@ -3,6 +3,9 @@ package com.ua.itclusterjava2024.service.implementation;
 import com.ua.itclusterjava2024.entity.CourseBlock;
 import com.ua.itclusterjava2024.repository.CourseBlockRepository;
 import com.ua.itclusterjava2024.service.interfaces.CourseBlockService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -10,7 +13,6 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@Transactional(readOnly = true)
 public class CourseBlockServiceImpl implements CourseBlockService {
 
     private final CourseBlockRepository courseBlockRepository;
@@ -45,4 +47,10 @@ public class CourseBlockServiceImpl implements CourseBlockService {
     public List<CourseBlock> getAll() {
         return courseBlockRepository.findAll();
     }
+
+    @Override
+    public Page<CourseBlock> getAll(Pageable pageable) {
+        return courseBlockRepository.findAll(pageable);
+    }
+
 }

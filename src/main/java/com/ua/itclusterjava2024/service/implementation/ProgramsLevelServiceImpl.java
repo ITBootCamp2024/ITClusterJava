@@ -1,9 +1,11 @@
 package com.ua.itclusterjava2024.service.implementation;
 
 import com.ua.itclusterjava2024.entity.ProgramsLevel;
-import com.ua.itclusterjava2024.entity.School;
 import com.ua.itclusterjava2024.repository.ProgramsLevelRepository;
 import com.ua.itclusterjava2024.service.interfaces.ProgramsLevelService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -38,6 +40,11 @@ public class ProgramsLevelServiceImpl implements ProgramsLevelService {
     @Override
     public void delete(long id) {
         programsLevelRepository.deleteById(id);
+    }
+
+    @Override
+    public Page<ProgramsLevel> getAll(Pageable pageable) {
+        return programsLevelRepository.findAll(pageable);
     }
 
     @Override

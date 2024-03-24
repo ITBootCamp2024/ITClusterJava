@@ -3,8 +3,10 @@ package com.ua.itclusterjava2024.service.implementation;
 import com.ua.itclusterjava2024.entity.School;
 import com.ua.itclusterjava2024.repository.SchoolRepository;
 import com.ua.itclusterjava2024.service.interfaces.SchoolService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -42,5 +44,10 @@ public class SchoolServiceImpl implements SchoolService {
     @Override
     public List<School> getAll() {
         return schoolRepository.findAll();
+    }
+
+    @Override
+    public Page<School> getAll(Pageable pageable) {
+        return schoolRepository.findAll(pageable);
     }
 }

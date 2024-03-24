@@ -1,9 +1,11 @@
 package com.ua.itclusterjava2024.service.implementation;
 
 import com.ua.itclusterjava2024.entity.Programs;
-import com.ua.itclusterjava2024.entity.School;
 import com.ua.itclusterjava2024.repository.ProgramsRepository;
 import com.ua.itclusterjava2024.service.interfaces.ProgramsService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -39,6 +41,10 @@ public class ProgramsServiceImpl implements ProgramsService {
     public void delete(long id) {
         programsRepository.deleteById(id);
     }
+
+    @Override
+    public Page<Programs> getAll(Pageable pageable) {
+        return programsRepository.findAll(pageable);    }
 
     @Override
     public List<Programs> getAll() {

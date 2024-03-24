@@ -1,11 +1,12 @@
 package com.ua.itclusterjava2024.service.implementation;
 
-import com.ua.itclusterjava2024.entity.School;
 import com.ua.itclusterjava2024.entity.Teachers;
 import com.ua.itclusterjava2024.repository.TeachersRepository;
 import com.ua.itclusterjava2024.service.interfaces.TeachersService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -43,5 +44,10 @@ public class TeachersServiceImpl implements TeachersService {
     @Override
     public List<Teachers> getAll() {
         return teachersRepository.findAll();
+    }
+
+    @Override
+    public Page<Teachers> getAll(Pageable pageable) {
+        return teachersRepository.findAll(pageable);
     }
 }

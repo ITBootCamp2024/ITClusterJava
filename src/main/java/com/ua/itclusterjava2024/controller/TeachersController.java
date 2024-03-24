@@ -1,17 +1,14 @@
 package com.ua.itclusterjava2024.controller;
 
-import com.ua.itclusterjava2024.entity.CourseBlock;
 import com.ua.itclusterjava2024.entity.Teachers;
-import com.ua.itclusterjava2024.entity.University;
 import com.ua.itclusterjava2024.service.implementation.TeachersServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/teachers")
@@ -24,40 +21,24 @@ public class TeachersController {
         this.service = service;
     }
 
-    @GetMapping("/getPage")
-    public Object hello() {
-        Map<String, String> object = new HashMap<>();
-        object.put("name", "ItCluster");
-        object.put("hello, World", "!");
-        return object;
-    }
-
     @GetMapping
-    public List<Teachers> getTeachers() {
-        return service.getAll();
+    public Page<Teachers> getAll(@RequestParam(defaultValue = "0") int page){
+        int pageSize = 20;
+        PageRequest pageable = PageRequest.of(page, pageSize);
+        return service.getAll(pageable);
     }
-
-//    @PutMapping("/{id}")
-//    public ResponseEntity<String> updateEntity(@RequestBody Teachers updatedTeachers) {
-//        try {
-//            service.update(updatedTeachers);
-//            return ResponseEntity.ok("Entity updated successfully");
-//        } catch (Exception e) {
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update entity: " + e.getMessage());
-//        }
-//    }
 
     @PutMapping("/{id}")
-    public List<Teachers> updateEntity(@PathVariable("id") Long id,
+    public ModelAndView updateEntity(@PathVariable("id") Long id,
                                        @RequestBody Teachers updatedTeachers) {
             service.update(id, updatedTeachers);
-            return service.getAll();
+        return new ModelAndView("redirect:/course_blocks");
     }
 
     @DeleteMapping("/{id}")
-    public List<Teachers> delete(@PathVariable long id) {
+    public ModelAndView delete(@PathVariable long id) {
         service.delete(id);
-        return service.getAll();
+        return new ModelAndView("redirect:/course_blocks");
     }
 
     @GetMapping("/{id}")
@@ -66,9 +47,9 @@ public class TeachersController {
     }
 
     @PostMapping
-    public List<Teachers> saveCourseBlock(@RequestBody Teachers newTeachers){
+    public ModelAndView saveCourseBlock(@RequestBody Teachers newTeachers){
         service.create(newTeachers);
-        return service.getAll();
+        return new ModelAndView("redirect:/course_blocks");
     }
 }
 

@@ -4,6 +4,7 @@ import com.ua.itclusterjava2024.entity.Programs;
 import com.ua.itclusterjava2024.service.interfaces.ProgramsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
@@ -28,22 +29,22 @@ public class ProgramsController {
     }
 
     @PostMapping
-    public List<Programs> save(@RequestBody Programs programs) {
+    public ModelAndView save(@RequestBody Programs programs) {
         programsService.create(programs);
-        return programsService.getAll();
+        return new ModelAndView("redirect:/course_blocks");
     }
 
     @PutMapping("/{id}")
-    public List<Programs> update(@PathVariable("id") Long id,
+    public ModelAndView update(@PathVariable("id") Long id,
             @RequestBody Programs programs
     ) {
         programsService.update(id, programs);
-        return programsService.getAll();
+        return new ModelAndView("redirect:/course_blocks");
     }
 
     @DeleteMapping("/{id}")
-    public List<Programs> delete(@PathVariable long id) {
+    public ModelAndView delete(@PathVariable long id) {
         programsService.delete(id);
-        return programsService.getAll();
+        return new ModelAndView("redirect:/course_blocks");
     }
 }
