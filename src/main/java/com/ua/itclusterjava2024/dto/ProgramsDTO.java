@@ -1,6 +1,5 @@
 package com.ua.itclusterjava2024.dto;
 
-import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;

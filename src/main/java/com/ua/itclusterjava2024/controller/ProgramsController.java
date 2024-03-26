@@ -26,18 +26,18 @@ public class ProgramsController {
 
     @GetMapping
     public List<ProgramsDTO> findAll() {
-        return programsService.getAll().stream().map(i -> convertToProgramsDTO(i))
+        return programsService.getAll().stream().map(i -> convertToDTO(i))
                 .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
     public ProgramsDTO findById(@PathVariable long id) {
-        return convertToProgramsDTO(programsService.readById(id));
+        return convertToDTO(programsService.readById(id));
     }
 
     @PostMapping
     public ModelAndView save(@RequestBody ProgramsDTO programsDTO) {
-        programsService.create(convertToPrograms(programsDTO));
+        programsService.create(convertToEntity(programsDTO));
         return new ModelAndView("redirect:/course_blocks");
     }
 
@@ -45,7 +45,7 @@ public class ProgramsController {
     public ModelAndView update(@PathVariable("id") Long id,
             @RequestBody ProgramsDTO programsDTO
     ) {
-        programsService.update(id, convertToPrograms(programsDTO));
+        programsService.update(id, convertToEntity(programsDTO));
         return new ModelAndView("redirect:/course_blocks");
     }
 
@@ -55,11 +55,11 @@ public class ProgramsController {
         return new ModelAndView("redirect:/course_blocks");
     }
 
-    private Programs convertToPrograms(ProgramsDTO programsDTO){
+    private Programs convertToEntity(ProgramsDTO programsDTO){
         return modelMapper.map(programsDTO, Programs.class);
     }
 
-    private ProgramsDTO convertToProgramsDTO(Programs programs){
+    private ProgramsDTO convertToDTO(Programs programs){
         return modelMapper.map(programs, ProgramsDTO.class);
     }
 }

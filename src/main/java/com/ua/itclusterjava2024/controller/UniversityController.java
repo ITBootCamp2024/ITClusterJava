@@ -1,45 +1,51 @@
 package com.ua.itclusterjava2024.controller;
 
+import com.ua.itclusterjava2024.dto.UniversityDTO;
 import com.ua.itclusterjava2024.entity.University;
 import com.ua.itclusterjava2024.service.interfaces.UniversityService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/university")
 public class UniversityController {
 
     private final UniversityService universityService;
+    private final ModelMapper modelMapper;
 
     @Autowired
-    public UniversityController(UniversityService universityService) {
+    public UniversityController(UniversityService universityService, ModelMapper modelMapper) {
         this.universityService = universityService;
+        this.modelMapper = modelMapper;
     }
 
     @GetMapping
-    public List<University> findAll() {
-        return universityService.getAll();
+    public List<UniversityDTO> findAll() {
+        return universityService.getAll().stream().map(i -> convertToDTO(i))
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
-    public University findById(@PathVariable long id) {
-        return universityService.readById(id);
+    public UniversityDTO findById(@PathVariable long id) {
+        return convertToDTO(universityService.readById(id));
     }
 
     @PostMapping
-    public ModelAndView save(@RequestBody University university) {
-        universityService.create(university);
+    public ModelAndView save(@RequestBody UniversityDTO universityDTO) {
+        universityService.create(convertToEntity(universityDTO));
         return new ModelAndView("redirect:/course_blocks");
     }
 
     @PutMapping("/{id}")
     public ModelAndView update(@PathVariable("id") Long id,
-            @RequestBody University university
+            @RequestBody UniversityDTO universityDTO
     ) {
-        universityService.update(id, university);
+        universityService.update(id, convertToEntity(universityDTO));
         return new ModelAndView("redirect:/course_blocks");
     }
 
@@ -47,5 +53,13 @@ public class UniversityController {
     public ModelAndView delete(@PathVariable long id) {
         universityService.delete(id);
         return new ModelAndView("redirect:/course_blocks");
+    }
+
+    private University convertToEntity(UniversityDTO universityDTO){
+        return modelMapper.map(universityDTO, University.class);
+    }
+
+    private UniversityDTO convertToDTO(University university){
+        return modelMapper.map(university, UniversityDTO.class);
     }
 }
