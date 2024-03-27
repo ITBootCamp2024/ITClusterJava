@@ -33,7 +33,7 @@ public class CourseStatusController {
         return new RedirectView("redirect:/course_statuses");
     }
 
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public RedirectView updateCourseStatus(@PathVariable("id") Long id,
                                          @RequestBody CourseStatusDTO courseStatusDTO){
         courseStatusService.update(id, convertToEntity(courseStatusDTO));
