@@ -1,14 +1,12 @@
 package com.ua.itclusterjava2024.controller;
 
-import com.ua.itclusterjava2024.dto.ProgramsDTO;
 import com.ua.itclusterjava2024.dto.SchoolDTO;
-import com.ua.itclusterjava2024.entity.Programs;
 import com.ua.itclusterjava2024.entity.School;
 import com.ua.itclusterjava2024.service.interfaces.SchoolService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,7 +25,7 @@ public class SchoolController {
 
     @GetMapping
     public List<SchoolDTO> findAll() {
-        return schoolService.getAll().stream().map(i -> convertToDTO(i))
+        return schoolService.getAll().stream().map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
 
@@ -37,22 +35,22 @@ public class SchoolController {
     }
 
     @PostMapping
-    public ModelAndView save(@RequestBody SchoolDTO schoolDTO) {
+    public RedirectView save(@RequestBody SchoolDTO schoolDTO) {
         schoolService.create(convertToEntity(schoolDTO));
-        return new ModelAndView("redirect:/course_blocks");
+        return new RedirectView("/school");
     }
 
     @PutMapping("/{id}")
-    public ModelAndView update(@PathVariable("id") Long id,
+    public RedirectView update(@PathVariable("id") Long id,
                                @RequestBody SchoolDTO schoolDTO) {
         schoolService.update(id, convertToEntity(schoolDTO));
-        return new ModelAndView("redirect:/course_blocks");
+        return new RedirectView("/school");
     }
 
     @DeleteMapping("/{id}")
-    public ModelAndView delete(@PathVariable long id) {
+    public RedirectView delete(@PathVariable long id) {
         schoolService.delete(id);
-        return new ModelAndView("redirect:/course_blocks");
+        return new RedirectView("/school");
     }
 
     private School convertToEntity(SchoolDTO schoolDTO){

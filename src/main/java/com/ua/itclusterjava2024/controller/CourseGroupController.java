@@ -1,13 +1,11 @@
 package com.ua.itclusterjava2024.controller;
 
 import com.ua.itclusterjava2024.dto.CourseGroupDTO;
-import com.ua.itclusterjava2024.dto.ProgramsDTO;
 import com.ua.itclusterjava2024.entity.CourseGroup;
-import com.ua.itclusterjava2024.entity.Programs;
 import com.ua.itclusterjava2024.service.interfaces.CourseGroupService;
 import org.modelmapper.ModelMapper;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,21 +23,21 @@ public class CourseGroupController {
 
     @GetMapping
     public List<CourseGroupDTO> showCourseGroupesList(){
-        return courseGroupService.getAll().stream().map(i -> convertToDTO(i))
+        return courseGroupService.getAll().stream().map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
 
     @PostMapping
-    public ModelAndView saveCourseGroup(@RequestBody CourseGroupDTO courseGroupDTO){
+    public RedirectView saveCourseGroup(@RequestBody CourseGroupDTO courseGroupDTO){
         courseGroupService.create(convertToEntity(courseGroupDTO));
-        return new ModelAndView("redirect:/course_blocks");
+        return new RedirectView("/course_groupes");
     }
 
     @PutMapping("/{id}")
-    public ModelAndView updateCourseGroup(@PathVariable("id") Long id,
+    public RedirectView updateCourseGroup(@PathVariable("id") Long id,
                                            @RequestBody CourseGroupDTO courseGroupDTO){
         courseGroupService.update(id, convertToEntity(courseGroupDTO));
-        return new ModelAndView("redirect:/course_blocks");
+        return new RedirectView("/course_groupes");
     }
 
     @GetMapping("/{id}")
@@ -48,9 +46,9 @@ public class CourseGroupController {
     }
 
     @DeleteMapping("/{id}")
-    public ModelAndView deleteCourseGroup(@PathVariable Long id){
+    public RedirectView deleteCourseGroup(@PathVariable Long id){
         courseGroupService.delete(id);
-        return new ModelAndView("redirect:/course_blocks");
+        return new RedirectView("/course_groupes");
     }
 
     private CourseGroup convertToEntity(CourseGroupDTO courseGroupDTO){
