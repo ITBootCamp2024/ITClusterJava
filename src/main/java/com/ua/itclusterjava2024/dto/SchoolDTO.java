@@ -1,6 +1,7 @@
 package com.ua.itclusterjava2024.dto;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -11,6 +12,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class SchoolDTO {
+    @Id
+    long id;
     @NotEmpty
     @Size(max = 100, message = "Name of school have to contain up to 100 symbols")
     String name;
