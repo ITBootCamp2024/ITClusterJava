@@ -6,7 +6,7 @@ import com.ua.itclusterjava2024.service.interfaces.ProgramsService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,7 +26,7 @@ public class ProgramsController {
 
     @GetMapping
     public List<ProgramsDTO> findAll() {
-        return programsService.getAll().stream().map(i -> convertToDTO(i))
+        return programsService.getAll().stream().map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
 
@@ -36,23 +36,23 @@ public class ProgramsController {
     }
 
     @PostMapping
-    public ModelAndView save(@RequestBody ProgramsDTO programsDTO) {
+    public RedirectView save(@RequestBody ProgramsDTO programsDTO) {
         programsService.create(convertToEntity(programsDTO));
-        return new ModelAndView("redirect:/course_blocks");
+        return new RedirectView("/programs");
     }
 
     @PutMapping("/{id}")
-    public ModelAndView update(@PathVariable("id") Long id,
+    public RedirectView update(@PathVariable("id") Long id,
             @RequestBody ProgramsDTO programsDTO
     ) {
         programsService.update(id, convertToEntity(programsDTO));
-        return new ModelAndView("redirect:/course_blocks");
+        return new RedirectView("/course_blocks");
     }
 
     @DeleteMapping("/{id}")
-    public ModelAndView delete(@PathVariable long id) {
+    public RedirectView delete(@PathVariable long id) {
         programsService.delete(id);
-        return new ModelAndView("redirect:/course_blocks");
+        return new RedirectView("/programs");
     }
 
     private Programs convertToEntity(ProgramsDTO programsDTO){

@@ -13,7 +13,7 @@ import org.modelmapper.spi.ErrorMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -35,7 +35,7 @@ public class UniversityController {
 
     @GetMapping
     public List<UniversityDTO> findAll() {
-        return universityService.getAll().stream().map(i -> convertToDTO(i))
+        return universityService.getAll().stream().map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
 
@@ -45,17 +45,17 @@ public class UniversityController {
     }
 
     @PostMapping
-    public ModelAndView save(@RequestBody @Valid UniversityDTO universityDTO, BindingResult bindingResult) {
+    public RedirectView save(@RequestBody @Valid UniversityDTO universityDTO, BindingResult bindingResult) {
         universityValidator.validate(universityDTO, bindingResult);
         if (bindingResult.hasErrors()){
             throw new ValidationException(bindingResult);
         }
         universityService.create(convertToEntity(universityDTO));
-        return new ModelAndView("redirect:/course_blocks");
+        return new RedirectView("/university");
     }
 
     @PutMapping("/{id}")
-    public ModelAndView update(@PathVariable("id") Long id,
+    public RedirectView update(@PathVariable("id") Long id,
             @RequestBody @Valid UniversityDTO universityDTO,
                                BindingResult bindingResult
     ) {
@@ -64,13 +64,13 @@ public class UniversityController {
             throw new ValidationException(bindingResult);
         }
         universityService.update(id, convertToEntity(universityDTO));
-        return new ModelAndView("redirect:/course_blocks");
+        return new RedirectView("/university");
     }
 
     @DeleteMapping("/{id}")
-    public ModelAndView delete(@PathVariable long id) {
+    public RedirectView delete(@PathVariable long id) {
         universityService.delete(id);
-        return new ModelAndView("redirect:/course_blocks");
+        return new RedirectView("/university");
     }
 
     private University convertToEntity(UniversityDTO universityDTO){
