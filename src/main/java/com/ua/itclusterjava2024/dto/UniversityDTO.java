@@ -17,14 +17,14 @@ public class UniversityDTO {
     @NotEmpty
     @Size(max = 200, message = "Name of university have to contain up to 200 symbols")
     private String name;
-
-    @NotEmpty
-    @Size(max = 20, message = "Shortname of university have to contain up to 20 symbols")
-    private String shortname;
-
-    @NotEmpty
-    @Size(max = 100, message = "Site link of university have to contain up to 100 symbols")
-    private String siteLink;
-
-    private String programs_list;
+//
+//    @NotEmpty
+//    @Size(max = 20, message = "Shortname of university have to contain up to 20 symbols")
+//    private String shortname;
+//
+//    @NotEmpty
+//    @Size(max = 100, message = "Site link of university have to contain up to 100 symbols")
+//    private String siteLink;
+//
+//    private String programs_list;
 }

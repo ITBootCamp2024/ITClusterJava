@@ -1,7 +1,7 @@
 package com.ua.itclusterjava2024.controller;
 
+import com.ua.itclusterjava2024.dto.*;
 import com.ua.itclusterjava2024.wrappers.PageWrapper;
-import com.ua.itclusterjava2024.dto.TeachersDTO;
 import com.ua.itclusterjava2024.entity.Teachers;
 import com.ua.itclusterjava2024.service.implementation.TeachersServiceImpl;
 import org.modelmapper.ModelMapper;
@@ -66,8 +66,13 @@ public class TeachersController {
         return modelMapper.map(teachersDTO, Teachers.class);
     }
 
-    private TeachersDTO convertToDTO(Teachers teachers) {
-        return modelMapper.map(teachers, TeachersDTO.class);
+    public TeachersDTO convertToDTO(Teachers teacher) {
+        TeachersDTO dto = modelMapper.map(teacher, TeachersDTO.class);
+        dto.setPosition(new PositionDTO(teacher.getPosition().getId(), teacher.getPosition().getName()));
+        dto.setDegree(new DegreeDTO(teacher.getDegree().getId(), teacher.getDegree().getName()));
+        dto.setUniversity(new UniversityDTO(teacher.getDepartment().getUniversity().getId(), teacher.getDepartment().getUniversity().getUniversity()));
+        dto.setDepartment(new DepartmentDTO(teacher.getDepartment().getId(), teacher.getDepartment().getName()));
+        return dto;
     }
 }
 
