@@ -22,23 +22,31 @@ public class Teachers {
     long id;
     @Column(name = "name")
     @NotEmpty
-    @Size(max = 50, message = "Teacher's name have to contain up to 50 symbols")
+    @Size(max = 100, message = "Teacher's name have to contain up to 100 symbols")
     String name;
-    @Column(name = "role")
+    @Column(name = "position")
     @NotEmpty
-    @Size(max = 50, message = "Teacher's role have to contain up to 50 symbols")
-    String role;
-    @Column(name = "status")
+    @Size(max = 100, message = "Teacher's position have to contain up to 100 symbols")
+    String position;
+    @Column(name = "degree")
     @NotEmpty
-    @Size(max = 100, message = "Teacher's status have to contain up to 100 symbols")
-    String status;
+    @Size(max = 100, message = "Teacher's degree have to contain up to 100 symbols")
+    String degree;
+    @Column(name = "university")
+    @NotEmpty
+    @Size(max = 100, message = "Teacher's university have to contain up to 100 symbols")
+    String university;
+    @Column(name = "department")
+    @NotEmpty
+    @Size(max = 100, message = "Teacher's department have to contain up to 100 symbols")
+    String department;
     @Column(name = "email")
     @Email
     @NotEmpty
     @Size(max = 100, message = "Teacher's email have to contain up to 100 symbols")
     String email;
-    @Column(name = "details")
+    @Column(name = "comments")
     @NotEmpty
-    @Size(max = 100, message = "Teacher's details have to contain up to 100 symbols")
-    String details;
+    @Size(max = 100, message = "Teacher's comments have to contain up to 100 symbols")
+    String comments;
 }

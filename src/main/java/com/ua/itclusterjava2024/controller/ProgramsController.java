@@ -41,7 +41,7 @@ public class ProgramsController {
         return new RedirectView("/programs");
     }
 
-    @PatchMapping("/{id}")
+    @PutMapping("/{id}")
     public RedirectView update(@PathVariable("id") Long id,
             @RequestBody ProgramsDTO programsDTO
     ) {

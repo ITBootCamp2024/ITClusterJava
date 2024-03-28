@@ -32,7 +32,7 @@ public class CourseBlockController {
         return new RedirectView("redirect:/course_blocks");
     }
 
-    @PatchMapping("/{id}")
+    @PutMapping("/{id}")
     public RedirectView updateCourseBlock(@PathVariable("id") Long id,
                                          @RequestBody CourseBlockDTO courseBlockDTO){
         courseBlockService.update(id, convertToEntity(courseBlockDTO));

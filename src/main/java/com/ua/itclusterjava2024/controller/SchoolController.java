@@ -40,7 +40,7 @@ public class SchoolController {
         return new RedirectView("/school");
     }
 
-    @PatchMapping("/{id}")
+    @PutMapping("/{id}")
     public RedirectView update(@PathVariable("id") Long id,
                                @RequestBody SchoolDTO schoolDTO) {
         schoolService.update(id, convertToEntity(schoolDTO));

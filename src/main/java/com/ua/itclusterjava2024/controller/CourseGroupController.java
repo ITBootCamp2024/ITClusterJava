@@ -33,7 +33,7 @@ public class CourseGroupController {
         return new RedirectView("/course_groupes");
     }
 
-    @PatchMapping("/{id}")
+    @PutMapping("/{id}")
     public RedirectView updateCourseGroup(@PathVariable("id") Long id,
                                            @RequestBody CourseGroupDTO courseGroupDTO){
         courseGroupService.update(id, convertToEntity(courseGroupDTO));

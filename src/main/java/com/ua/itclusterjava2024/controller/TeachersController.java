@@ -38,7 +38,7 @@ public class TeachersController {
         return pageWrapper;
     }
 
-    @PatchMapping("/{id}")
+    @PutMapping("/{id}")
     public RedirectView updateEntity(@PathVariable("id") Long id,
                                      @RequestBody TeachersDTO teachersDTO) {
         service.update(id, convertToEntity(teachersDTO));

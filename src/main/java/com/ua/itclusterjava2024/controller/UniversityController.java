@@ -54,7 +54,7 @@ public class UniversityController {
         return new RedirectView("/university");
     }
 
-    @PatchMapping("/{id}")
+    @PutMapping("/{id}")
     public RedirectView update(@PathVariable("id") Long id,
             @RequestBody @Valid UniversityDTO universityDTO,
                                BindingResult bindingResult

@@ -39,7 +39,7 @@ public class CourseController {
         return new RedirectView("/course");
     }
 
-    @PatchMapping("/{id}")
+    @PutMapping("/{id}")
     public RedirectView update(@PathVariable("id") Long id,
             @RequestBody CourseDTO courseDTO
     ) {
