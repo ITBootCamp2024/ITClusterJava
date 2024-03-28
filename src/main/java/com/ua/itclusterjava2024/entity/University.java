@@ -18,8 +18,8 @@ public class University {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "university")
-    private String university;
+    @Column(name = "name")
+    private String name;
 
     @Column(name = "abbr")
     private String abbr;
