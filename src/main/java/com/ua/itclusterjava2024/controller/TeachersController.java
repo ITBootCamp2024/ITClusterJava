@@ -1,6 +1,6 @@
 package com.ua.itclusterjava2024.controller;
 
-import com.ua.itclusterjava2024.controller.wrappers.PageWrapper;
+import com.ua.itclusterjava2024.wrappers.PageWrapper;
 import com.ua.itclusterjava2024.dto.TeachersDTO;
 import com.ua.itclusterjava2024.entity.Teachers;
 import com.ua.itclusterjava2024.service.implementation.TeachersServiceImpl;
@@ -38,7 +38,7 @@ public class TeachersController {
         return pageWrapper;
     }
 
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public RedirectView updateEntity(@PathVariable("id") Long id,
                                      @RequestBody TeachersDTO teachersDTO) {
         service.update(id, convertToEntity(teachersDTO));
