@@ -8,32 +8,30 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class TeachersDTO {
     @Id
-    long id;
+    private long id;
+
     @NotEmpty
-    @Size(max = 100, message = "Teacher's name have to contain up to 100 symbols")
-    String name;
-    @NotEmpty
-    @Size(max = 100, message = "Teacher's position have to contain up to 100 symbols")
-    String position;
-    @NotEmpty
-    @Size(max = 100, message = "Teacher's degree have to contain up to 100 symbols")
-    String degree;
-    @NotEmpty
-    @Size(max = 100, message = "Teacher's university have to contain up to 100 symbols")
-    String university;
-    @NotEmpty
-    @Size(max = 100, message = "Teacher's department have to contain up to 100 symbols")
-    String department;
+    @Size(max = 100, message = "Teacher's name must contain up to 100 characters")
+    private String name;
+
+    private PositionDTO position;
+    private DegreeDTO degree;
+    private UniversityDTO university;
+    private DepartmentDTO department;
+
     @Email
     @NotEmpty
-    @Size(max = 100, message = "Teacher's email have to contain up to 100 symbols")
-    String email;
+    @Size(max = 100, message = "Teacher's email must contain up to 100 characters")
+    private String email;
+
     @NotEmpty
-    @Size(max = 100, message = "Teacher's comments have to contain up to 100 symbols")
-    String comments;
+    @Size(max = 100, message = "Teacher's comments must contain up to 100 characters")
+    private String comments;
 }
+

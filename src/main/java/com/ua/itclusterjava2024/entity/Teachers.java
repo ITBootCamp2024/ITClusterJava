@@ -12,41 +12,29 @@ import lombok.NoArgsConstructor;
 @Data
 @Entity
 @Table(name = "teachers")
-@AllArgsConstructor
-@NoArgsConstructor
-@EqualsAndHashCode
 public class Teachers {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    long id;
+    private Long id;
+
     @Column(name = "name")
-    @NotEmpty
-    @Size(max = 100, message = "Teacher's name have to contain up to 100 symbols")
-    String name;
-    @Column(name = "position")
-    @NotEmpty
-    @Size(max = 100, message = "Teacher's position have to contain up to 100 symbols")
-    String position;
-    @Column(name = "degree")
-    @NotEmpty
-    @Size(max = 100, message = "Teacher's degree have to contain up to 100 symbols")
-    String degree;
-    @Column(name = "university")
-    @NotEmpty
-    @Size(max = 100, message = "Teacher's university have to contain up to 100 symbols")
-    String university;
-    @Column(name = "department")
-    @NotEmpty
-    @Size(max = 100, message = "Teacher's department have to contain up to 100 symbols")
-    String department;
+    private String name;
+
+    @ManyToOne
+    @JoinColumn(name = "position")
+    private Position position;
+
+    @ManyToOne
+    @JoinColumn(name = "degree")
+    private Degree degree;
+
     @Column(name = "email")
-    @Email
-    @NotEmpty
-    @Size(max = 100, message = "Teacher's email have to contain up to 100 symbols")
-    String email;
+    private String email;
+
+    @ManyToOne
+    @JoinColumn(name = "department")
+    private Department department;
+
     @Column(name = "comments")
-    @NotEmpty
-    @Size(max = 100, message = "Teacher's comments have to contain up to 100 symbols")
-    String comments;
+    private String comments;
 }

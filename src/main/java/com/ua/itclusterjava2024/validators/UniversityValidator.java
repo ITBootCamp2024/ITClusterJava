@@ -20,15 +20,15 @@ public class UniversityValidator implements Validator {
         if (checkNullAndEmpty(universityDTO.getName())) {
             errors.rejectValue("name", "", "Name mustn't be empty");
         }
-        if (checkNullAndEmpty(universityDTO.getShortname())) {
-            errors.rejectValue("shortname", "", "Shortname mustn't be empty");
-        }
-        if (checkNullAndEmpty(universityDTO.getSiteLink())) {
-            errors.rejectValue("siteLink", "", "Sitelink mustn't be empty");
-        }
-        if (checkNullAndEmpty(universityDTO.getPrograms_list())) {
-            errors.rejectValue("programs_list", "", "Programs list mustn't be empty");
-        }
+//        if (checkNullAndEmpty(universityDTO.getShortname())) {
+//            errors.rejectValue("shortname", "", "Shortname mustn't be empty");
+//        }
+//        if (checkNullAndEmpty(universityDTO.getSiteLink())) {
+//            errors.rejectValue("siteLink", "", "Sitelink mustn't be empty");
+//        }
+//        if (checkNullAndEmpty(universityDTO.getPrograms_list())) {
+//            errors.rejectValue("programs_list", "", "Programs list mustn't be empty");
+//        }
     }
 
     private static boolean checkNullAndEmpty(String string) {
