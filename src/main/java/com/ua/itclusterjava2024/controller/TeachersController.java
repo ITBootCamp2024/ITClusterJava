@@ -70,7 +70,7 @@ public class TeachersController {
         TeachersDTO dto = modelMapper.map(teacher, TeachersDTO.class);
         dto.setPosition(new PositionDTO(teacher.getPosition().getId(), teacher.getPosition().getName()));
         dto.setDegree(new DegreeDTO(teacher.getDegree().getId(), teacher.getDegree().getName()));
-        dto.setUniversity(new UniversityDTO(teacher.getDepartment().getUniversity().getId(), teacher.getDepartment().getUniversity().getUniversity()));
+        dto.setUniversity(new UniversityDTO(teacher.getDepartment().getUniversity().getId(), teacher.getDepartment().getUniversity().getName()));
         dto.setDepartment(new DepartmentDTO(teacher.getDepartment().getId(), teacher.getDepartment().getName()));
         return dto;
     }

@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Entity
 @Data
-@Table(name = "deparment") //TODO Помилка в назві таблиці у SQL-дампі, повинно бути department
+@Table(name = "department")
 public class Department {
 
     @Id
