@@ -1,4 +1,4 @@
-package com.ua.itclusterjava2024.controller.wrappers;
+package com.ua.itclusterjava2024.wrappers;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
