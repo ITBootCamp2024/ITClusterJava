@@ -1,9 +1,13 @@
 package com.ua.itclusterjava2024.controller;
 
 import com.ua.itclusterjava2024.dto.*;
+import com.ua.itclusterjava2024.entity.Degree;
+import com.ua.itclusterjava2024.entity.Department;
+import com.ua.itclusterjava2024.entity.Position;
+import com.ua.itclusterjava2024.entity.University;
+import com.ua.itclusterjava2024.service.implementation.*;
 import com.ua.itclusterjava2024.wrappers.PageWrapper;
 import com.ua.itclusterjava2024.entity.Teachers;
-import com.ua.itclusterjava2024.service.implementation.TeachersServiceImpl;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,12 +20,20 @@ import org.springframework.web.servlet.view.RedirectView;
 @RequestMapping("/teachers")
 public class TeachersController {
 
-    private final TeachersServiceImpl service;
+    private final TeachersServiceImpl teachersService;
+    private final DegreeServiceImpl degreeService;
+    private final PositionServiceImpl positionService;
+    private final DepartmentServiceImpl departmentService;
+    private final UniversityServiceImpl universityService;
     private final ModelMapper modelMapper;
 
     @Autowired
-    public TeachersController(TeachersServiceImpl service, ModelMapper modelMapper) {
-        this.service = service;
+    public TeachersController(TeachersServiceImpl teachersService, DegreeServiceImpl degreeService, PositionServiceImpl positionService, DepartmentServiceImpl departmentService, UniversityServiceImpl universityService, ModelMapper modelMapper) {
+        this.teachersService = teachersService;
+        this.degreeService = degreeService;
+        this.positionService = positionService;
+        this.departmentService = departmentService;
+        this.universityService = universityService;
         this.modelMapper = modelMapper;
     }
 
@@ -29,7 +41,7 @@ public class TeachersController {
     public PageWrapper<TeachersDTO> findAll(@RequestParam(defaultValue = "0") int page) {
         int pageSize = 20;
         PageRequest pageable = PageRequest.of(page, pageSize);
-        Page<TeachersDTO> teachersPage = service.getAll(pageable).map(this::convertToDTO);
+        Page<TeachersDTO> teachersPage = teachersService.getAll(pageable).map(this::convertToDTO);
 
         PageWrapper<TeachersDTO> pageWrapper = new PageWrapper<>();
         pageWrapper.setContent(teachersPage.getContent());
@@ -41,30 +53,89 @@ public class TeachersController {
     @PatchMapping("/{id}")
     public RedirectView updateEntity(@PathVariable("id") Long id,
                                      @RequestBody TeachersDTO teachersDTO) {
-        service.update(id, convertToEntity(teachersDTO));
-        return new RedirectView("/teachers");
+        Teachers existingTeacher = teachersService.readById(id);
+
+        if (teachersDTO.getName() != null) {
+            existingTeacher.setName(teachersDTO.getName());
+        }
+
+        if (teachersDTO.getPosition() != null) {
+            Position position = positionService.readById(teachersDTO.getPosition().getId());
+            existingTeacher.setPosition(position);
+        }
+
+        if (teachersDTO.getDegree() != null) {
+            Degree degree = degreeService.readById(teachersDTO.getDegree().getId());
+            existingTeacher.setDegree(degree);
+        }
+
+        if (teachersDTO.getDepartment() != null) {
+            Department department = departmentService.readById(teachersDTO.getDepartment().getId());
+            existingTeacher.setDepartment(department);
+        }
+
+        if (teachersDTO.getUniversity() != null) {
+            University university = universityService.readById(teachersDTO.getUniversity().getId());
+            Department department = existingTeacher.getDepartment();
+            department.setUniversity(university);
+        }
+
+        if (teachersDTO.getEmail() != null) {
+            existingTeacher.setEmail(teachersDTO.getEmail());
+        }
+        if (teachersDTO.getComments() != null) {
+            existingTeacher.setComments(teachersDTO.getComments());
+        }
+        teachersService.create(existingTeacher);
+        return new RedirectView("http://localhost:8080/teachers", true);
     }
+
 
     @DeleteMapping("/{id}")
     public RedirectView delete(@PathVariable long id) {
-        service.delete(id);
+        teachersService.delete(id);
         return new RedirectView("/teachers");
     }
 
     @GetMapping("/{id}")
     public TeachersDTO findById(@PathVariable long id) {
-        return convertToDTO(service.readById(id));
+        return convertToDTO(teachersService.readById(id));
     }
 
+    //TODO @RequestBody Teachers or TeachersDTO
     @PostMapping
-    public RedirectView save(@RequestBody TeachersDTO teachersDTO) {
-        service.create(convertToEntity(teachersDTO));
+    public RedirectView save(@RequestBody Teachers teachers) {
+        teachersService.create(teachers);
         return new RedirectView("/teachers");
     }
 
-    private Teachers convertToEntity(TeachersDTO teachersDTO) {
-        return modelMapper.map(teachersDTO, Teachers.class);
+    //TODO змінити на Optional(?)
+    public Teachers convertToEntity(TeachersDTO dto) {
+        Teachers teacher = modelMapper.map(dto, Teachers.class);
+        Position position = positionService.readById(dto.getPosition().getId());
+        if (position == null) {
+            throw new RuntimeException("Position not found");
+        }
+        Degree degree = degreeService.readById(dto.getDegree().getId());
+        if (degree == null) {
+            throw new RuntimeException("Degree not found");
+        }
+        Department department = departmentService.readById(dto.getDepartment().getId());
+        if (department == null) {
+            throw new RuntimeException("Department not found");
+        }
+        University university = universityService.readById(dto.getUniversity().getId());
+        if (university == null) {
+            throw new RuntimeException("University not found");
+        }
+
+        teacher.setPosition(position);
+        teacher.setDegree(degree);
+        department.setUniversity(university);
+        teacher.setDepartment(department);
+        return teacher;
     }
+
 
     public TeachersDTO convertToDTO(Teachers teacher) {
         TeachersDTO dto = modelMapper.map(teacher, TeachersDTO.class);
