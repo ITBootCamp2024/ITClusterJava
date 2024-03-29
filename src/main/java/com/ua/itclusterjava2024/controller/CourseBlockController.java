@@ -2,8 +2,12 @@ package com.ua.itclusterjava2024.controller;
 
 import com.ua.itclusterjava2024.dto.CourseBlockDTO;
 import com.ua.itclusterjava2024.entity.CourseBlock;
+import com.ua.itclusterjava2024.exceptions.ValidationException;
 import com.ua.itclusterjava2024.service.interfaces.CourseBlockService;
+import com.ua.itclusterjava2024.validators.CourseBlockValidator;
+import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -15,10 +19,12 @@ import java.util.stream.Collectors;
 public class CourseBlockController {
     private final CourseBlockService courseBlockService;
     private final ModelMapper modelMapper;
+    private final CourseBlockValidator courseBlockValidator;
 
-    public CourseBlockController(CourseBlockService courseBlockService, ModelMapper modelMapper) {
+    public CourseBlockController(CourseBlockService courseBlockService, ModelMapper modelMapper, CourseBlockValidator courseBlockValidator) {
         this.courseBlockService = courseBlockService;
         this.modelMapper = modelMapper;
+        this.courseBlockValidator = courseBlockValidator;
     }
     @GetMapping
     public List<CourseBlockDTO> showCourseBlockList(){
@@ -27,14 +33,24 @@ public class CourseBlockController {
     }
 
     @PostMapping
-    public RedirectView saveCourseBlock(@RequestBody CourseBlockDTO courseBlockDTO){
+    public RedirectView saveCourseBlock(@RequestBody @Valid CourseBlockDTO courseBlockDTO,
+                                        BindingResult bindingResult){
+        courseBlockValidator.validate(courseBlockDTO, bindingResult);
+        if (bindingResult.hasErrors()){
+            throw new ValidationException(bindingResult);
+        }
         courseBlockService.create(convertToEntity(courseBlockDTO));
         return new RedirectView("redirect:/course_blocks");
     }
 
     @PutMapping("/{id}")
     public RedirectView updateCourseBlock(@PathVariable("id") Long id,
-                                         @RequestBody CourseBlockDTO courseBlockDTO){
+                                         @RequestBody @Valid CourseBlockDTO courseBlockDTO,
+                                          BindingResult bindingResult){
+        courseBlockValidator.validate(courseBlockDTO, bindingResult);
+        if (bindingResult.hasErrors()){
+            throw new ValidationException(bindingResult);
+        }
         courseBlockService.update(id, convertToEntity(courseBlockDTO));
         return new RedirectView("redirect:/course_blocks");
     }
