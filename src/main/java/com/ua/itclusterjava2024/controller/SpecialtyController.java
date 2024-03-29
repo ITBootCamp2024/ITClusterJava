@@ -51,7 +51,7 @@ public class SpecialtyController {
         return new RedirectView("/specialty");
     }
 
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public RedirectView update(@PathVariable("id") Long id,
             @RequestBody @Valid SpecialtyDTO specialtyDTO,
                                BindingResult bindingResult

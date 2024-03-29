@@ -51,7 +51,7 @@ public class ProgramsLevelController {
         return new RedirectView("/programs_levels");
     }
 
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public RedirectView update(@PathVariable("id") Long id,
             @RequestBody @Valid ProgramsLevelDTO programsLevelDTO,
                                BindingResult bindingResult

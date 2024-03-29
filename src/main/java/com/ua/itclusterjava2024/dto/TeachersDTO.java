@@ -1,6 +1,5 @@
 package com.ua.itclusterjava2024.dto;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
@@ -9,26 +8,30 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class TeachersDTO {
     @Id
-    long id;
-    @NotEmpty
-    @Size(max = 50, message = "Teacher's name have to contain up to 50 symbols")
-    String name;
-    @NotEmpty
-    @Size(max = 50, message = "Teacher's role have to contain up to 50 symbols")
-    String role;
-    @NotEmpty
-    @Size(max = 100, message = "Teacher's status have to contain up to 100 symbols")
-    String status;
+    private long id;
 
     @NotEmpty
-    @Size(max = 100, message = "Teacher's email have to contain up to 100 symbols")
-    String email;
+    @Size(max = 100, message = "Teacher's name must contain up to 100 characters")
+    private String name;
+
+    private PositionDTO position;
+    private DegreeDTO degree;
+    private UniversityDTO university;
+    private DepartmentDTO department;
+
+    @Email
     @NotEmpty
-    @Size(max = 100, message = "Teacher's details have to contain up to 100 symbols")
-    String details;
+    @Size(max = 100, message = "Teacher's email must contain up to 100 characters")
+    private String email;
+
+    @NotEmpty
+    @Size(max = 100, message = "Teacher's comments must contain up to 100 characters")
+    private String comments;
 }
+

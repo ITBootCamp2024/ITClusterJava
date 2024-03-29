@@ -50,7 +50,7 @@ public class CourseController {
         return new RedirectView("/course");
     }
 
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public RedirectView update(@PathVariable("id") Long id,
             @RequestBody @Valid CourseDTO courseDTO,
                                BindingResult bindingResult

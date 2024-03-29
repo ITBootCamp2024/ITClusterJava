@@ -44,7 +44,7 @@ public class CourseStatusController {
         return new RedirectView("redirect:/course_statuses");
     }
 
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public RedirectView updateCourseStatus(@PathVariable("id") Long id,
                                          @RequestBody @Valid CourseStatusDTO courseStatusDTO,
                                            BindingResult bindingResult){
