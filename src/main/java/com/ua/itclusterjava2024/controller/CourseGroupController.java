@@ -2,8 +2,12 @@ package com.ua.itclusterjava2024.controller;
 
 import com.ua.itclusterjava2024.dto.CourseGroupDTO;
 import com.ua.itclusterjava2024.entity.CourseGroup;
+import com.ua.itclusterjava2024.exceptions.ValidationException;
 import com.ua.itclusterjava2024.service.interfaces.CourseGroupService;
+import com.ua.itclusterjava2024.validators.CourseGroupValidator;
+import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -15,10 +19,12 @@ import java.util.stream.Collectors;
 public class CourseGroupController {
     private final CourseGroupService courseGroupService;
     private final ModelMapper modelMapper;
+    private final CourseGroupValidator courseGroupValidator;
 
-    public CourseGroupController(CourseGroupService courseGroupService, ModelMapper modelMapper) {
+    public CourseGroupController(CourseGroupService courseGroupService, ModelMapper modelMapper, CourseGroupValidator courseGroupValidator) {
         this.courseGroupService = courseGroupService;
         this.modelMapper = modelMapper;
+        this.courseGroupValidator = courseGroupValidator;
     }
 
     @GetMapping
@@ -28,14 +34,24 @@ public class CourseGroupController {
     }
 
     @PostMapping
-    public RedirectView saveCourseGroup(@RequestBody CourseGroupDTO courseGroupDTO){
+    public RedirectView saveCourseGroup(@RequestBody @Valid CourseGroupDTO courseGroupDTO,
+                                        BindingResult bindingResult){
+        courseGroupValidator.validate(courseGroupDTO, bindingResult);
+        if (bindingResult.hasErrors()){
+            throw new ValidationException(bindingResult);
+        }
         courseGroupService.create(convertToEntity(courseGroupDTO));
         return new RedirectView("/course_groupes");
     }
 
     @PatchMapping("/{id}")
     public RedirectView updateCourseGroup(@PathVariable("id") Long id,
-                                           @RequestBody CourseGroupDTO courseGroupDTO){
+                                           @RequestBody @Valid CourseGroupDTO courseGroupDTO,
+                                          BindingResult bindingResult){
+        courseGroupValidator.validate(courseGroupDTO, bindingResult);
+        if (bindingResult.hasErrors()){
+            throw new ValidationException(bindingResult);
+        }
         courseGroupService.update(id, convertToEntity(courseGroupDTO));
         return new RedirectView("/course_groupes");
     }

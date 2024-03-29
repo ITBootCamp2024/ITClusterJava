@@ -8,10 +8,15 @@ import com.ua.itclusterjava2024.entity.University;
 import com.ua.itclusterjava2024.service.implementation.*;
 import com.ua.itclusterjava2024.wrappers.PageWrapper;
 import com.ua.itclusterjava2024.entity.Teachers;
+import com.ua.itclusterjava2024.exceptions.ValidationException;
+import com.ua.itclusterjava2024.service.implementation.TeachersServiceImpl;
+import com.ua.itclusterjava2024.validators.TeachersValidator;
+import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -26,15 +31,17 @@ public class TeachersController {
     private final DepartmentServiceImpl departmentService;
     private final UniversityServiceImpl universityService;
     private final ModelMapper modelMapper;
+    private final TeachersValidator teachersValidator;
 
     @Autowired
-    public TeachersController(TeachersServiceImpl teachersService, DegreeServiceImpl degreeService, PositionServiceImpl positionService, DepartmentServiceImpl departmentService, UniversityServiceImpl universityService, ModelMapper modelMapper) {
+    public TeachersController(TeachersServiceImpl teachersService, DegreeServiceImpl degreeService, PositionServiceImpl positionService, DepartmentServiceImpl departmentService, UniversityServiceImpl universityService, ModelMapper modelMapper, TeachersValidator teachersValidator) {
         this.teachersService = teachersService;
         this.degreeService = degreeService;
         this.positionService = positionService;
         this.departmentService = departmentService;
         this.universityService = universityService;
         this.modelMapper = modelMapper;
+        this.teachersValidator = teachersValidator;
     }
 
     @GetMapping
@@ -52,9 +59,13 @@ public class TeachersController {
 
     @PatchMapping("/{id}")
     public RedirectView updateEntity(@PathVariable("id") Long id,
-                                     @RequestBody TeachersDTO teachersDTO) {
+                                     @RequestBody @Valid TeachersDTO teachersDTO,
+                                         BindingResult bindingResult) {
         Teachers existingTeacher = teachersService.readById(id);
-
+        teachersValidator.validate(teachersDTO, bindingResult);
+        if (bindingResult.hasErrors()){
+            throw new ValidationException(bindingResult);
+        }
         if (teachersDTO.getName() != null) {
             existingTeacher.setName(teachersDTO.getName());
         }
@@ -104,8 +115,12 @@ public class TeachersController {
 
     //TODO @RequestBody Teachers or TeachersDTO
     @PostMapping
-    public RedirectView save(@RequestBody Teachers teachers) {
-        teachersService.create(teachers);
+    public RedirectView save(@RequestBody @Valid TeachersDTO teachersDTO, BindingResult bindingResult) {
+        teachersValidator.validate(teachersDTO, bindingResult);
+        if (bindingResult.hasErrors()){
+            throw new ValidationException(bindingResult);
+        }
+        service.create(convertToEntity(teachersDTO));
         return new RedirectView("/teachers");
     }
 

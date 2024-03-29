@@ -2,9 +2,13 @@ package com.ua.itclusterjava2024.controller;
 
 import com.ua.itclusterjava2024.dto.ProgramsLevelDTO;
 import com.ua.itclusterjava2024.entity.ProgramsLevel;
+import com.ua.itclusterjava2024.exceptions.ValidationException;
 import com.ua.itclusterjava2024.service.interfaces.ProgramsLevelService;
+import com.ua.itclusterjava2024.validators.ProgramsLevelValidator;
+import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -17,11 +21,13 @@ public class ProgramsLevelController {
 
     private final ProgramsLevelService programsLevelService;
     private final ModelMapper modelMapper;
+    private final ProgramsLevelValidator programsLevelValidator;
 
     @Autowired
-    public ProgramsLevelController(ProgramsLevelService programsLevelService, ModelMapper modelMapper) {
+    public ProgramsLevelController(ProgramsLevelService programsLevelService, ModelMapper modelMapper, ProgramsLevelValidator programsLevelValidator) {
         this.programsLevelService = programsLevelService;
         this.modelMapper = modelMapper;
+        this.programsLevelValidator = programsLevelValidator;
     }
 
     @GetMapping
@@ -36,15 +42,24 @@ public class ProgramsLevelController {
     }
 
     @PostMapping
-    public RedirectView save(@RequestBody ProgramsLevelDTO programsLevelDTO) {
+    public RedirectView save(@RequestBody @Valid ProgramsLevelDTO programsLevelDTO, BindingResult bindingResult) {
+        programsLevelValidator.validate(programsLevelDTO, bindingResult);
+        if (bindingResult.hasErrors()){
+            throw new ValidationException(bindingResult);
+        }
         programsLevelService.create(convertToEntity(programsLevelDTO));
         return new RedirectView("/programs_levels");
     }
 
     @PatchMapping("/{id}")
     public RedirectView update(@PathVariable("id") Long id,
-            @RequestBody ProgramsLevelDTO programsLevelDTO
+            @RequestBody @Valid ProgramsLevelDTO programsLevelDTO,
+                               BindingResult bindingResult
     ) {
+        programsLevelValidator.validate(programsLevelDTO, bindingResult);
+        if (bindingResult.hasErrors()){
+            throw new ValidationException(bindingResult);
+        }
         programsLevelService.update(id, convertToEntity(programsLevelDTO));
         return new RedirectView("/programs_levels");
     }

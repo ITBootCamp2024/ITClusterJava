@@ -2,11 +2,15 @@ package com.ua.itclusterjava2024.controller;
 
 import com.ua.itclusterjava2024.dto.SpecialtyDTO;
 import com.ua.itclusterjava2024.entity.Specialty;
+import com.ua.itclusterjava2024.exceptions.ValidationException;
 import com.ua.itclusterjava2024.service.interfaces.SpecialtyService;
+import com.ua.itclusterjava2024.validators.SpecialtyValidator;
+import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -16,11 +20,13 @@ public class SpecialtyController {
 
     private final SpecialtyService specialtyService;
     private final ModelMapper modelMapper;
+    private final SpecialtyValidator specialtyValidator;
 
     @Autowired
-    public SpecialtyController(SpecialtyService specialtyService, ModelMapper modelMapper) {
+    public SpecialtyController(SpecialtyService specialtyService, ModelMapper modelMapper, SpecialtyValidator specialtyValidator) {
         this.specialtyService = specialtyService;
         this.modelMapper = modelMapper;
+        this.specialtyValidator = specialtyValidator;
     }
 
     @GetMapping
@@ -36,15 +42,24 @@ public class SpecialtyController {
     }
 
     @PostMapping
-    public RedirectView save(@RequestBody SpecialtyDTO specialtyDTO) {
+    public RedirectView save(@RequestBody @Valid SpecialtyDTO specialtyDTO, BindingResult bindingResult) {
+        specialtyValidator.validate(specialtyDTO, bindingResult);
+        if (bindingResult.hasErrors()){
+            throw new ValidationException(bindingResult);
+        }
         specialtyService.create(convertToEntity(specialtyDTO));
         return new RedirectView("/specialty");
     }
 
     @PatchMapping("/{id}")
     public RedirectView update(@PathVariable("id") Long id,
-            @RequestBody SpecialtyDTO specialtyDTO
+            @RequestBody @Valid SpecialtyDTO specialtyDTO,
+                               BindingResult bindingResult
     ) {
+        specialtyValidator.validate(specialtyDTO, bindingResult);
+        if (bindingResult.hasErrors()){
+            throw new ValidationException(bindingResult);
+        }
          specialtyService.update(id, convertToEntity(specialtyDTO));
         return new RedirectView("/specialty");
     }
