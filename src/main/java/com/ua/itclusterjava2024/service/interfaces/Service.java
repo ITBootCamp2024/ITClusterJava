@@ -5,10 +5,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface Service <T>{
     T create(T specialty);
-    T readById(long id);
+    Optional<T> readById(long id);
     T update(long id, T t);
     void delete(long id);
     List<T> getAll();

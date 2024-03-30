@@ -4,7 +4,6 @@ import com.ua.itclusterjava2024.entity.CourseGroup;
 import com.ua.itclusterjava2024.repository.CourseGroupRepository;
 import com.ua.itclusterjava2024.service.interfaces.CourseGroupService;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -26,9 +25,8 @@ public class CourseGroupServiceImpl implements CourseGroupService {
     }
 
     @Override
-    public CourseGroup readById(long id) {
-        Optional<CourseGroup> foundSchool = courseGroupRepository.findById(id);
-        return foundSchool.orElse(null);
+    public Optional<CourseGroup> readById(long id) {
+        return courseGroupRepository.findById(id);
     }
 
     @Override

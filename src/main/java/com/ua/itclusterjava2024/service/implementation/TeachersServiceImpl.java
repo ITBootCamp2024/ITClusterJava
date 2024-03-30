@@ -4,7 +4,6 @@ import com.ua.itclusterjava2024.entity.Teachers;
 import com.ua.itclusterjava2024.repository.TeachersRepository;
 import com.ua.itclusterjava2024.service.interfaces.TeachersService;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -25,9 +24,8 @@ public class TeachersServiceImpl implements TeachersService {
     }
 
     @Override
-    public Teachers readById(long id) {
-        Optional<Teachers> foundSchool = teachersRepository.findById(id);
-        return foundSchool.orElse(null);
+    public Optional<Teachers> readById(long id) {
+        return teachersRepository.findById(id);
     }
 
     @Override

@@ -5,14 +5,13 @@ import com.ua.itclusterjava2024.entity.Degree;
 import com.ua.itclusterjava2024.entity.Department;
 import com.ua.itclusterjava2024.entity.Position;
 import com.ua.itclusterjava2024.entity.University;
+import com.ua.itclusterjava2024.exception.NotFoundException;
 import com.ua.itclusterjava2024.service.implementation.*;
 import com.ua.itclusterjava2024.wrappers.PageWrapper;
 import com.ua.itclusterjava2024.entity.Teachers;
-import com.ua.itclusterjava2024.exceptions.ValidationException;
 import com.ua.itclusterjava2024.service.implementation.TeachersServiceImpl;
 import com.ua.itclusterjava2024.validators.TeachersValidator;
 import com.ua.itclusterjava2024.wrappers.Patcher;
-import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -62,7 +61,7 @@ public class TeachersController {
 
     @PatchMapping("/{id}")
     public RedirectView updateEntity(@PathVariable("id") Long id, @RequestBody Teachers teachers) {
-        Teachers existingTeacher = teachersService.readById(id);
+        Teachers existingTeacher = teachersService.readById(id).orElse(null);
         try {
             Patcher.teachersPatcher(existingTeacher, teachers);
             teachersService.create(existingTeacher);
@@ -81,7 +80,7 @@ public class TeachersController {
 
     @GetMapping("/{id}")
     public TeachersDTO findById(@PathVariable long id) {
-        return convertToDTO(teachersService.readById(id));
+        return convertToDTO(teachersService.readById(id).orElse(null));
     }
 
     //TODO @RequestBody Teachers or TeachersDTO
@@ -91,40 +90,31 @@ public class TeachersController {
         return new RedirectView("/teachers");
     }
 
-    //TODO змінити на Optional(?)
     public Teachers convertToEntity(TeachersDTO dto) {
         Teachers teacher = modelMapper.map(dto, Teachers.class);
-        Position position = positionService.readById(dto.getPosition().getId());
-        if (position == null) {
-            throw new RuntimeException("Position not found");
-        }
-        Degree degree = degreeService.readById(dto.getDegree().getId());
-        if (degree == null) {
-            throw new RuntimeException("Degree not found");
-        }
-        Department department = departmentService.readById(dto.getDepartment().getId());
-        if (department == null) {
-            throw new RuntimeException("Department not found");
-        }
-        University university = universityService.readById(dto.getUniversity().getId());
-        if (university == null) {
-            throw new RuntimeException("University not found");
-        }
+        Position position = positionService.readById(dto.getPosition().getId())
+                .orElseThrow(() -> new NotFoundException("Position not found"));
+        Degree degree = degreeService.readById(dto.getDegree().getId())
+                .orElseThrow(() -> new NotFoundException("Degree not found"));
+        Department department = departmentService.readById(dto.getDepartment().getId())
+                .orElseThrow(() -> new NotFoundException("Department not found"));
+        University university = universityService.readById(dto.getUniversity().getId())
+                .orElseThrow(() -> new NotFoundException("University not found"));
 
-        teacher.setPosition(position);
-        teacher.setDegree(degree);
-        department.setUniversity(university);
-        teacher.setDepartment(department);
+        teacher.setPosition_id(position);
+        teacher.setDegree_id(degree);
+        department.setUniversity_id(university);
+        teacher.setDepartment_id(department);
         return teacher;
     }
 
 
     public TeachersDTO convertToDTO(Teachers teacher) {
         TeachersDTO dto = modelMapper.map(teacher, TeachersDTO.class);
-        dto.setPosition(new PositionDTO(teacher.getPosition().getId(), teacher.getPosition().getName()));
-        dto.setDegree(new DegreeDTO(teacher.getDegree().getId(), teacher.getDegree().getName()));
-        dto.setUniversity(new UniversityDTO(teacher.getDepartment().getUniversity().getId(), teacher.getDepartment().getUniversity().getName()));
-        dto.setDepartment(new DepartmentDTO(teacher.getDepartment().getId(), teacher.getDepartment().getName()));
+        dto.setPosition(new PositionDTO(teacher.getPosition_id().getId(), teacher.getPosition_id().getName()));
+        dto.setDegree(new DegreeDTO(teacher.getDegree_id().getId(), teacher.getDegree_id().getName()));
+        dto.setUniversity(new UniversityDTO(teacher.getDepartment_id().getUniversity_id().getId(), teacher.getDepartment_id().getUniversity_id().getName()));
+        dto.setDepartment(new DepartmentDTO(teacher.getDepartment_id().getId(), teacher.getDepartment_id().getName()));
         return dto;
     }
 }

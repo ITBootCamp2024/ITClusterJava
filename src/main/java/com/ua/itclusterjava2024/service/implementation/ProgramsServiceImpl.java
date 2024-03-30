@@ -4,7 +4,6 @@ import com.ua.itclusterjava2024.entity.Programs;
 import com.ua.itclusterjava2024.repository.ProgramsRepository;
 import com.ua.itclusterjava2024.service.interfaces.ProgramsService;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -26,9 +25,8 @@ public class ProgramsServiceImpl implements ProgramsService {
     }
 
     @Override
-    public Programs readById(long id) {
-        Optional<Programs> foundSchool = programsRepository.findById(id);
-        return foundSchool.orElse(null);
+    public Optional<Programs> readById(long id) {
+        return programsRepository.findById(id);
     }
 
     @Override

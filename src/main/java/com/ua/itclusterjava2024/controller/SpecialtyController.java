@@ -38,7 +38,7 @@ public class SpecialtyController {
 
     @GetMapping("/{id}")
     public SpecialtyDTO findById(@PathVariable long id) {
-        return convertToDTO(specialtyService.readById(id));
+        return convertToDTO(specialtyService.readById(id).orElse(null));
     }
 
     @PostMapping

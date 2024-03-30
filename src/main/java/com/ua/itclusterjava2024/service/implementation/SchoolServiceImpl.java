@@ -4,7 +4,6 @@ import com.ua.itclusterjava2024.entity.School;
 import com.ua.itclusterjava2024.repository.SchoolRepository;
 import com.ua.itclusterjava2024.service.interfaces.SchoolService;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -25,9 +24,9 @@ public class SchoolServiceImpl implements SchoolService {
     }
 
     @Override
-    public School readById(long id) {
-        Optional<School> foundSchool = schoolRepository.findById(id);
-        return foundSchool.orElse(null);
+    public Optional<School> readById(long id) {
+        return schoolRepository.findById(id);
+
     }
 
     @Override

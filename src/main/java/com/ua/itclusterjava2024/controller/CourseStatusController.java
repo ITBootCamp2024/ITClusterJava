@@ -58,7 +58,7 @@ public class CourseStatusController {
 
     @GetMapping("/{id}")
     public CourseStatusDTO findById(@PathVariable Long id){
-        return convertToDTO(courseStatusService.readById(id));
+        return convertToDTO(courseStatusService.readById(id).orElse(null));
     }
 
     @DeleteMapping("/{id}")

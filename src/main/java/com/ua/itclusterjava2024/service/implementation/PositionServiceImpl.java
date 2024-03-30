@@ -1,7 +1,6 @@
 package com.ua.itclusterjava2024.service.implementation;
 
 import com.ua.itclusterjava2024.entity.Position;
-import com.ua.itclusterjava2024.entity.Position;
 import com.ua.itclusterjava2024.repository.PositionRepository;
 import com.ua.itclusterjava2024.service.interfaces.PositionService;
 import org.springframework.data.domain.Page;
@@ -25,9 +24,8 @@ public class PositionServiceImpl implements PositionService {
     }
 
     @Override
-    public Position readById(long id) {
-        Optional<Position> foundSchool = positionRepository.findById(id);
-        return foundSchool.orElse(null);
+    public Optional<Position> readById(long id) {
+        return positionRepository.findById(id);
     }
 
     @Override

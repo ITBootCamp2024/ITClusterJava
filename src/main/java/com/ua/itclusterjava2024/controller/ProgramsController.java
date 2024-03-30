@@ -41,7 +41,7 @@ public class ProgramsController {
 
     @GetMapping("/{id}")
     public ProgramsDTO findById(@PathVariable long id) {
-        return convertToDTO(programsService.readById(id));
+        return convertToDTO(programsService.readById(id).orElse(null));
     }
 
     @PostMapping
