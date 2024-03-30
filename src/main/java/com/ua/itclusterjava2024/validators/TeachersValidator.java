@@ -14,21 +14,21 @@ public class TeachersValidator implements Validate{
     @Override
     public void validate(Object target, Errors errors) {
         TeachersDTO teachersDTO = (TeachersDTO) target;
-
-        if (Validate.checkNullAndEmpty(teachersDTO.getName())) {
-            errors.rejectValue("name", "", "Name mustn't be empty");
-        }
-        if (Validate.checkNullAndEmpty(teachersDTO.getRole())) {
-            errors.rejectValue("role", "", "Role mustn't be empty");
-        }
-        if (Validate.checkNullAndEmpty(teachersDTO.getStatus())) {
-            errors.rejectValue("status", "", "Status mustn't be empty");
-        }
-        if (Validate.checkNullAndEmpty(teachersDTO.getEmail())) {
-            errors.rejectValue("email", "", "email mustn't be empty");
-        }
-        if (Validate.checkNullAndEmpty(teachersDTO.getDetails())) {
-            errors.rejectValue("details", "", "details mustn't be empty");
-        }
+//
+//        if (Validate.checkNullAndEmpty(teachersDTO.getName())) {
+//            errors.rejectValue("name", "", "Name mustn't be empty");
+//        }
+//        if (Validate.checkNullAndEmpty(teachersDTO.getRole())) {
+//            errors.rejectValue("role", "", "Role mustn't be empty");
+//        }
+//        if (Validate.checkNullAndEmpty(teachersDTO.getStatus())) {
+//            errors.rejectValue("status", "", "Status mustn't be empty");
+//        }
+//        if (Validate.checkNullAndEmpty(teachersDTO.getEmail())) {
+//            errors.rejectValue("email", "", "email mustn't be empty");
+//        }
+//        if (Validate.checkNullAndEmpty(teachersDTO.getDetails())) {
+//            errors.rejectValue("details", "", "details mustn't be empty");
+//        }
     }
 }
