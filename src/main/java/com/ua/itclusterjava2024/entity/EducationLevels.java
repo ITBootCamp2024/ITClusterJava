@@ -11,8 +11,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @Entity
-@Table(name = "programs_level")
-public class ProgramsLevel {
+@Table(name = "education_levels")
+public class EducationLevels {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -20,6 +20,6 @@ public class ProgramsLevel {
 
     @Column(name = "name", nullable = false)
     @NotEmpty
-    @Size(max = 100, message = "Name of program level have to contain up to 100 symbols")
+    @Size(max = 45, message = "Name of education level have to contain up to 45 symbols")
     private String name;
 }

@@ -63,7 +63,7 @@ public class TeachersController {
     public RedirectView updateEntity(@PathVariable("id") Long id, @RequestBody Teachers teachers) {
         Teachers existingTeacher = teachersService.readById(id).orElse(null);
         try {
-            Patcher.teachersPatcher(existingTeacher, teachers);
+            patcher.patch(existingTeacher, teachers);
             teachersService.create(existingTeacher);
         } catch (Exception e) {
             e.printStackTrace();
@@ -113,7 +113,7 @@ public class TeachersController {
         TeachersDTO dto = modelMapper.map(teacher, TeachersDTO.class);
         dto.setPosition(new PositionDTO(teacher.getPosition_id().getId(), teacher.getPosition_id().getName()));
         dto.setDegree(new DegreeDTO(teacher.getDegree_id().getId(), teacher.getDegree_id().getName()));
-        dto.setUniversity(new UniversityDTO(teacher.getDepartment_id().getUniversity_id().getId(), teacher.getDepartment_id().getUniversity_id().getName()));
+        dto.setUniversity(UniversityDTO.builder().id(teacher.getDepartment_id().getUniversity_id().getId()).name(teacher.getDepartment_id().getUniversity_id().getName()).build());
         dto.setDepartment(new DepartmentDTO(teacher.getDepartment_id().getId(), teacher.getDepartment_id().getName()));
         return dto;
     }

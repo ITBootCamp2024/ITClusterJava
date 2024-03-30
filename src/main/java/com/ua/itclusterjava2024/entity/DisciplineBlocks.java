@@ -11,15 +11,15 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name="course_blocks")
-public class CourseBlock {
+@Table(name="discipline_blocks")
+public class DisciplineBlocks {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     Long id;
 
     @Column(name="name", nullable = false)
     @NotEmpty
-    @Size(max = 100, message = "Name of course block have to contain up to 100 symbols")
+    @Size(max = 100, message = "Name of discipline block have to contain up to 100 symbols")
     String name;
 
     @Column(name="description")

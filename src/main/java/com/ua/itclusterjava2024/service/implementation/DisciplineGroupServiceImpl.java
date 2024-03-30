@@ -1,8 +1,8 @@
 package com.ua.itclusterjava2024.service.implementation;
 
-import com.ua.itclusterjava2024.entity.CourseGroup;
+import com.ua.itclusterjava2024.entity.DisciplineGroup;
 import com.ua.itclusterjava2024.repository.CourseGroupRepository;
-import com.ua.itclusterjava2024.service.interfaces.CourseGroupService;
+import com.ua.itclusterjava2024.service.interfaces.DisciplineGroupService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -11,28 +11,28 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class CourseGroupServiceImpl implements CourseGroupService {
+public class DisciplineGroupServiceImpl implements DisciplineGroupService {
 
     private final CourseGroupRepository courseGroupRepository;
 
-    public CourseGroupServiceImpl(CourseGroupRepository courseGroupRepository) {
+    public DisciplineGroupServiceImpl(CourseGroupRepository courseGroupRepository) {
         this.courseGroupRepository = courseGroupRepository;
     }
 
     @Override
-    public CourseGroup create(CourseGroup courseGroup) {
-        return courseGroupRepository.save(courseGroup);
+    public DisciplineGroup create(DisciplineGroup disciplineGroup) {
+        return courseGroupRepository.save(disciplineGroup);
     }
 
     @Override
-    public Optional<CourseGroup> readById(long id) {
+    public Optional<DisciplineGroup> readById(long id) {
         return courseGroupRepository.findById(id);
     }
 
     @Override
-    public CourseGroup update(long id, CourseGroup courseGroup) {
-        courseGroup.setId(id);
-        return courseGroupRepository.save(courseGroup);
+    public DisciplineGroup update(long id, DisciplineGroup disciplineGroup) {
+        disciplineGroup.setId(id);
+        return courseGroupRepository.save(disciplineGroup);
     }
 
     @Override
@@ -41,12 +41,12 @@ public class CourseGroupServiceImpl implements CourseGroupService {
     }
 
     @Override
-    public List<CourseGroup> getAll() {
+    public List<DisciplineGroup> getAll() {
         return courseGroupRepository.findAll();
     }
 
     @Override
-    public Page<CourseGroup> getAll(Pageable pageable) {
+    public Page<DisciplineGroup> getAll(Pageable pageable) {
         return courseGroupRepository.findAll(pageable);
     }
 }
