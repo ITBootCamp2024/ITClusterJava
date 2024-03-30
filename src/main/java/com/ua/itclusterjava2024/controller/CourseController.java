@@ -36,7 +36,7 @@ public class CourseController {
     }
     @GetMapping("/{id}")
     public CourseDTO findById(@PathVariable long id) {
-        return convertToDTO(courseService.readById(id));
+        return convertToDTO(courseService.readById(id).orElse(null));
     }
 
     @PostMapping

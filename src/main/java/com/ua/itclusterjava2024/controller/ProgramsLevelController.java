@@ -38,7 +38,7 @@ public class ProgramsLevelController {
 
     @GetMapping("/{id}")
     public ProgramsLevelDTO findById(@PathVariable long id) {
-        return convertToDTO(programsLevelService.readById(id));
+        return convertToDTO(programsLevelService.readById(id).orElse(null));
     }
 
     @PostMapping

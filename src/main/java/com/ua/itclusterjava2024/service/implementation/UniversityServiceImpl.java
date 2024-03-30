@@ -4,7 +4,6 @@ import com.ua.itclusterjava2024.entity.University;
 import com.ua.itclusterjava2024.repository.UniversityRepository;
 import com.ua.itclusterjava2024.service.interfaces.UniversityService;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -25,9 +24,8 @@ public class UniversityServiceImpl implements UniversityService {
     }
 
     @Override
-    public University readById(long id) {
-        Optional<University> foundSchool = universityRepository.findById(id);
-        return foundSchool.orElse(null);
+    public Optional<University> readById(long id) {
+        return universityRepository.findById(id);
     }
 
     @Override

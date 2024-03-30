@@ -1,7 +1,6 @@
 package com.ua.itclusterjava2024.service.implementation;
 
 import com.ua.itclusterjava2024.entity.Degree;
-import com.ua.itclusterjava2024.entity.Degree;
 import com.ua.itclusterjava2024.repository.DegreeRepository;
 import com.ua.itclusterjava2024.service.interfaces.DegreeService;
 import org.springframework.data.domain.Page;
@@ -25,9 +24,8 @@ public class DegreeServiceImpl implements DegreeService {
     }
 
     @Override
-    public Degree readById(long id) {
-        Optional<Degree> foundSchool = degreeRepository.findById(id);
-        return foundSchool.orElse(null);
+    public Optional<Degree> readById(long id) {
+        return degreeRepository.findById(id);
     }
 
     @Override

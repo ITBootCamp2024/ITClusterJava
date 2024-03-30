@@ -57,7 +57,7 @@ public class CourseBlockController {
 
     @GetMapping("/{id}")
     public CourseBlockDTO findById(@PathVariable Long id){
-        return convertToDTO(courseBlockService.readById(id));
+        return convertToDTO(courseBlockService.readById(id).orElse(null));
     }
 
     @DeleteMapping("/{id}")

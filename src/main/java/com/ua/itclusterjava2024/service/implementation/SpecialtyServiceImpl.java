@@ -4,7 +4,6 @@ import com.ua.itclusterjava2024.entity.Specialty;
 import com.ua.itclusterjava2024.repository.SpecialtyRepository;
 import com.ua.itclusterjava2024.service.interfaces.SpecialtyService;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -26,9 +25,8 @@ public class SpecialtyServiceImpl implements SpecialtyService {
     }
 
     @Override
-    public Specialty readById(long id) {
-        Optional<Specialty> foundSchool = specialtyRepository.findById(id);
-        return foundSchool.orElse(null);
+    public Optional<Specialty> readById(long id) {
+        return specialtyRepository.findById(id);
     }
 
     @Override

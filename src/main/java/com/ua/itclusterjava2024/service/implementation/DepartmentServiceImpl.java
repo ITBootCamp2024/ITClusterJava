@@ -24,9 +24,8 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
-    public Department readById(long id) {
-        Optional<Department> foundSchool = departmentRepository.findById(id);
-        return foundSchool.orElse(null);
+    public Optional<Department> readById(long id) {
+        return departmentRepository.findById(id);
     }
 
     @Override

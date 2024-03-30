@@ -4,7 +4,6 @@ import com.ua.itclusterjava2024.entity.ProgramsLevel;
 import com.ua.itclusterjava2024.repository.ProgramsLevelRepository;
 import com.ua.itclusterjava2024.service.interfaces.ProgramsLevelService;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -26,9 +25,8 @@ public class ProgramsLevelServiceImpl implements ProgramsLevelService {
     }
 
     @Override
-    public ProgramsLevel readById(long id) {
-        Optional<ProgramsLevel> foundSchool = programsLevelRepository.findById(id);
-        return foundSchool.orElse(null);
+    public Optional<ProgramsLevel> readById(long id) {
+        return programsLevelRepository.findById(id);
     }
 
     @Override

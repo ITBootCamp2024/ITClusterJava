@@ -1,13 +1,7 @@
 package com.ua.itclusterjava2024.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 
 @Data
 @Entity
@@ -21,19 +15,19 @@ public class Teachers {
     private String name;
 
     @ManyToOne
-    @JoinColumn(name = "position")
-    private Position position;
+    @JoinColumn(name = "position_id")
+    private Position position_id;
 
     @ManyToOne
-    @JoinColumn(name = "degree")
-    private Degree degree;
+    @JoinColumn(name = "degree_id")
+    private Degree degree_id;
 
     @Column(name = "email")
     private String email;
 
     @ManyToOne
-    @JoinColumn(name = "department")
-    private Department department;
+    @JoinColumn(name = "department_id")
+    private Department department_id;
 
     @Column(name = "comments")
     private String comments;

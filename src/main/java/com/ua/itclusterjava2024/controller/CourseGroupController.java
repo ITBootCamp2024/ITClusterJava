@@ -58,7 +58,7 @@ public class CourseGroupController {
 
     @GetMapping("/{id}")
     public CourseGroupDTO findById(@PathVariable Long id){
-        return convertToDTO(courseGroupService.readById(id));
+        return convertToDTO(courseGroupService.readById(id).orElse(null));
     }
 
     @DeleteMapping("/{id}")

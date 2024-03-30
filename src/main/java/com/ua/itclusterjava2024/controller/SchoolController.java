@@ -37,7 +37,7 @@ public class SchoolController {
 
     @GetMapping("/{id}")
     public SchoolDTO findById(@PathVariable long id) {
-        return convertToDTO(schoolService.readById(id));
+        return convertToDTO(schoolService.readById(id).orElse(null));
     }
 
     @PostMapping

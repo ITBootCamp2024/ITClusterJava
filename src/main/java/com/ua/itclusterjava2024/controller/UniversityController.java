@@ -41,7 +41,7 @@ public class UniversityController {
 
     @GetMapping("/{id}")
     public UniversityDTO findById(@PathVariable long id) {
-        return convertToDTO(universityService.readById(id));
+        return convertToDTO(universityService.readById(id).orElse(null));
     }
 
     @PostMapping

@@ -5,9 +5,7 @@ import com.ua.itclusterjava2024.repository.CourseBlockRepository;
 import com.ua.itclusterjava2024.service.interfaces.CourseBlockService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,9 +25,8 @@ public class CourseBlockServiceImpl implements CourseBlockService {
     }
 
     @Override
-    public CourseBlock readById(long id) {
-        Optional<CourseBlock> foundSchool = courseBlockRepository.findById(id);
-        return foundSchool.orElse(null);
+    public Optional<CourseBlock> readById(long id) {
+        return courseBlockRepository.findById(id);
     }
 
     @Override
