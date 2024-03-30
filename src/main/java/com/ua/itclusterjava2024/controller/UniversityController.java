@@ -60,16 +60,17 @@ public class UniversityController {
     @PostMapping
     public RedirectView save(@RequestBody @Valid UniversityDTO universityDTO, BindingResult bindingResult) {
         universityValidator.validate(universityDTO, bindingResult);
-        if (bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             throw new ValidationException(bindingResult);
         }
         universityService.create(convertToEntity(universityDTO));
         return new RedirectView("/university");
     }
-//TODO приямається сутність, а не DTO
+
+    //TODO приямається сутність, а не DTO
     @PatchMapping("/{id}")
     public RedirectView update(@PathVariable("id") Long id,
-            @RequestBody University university,
+                               @RequestBody University university,
                                BindingResult bindingResult
     ) {
         University existingUniversity = universityService.readById(id).orElse(null);
@@ -88,11 +89,11 @@ public class UniversityController {
         return new RedirectView("/university");
     }
 
-    private University convertToEntity(UniversityDTO universityDTO){
+    private University convertToEntity(UniversityDTO universityDTO) {
         return modelMapper.map(universityDTO, University.class);
     }
 
-    private UniversityDTO convertToDTO(University university){
+    private UniversityDTO convertToDTO(University university) {
         return modelMapper.map(university, UniversityDTO.class);
     }
 }

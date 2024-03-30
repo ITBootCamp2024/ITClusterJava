@@ -1,4 +1,4 @@
-package com.ua.itclusterjava2024.exception;
+package com.ua.itclusterjava2024.exceptions;
 
 
 public class NotFoundException extends RuntimeException {

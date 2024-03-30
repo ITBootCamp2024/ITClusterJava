@@ -1,7 +1,7 @@
 package com.ua.itclusterjava2024.service.implementation;
 
 import com.ua.itclusterjava2024.entity.DisciplineGroup;
-import com.ua.itclusterjava2024.repository.CourseGroupRepository;
+import com.ua.itclusterjava2024.repository.DisciplineGroupRepository;
 import com.ua.itclusterjava2024.service.interfaces.DisciplineGroupService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,40 +13,40 @@ import java.util.Optional;
 @Service
 public class DisciplineGroupServiceImpl implements DisciplineGroupService {
 
-    private final CourseGroupRepository courseGroupRepository;
+    private final DisciplineGroupRepository disciplineGroupRepository;
 
-    public DisciplineGroupServiceImpl(CourseGroupRepository courseGroupRepository) {
-        this.courseGroupRepository = courseGroupRepository;
+    public DisciplineGroupServiceImpl(DisciplineGroupRepository disciplineGroupRepository) {
+        this.disciplineGroupRepository = disciplineGroupRepository;
     }
 
     @Override
     public DisciplineGroup create(DisciplineGroup disciplineGroup) {
-        return courseGroupRepository.save(disciplineGroup);
+        return disciplineGroupRepository.save(disciplineGroup);
     }
 
     @Override
     public Optional<DisciplineGroup> readById(long id) {
-        return courseGroupRepository.findById(id);
+        return disciplineGroupRepository.findById(id);
     }
 
     @Override
     public DisciplineGroup update(long id, DisciplineGroup disciplineGroup) {
         disciplineGroup.setId(id);
-        return courseGroupRepository.save(disciplineGroup);
+        return disciplineGroupRepository.save(disciplineGroup);
     }
 
     @Override
     public void delete(long id) {
-        courseGroupRepository.deleteById(id);
+        disciplineGroupRepository.deleteById(id);
     }
 
     @Override
     public List<DisciplineGroup> getAll() {
-        return courseGroupRepository.findAll();
+        return disciplineGroupRepository.findAll();
     }
 
     @Override
     public Page<DisciplineGroup> getAll(Pageable pageable) {
-        return courseGroupRepository.findAll(pageable);
+        return disciplineGroupRepository.findAll(pageable);
     }
 }

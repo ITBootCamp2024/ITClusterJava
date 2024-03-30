@@ -16,18 +16,18 @@ public class Teachers {
 
     @ManyToOne
     @JoinColumn(name = "position_id")
-    private Position position_id;
+    private Position position;
 
     @ManyToOne
     @JoinColumn(name = "degree_id")
-    private Degree degree_id;
+    private Degree degree;
 
     @Column(name = "email")
     private String email;
 
     @ManyToOne
     @JoinColumn(name = "department_id")
-    private Department department_id;
+    private Department department;
 
     @Column(name = "comments")
     private String comments;
