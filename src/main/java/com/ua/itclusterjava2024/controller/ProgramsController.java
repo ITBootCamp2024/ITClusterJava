@@ -4,6 +4,7 @@ import com.ua.itclusterjava2024.dto.ProgramsDTO;
 import com.ua.itclusterjava2024.entity.Programs;
 import com.ua.itclusterjava2024.exceptions.ValidationException;
 import com.ua.itclusterjava2024.service.interfaces.ProgramsService;
+
 import com.ua.itclusterjava2024.validators.ProgramsValidator;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
@@ -12,7 +13,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
