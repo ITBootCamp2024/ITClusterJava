@@ -2,15 +2,16 @@ package com.ua.itclusterjava2024.controller;
 
 import com.ua.itclusterjava2024.dto.ProgramsDTO;
 import com.ua.itclusterjava2024.entity.Programs;
+import com.ua.itclusterjava2024.exceptions.ValidationException;
 import com.ua.itclusterjava2024.service.interfaces.ProgramsService;
+
+import com.ua.itclusterjava2024.validators.ProgramsValidator;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.HashMap;
 import java.util.List;
@@ -23,16 +24,18 @@ public class ProgramsController {
     private final ProgramsService programsService;
 
     private final ModelMapper modelMapper;
+    private final ProgramsValidator programsValidator;
 
     @Autowired
-    public ProgramsController(ProgramsService programsService, ModelMapper modelMapper) {
+    public ProgramsController(ProgramsService programsService, ModelMapper modelMapper, ProgramsValidator programsValidator) {
         this.programsService = programsService;
         this.modelMapper = modelMapper;
+        this.programsValidator = programsValidator;
     }
 
     @GetMapping
     public List<ProgramsDTO> findAll() {
-        return programsService.getAll().stream().map(i -> convertToDTO(i))
+        return programsService.getAll().stream().map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
 
@@ -42,23 +45,32 @@ public class ProgramsController {
     }
 
     @PostMapping
-    public ModelAndView save(@RequestBody ProgramsDTO programsDTO) {
+    public RedirectView save(@RequestBody @Valid ProgramsDTO programsDTO, BindingResult bindingResult) {
+        programsValidator.validate(programsDTO, bindingResult);
+        if (bindingResult.hasErrors()){
+            throw new ValidationException(bindingResult);
+        }
         programsService.create(convertToEntity(programsDTO));
-        return new ModelAndView("redirect:/course_blocks");
+        return new RedirectView("/programs");
     }
 
-    @PutMapping("/{id}")
-    public ModelAndView update(@PathVariable("id") Long id,
-            @RequestBody ProgramsDTO programsDTO
+    @PatchMapping("/{id}")
+    public RedirectView update(@PathVariable("id") Long id,
+            @RequestBody @Valid ProgramsDTO programsDTO,
+                               BindingResult bindingResult
     ) {
+        programsValidator.validate(programsDTO, bindingResult);
+        if (bindingResult.hasErrors()){
+            throw new ValidationException(bindingResult);
+        }
         programsService.update(id, convertToEntity(programsDTO));
-        return new ModelAndView("redirect:/course_blocks");
+        return new RedirectView("/course_blocks");
     }
 
     @DeleteMapping("/{id}")
-    public ModelAndView delete(@PathVariable long id) {
+    public RedirectView delete(@PathVariable long id) {
         programsService.delete(id);
-        return new ModelAndView("redirect:/course_blocks");
+        return new RedirectView("/programs");
     }
 
     private Programs convertToEntity(ProgramsDTO programsDTO){
