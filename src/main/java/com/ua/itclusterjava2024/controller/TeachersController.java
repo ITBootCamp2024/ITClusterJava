@@ -11,6 +11,7 @@ import com.ua.itclusterjava2024.entity.Teachers;
 import com.ua.itclusterjava2024.exceptions.ValidationException;
 import com.ua.itclusterjava2024.service.implementation.TeachersServiceImpl;
 import com.ua.itclusterjava2024.validators.TeachersValidator;
+import com.ua.itclusterjava2024.wrappers.Patcher;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,8 @@ public class TeachersController {
     private final DepartmentServiceImpl departmentService;
     private final UniversityServiceImpl universityService;
     private final ModelMapper modelMapper;
+    @Autowired
+    Patcher patcher;
     private final TeachersValidator teachersValidator;
 
     @Autowired
@@ -58,47 +61,15 @@ public class TeachersController {
     }
 
     @PatchMapping("/{id}")
-    public RedirectView updateEntity(@PathVariable("id") Long id,
-                                     @RequestBody @Valid TeachersDTO teachersDTO,
-                                         BindingResult bindingResult) {
+    public RedirectView updateEntity(@PathVariable("id") Long id, @RequestBody Teachers teachers) {
         Teachers existingTeacher = teachersService.readById(id);
-        teachersValidator.validate(teachersDTO, bindingResult);
-        if (bindingResult.hasErrors()){
-            throw new ValidationException(bindingResult);
+        try {
+            Patcher.teachersPatcher(existingTeacher, teachers);
+            teachersService.create(existingTeacher);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        if (teachersDTO.getName() != null) {
-            existingTeacher.setName(teachersDTO.getName());
-        }
-
-        if (teachersDTO.getPosition() != null) {
-            Position position = positionService.readById(teachersDTO.getPosition().getId());
-            existingTeacher.setPosition(position);
-        }
-
-        if (teachersDTO.getDegree() != null) {
-            Degree degree = degreeService.readById(teachersDTO.getDegree().getId());
-            existingTeacher.setDegree(degree);
-        }
-
-        if (teachersDTO.getDepartment() != null) {
-            Department department = departmentService.readById(teachersDTO.getDepartment().getId());
-            existingTeacher.setDepartment(department);
-        }
-
-        if (teachersDTO.getUniversity() != null) {
-            University university = universityService.readById(teachersDTO.getUniversity().getId());
-            Department department = existingTeacher.getDepartment();
-            department.setUniversity(university);
-        }
-
-        if (teachersDTO.getEmail() != null) {
-            existingTeacher.setEmail(teachersDTO.getEmail());
-        }
-        if (teachersDTO.getComments() != null) {
-            existingTeacher.setComments(teachersDTO.getComments());
-        }
-        teachersService.create(existingTeacher);
-        return new RedirectView("http://localhost:8080/teachers", true);
+        return new RedirectView("/teachers");
     }
 
 
@@ -115,12 +86,8 @@ public class TeachersController {
 
     //TODO @RequestBody Teachers or TeachersDTO
     @PostMapping
-    public RedirectView save(@RequestBody @Valid TeachersDTO teachersDTO, BindingResult bindingResult) {
-        teachersValidator.validate(teachersDTO, bindingResult);
-        if (bindingResult.hasErrors()){
-            throw new ValidationException(bindingResult);
-        }
-        service.create(convertToEntity(teachersDTO));
+    public RedirectView save(@RequestBody Teachers teachers, BindingResult bindingResult) {
+        teachersService.create(teachers);
         return new RedirectView("/teachers");
     }
 
