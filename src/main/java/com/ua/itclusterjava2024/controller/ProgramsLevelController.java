@@ -1,14 +1,16 @@
 package com.ua.itclusterjava2024.controller;
 
-import com.ua.itclusterjava2024.dto.ProgramsDTO;
 import com.ua.itclusterjava2024.dto.ProgramsLevelDTO;
-import com.ua.itclusterjava2024.entity.Programs;
 import com.ua.itclusterjava2024.entity.ProgramsLevel;
+import com.ua.itclusterjava2024.exceptions.ValidationException;
 import com.ua.itclusterjava2024.service.interfaces.ProgramsLevelService;
+import com.ua.itclusterjava2024.validators.ProgramsLevelValidator;
+import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,16 +21,18 @@ public class ProgramsLevelController {
 
     private final ProgramsLevelService programsLevelService;
     private final ModelMapper modelMapper;
+    private final ProgramsLevelValidator programsLevelValidator;
 
     @Autowired
-    public ProgramsLevelController(ProgramsLevelService programsLevelService, ModelMapper modelMapper) {
+    public ProgramsLevelController(ProgramsLevelService programsLevelService, ModelMapper modelMapper, ProgramsLevelValidator programsLevelValidator) {
         this.programsLevelService = programsLevelService;
         this.modelMapper = modelMapper;
+        this.programsLevelValidator = programsLevelValidator;
     }
 
     @GetMapping
     public List<ProgramsLevelDTO> findAll() {
-        return programsLevelService.getAll().stream().map(i -> convertToDTO(i))
+        return programsLevelService.getAll().stream().map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
 
@@ -38,23 +42,32 @@ public class ProgramsLevelController {
     }
 
     @PostMapping
-    public ModelAndView save(@RequestBody ProgramsLevelDTO programsLevelDTO) {
+    public RedirectView save(@RequestBody @Valid ProgramsLevelDTO programsLevelDTO, BindingResult bindingResult) {
+        programsLevelValidator.validate(programsLevelDTO, bindingResult);
+        if (bindingResult.hasErrors()){
+            throw new ValidationException(bindingResult);
+        }
         programsLevelService.create(convertToEntity(programsLevelDTO));
-        return new ModelAndView("redirect:/course_blocks");
+        return new RedirectView("/programs_levels");
     }
 
-    @PutMapping("/{id}")
-    public ModelAndView update(@PathVariable("id") Long id,
-            @RequestBody ProgramsLevelDTO programsLevelDTO
+    @PatchMapping("/{id}")
+    public RedirectView update(@PathVariable("id") Long id,
+            @RequestBody @Valid ProgramsLevelDTO programsLevelDTO,
+                               BindingResult bindingResult
     ) {
+        programsLevelValidator.validate(programsLevelDTO, bindingResult);
+        if (bindingResult.hasErrors()){
+            throw new ValidationException(bindingResult);
+        }
         programsLevelService.update(id, convertToEntity(programsLevelDTO));
-        return new ModelAndView("redirect:/course_blocks");
+        return new RedirectView("/programs_levels");
     }
 
     @DeleteMapping("/{id}")
-    public ModelAndView delete(@PathVariable long id) {
+    public RedirectView delete(@PathVariable long id) {
         programsLevelService.delete(id);
-        return new ModelAndView("redirect:/course_blocks");
+        return new RedirectView("/programs_levels");
     }
 
     private ProgramsLevel convertToEntity(ProgramsLevelDTO programsLevelDTO){

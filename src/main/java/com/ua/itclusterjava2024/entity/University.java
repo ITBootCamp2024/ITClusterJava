@@ -16,25 +16,18 @@ public class University {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private Long id;
 
-    @Column(name = "name", nullable = false)
-    @NotEmpty
-    @Size(max = 200, message = "Name of university have to contain up to 200 symbols")
+    @Column(name = "name")
     private String name;
 
-    @Column(name = "shortname", nullable = false)
-    @NotEmpty
-    @Size(max = 20, message = "Shortname of university have to contain up to 20 symbols")
-    private String shortname;
+    @Column(name = "abbr")
+    private String abbr;
 
-    @Column(name = "sitelink", nullable = false)
-    @NotEmpty
-    @Size(max = 100, message = "Site link of university have to contain up to 100 symbols")
-    private String siteLink;
+    @Column(name = "programs_list_url")
+    private String programsListUrl;
 
-    //TODO
-    @Column(name = "programs_list", nullable = false)
-    private String programs_list;
+    @Column(name = "url")
+    private String url;
+
 }
