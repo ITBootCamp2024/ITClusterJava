@@ -1,9 +1,9 @@
 package com.ua.itclusterjava2024.controller;
 
-import com.ua.itclusterjava2024.dto.TeachersDTO;
 import com.ua.itclusterjava2024.dto.UniversityDTO;
 import com.ua.itclusterjava2024.entity.University;
 
+import com.ua.itclusterjava2024.exceptions.NotFoundException;
 import com.ua.itclusterjava2024.exceptions.ValidationException;
 import com.ua.itclusterjava2024.service.interfaces.UniversityService;
 import com.ua.itclusterjava2024.validators.UniversityValidator;
@@ -18,9 +18,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/universities")
@@ -42,7 +39,7 @@ public class UniversityController {
     @GetMapping
     public PageWrapper<UniversityDTO> findAll(@RequestParam(defaultValue = "1") int page) {
         int pageSize = 20;
-        PageRequest pageable = PageRequest.of(page-1, pageSize);
+        PageRequest pageable = PageRequest.of(page - 1, pageSize);
         Page<UniversityDTO> universityPage = universityService.getAll(pageable).map(this::convertToDTO);
 
         PageWrapper<UniversityDTO> pageWrapper = new PageWrapper<>();
@@ -64,29 +61,29 @@ public class UniversityController {
             throw new ValidationException(bindingResult);
         }
         universityService.create(convertToEntity(universityDTO));
-        return new RedirectView("/university");
+        return new RedirectView("/universities");
     }
 
     //TODO приямається сутність, а не DTO
     @PatchMapping("/{id}")
-    public RedirectView update(@PathVariable("id") Long id,
-                               @RequestBody University university,
-                               BindingResult bindingResult
-    ) {
-        University existingUniversity = universityService.readById(id).orElse(null);
+    public PageWrapper<UniversityDTO> update(@PathVariable Long id, @RequestBody University updatedUniversity) {
+        University existingUniversity = universityService.readById(id)
+                .orElseThrow(() -> new NotFoundException("University not found with id: " + id));
         try {
-            patcher.patch(existingUniversity, university);
-            universityService.create(existingUniversity);
-        } catch (Exception e) {
+            patcher.patch(existingUniversity, updatedUniversity);
+        } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
-        return new RedirectView("/university");
+
+        universityService.update(id,existingUniversity);
+        return findAll(1);
+//        return new RedirectView("/universities");
     }
 
     @DeleteMapping("/{id}")
     public RedirectView delete(@PathVariable long id) {
         universityService.delete(id);
-        return new RedirectView("/university");
+        return new RedirectView("/universities");
     }
 
     private University convertToEntity(UniversityDTO universityDTO) {
