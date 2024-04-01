@@ -1,9 +1,9 @@
 package com.ua.itclusterjava2024.controller;
 
 import com.ua.itclusterjava2024.dto.CourseBlockDTO;
-import com.ua.itclusterjava2024.entity.CourseBlock;
+import com.ua.itclusterjava2024.entity.DisciplineBlocks;
 import com.ua.itclusterjava2024.exceptions.ValidationException;
-import com.ua.itclusterjava2024.service.interfaces.CourseBlockService;
+import com.ua.itclusterjava2024.service.interfaces.DisciplineBlocksService;
 import com.ua.itclusterjava2024.validators.CourseBlockValidator;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
@@ -16,19 +16,19 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/course_blocks")
-public class CourseBlockController {
-    private final CourseBlockService courseBlockService;
+public class DisciplineBlocksController {
+    private final DisciplineBlocksService disciplineBlocksService;
     private final ModelMapper modelMapper;
     private final CourseBlockValidator courseBlockValidator;
 
-    public CourseBlockController(CourseBlockService courseBlockService, ModelMapper modelMapper, CourseBlockValidator courseBlockValidator) {
-        this.courseBlockService = courseBlockService;
+    public DisciplineBlocksController(DisciplineBlocksService disciplineBlocksService, ModelMapper modelMapper, CourseBlockValidator courseBlockValidator) {
+        this.disciplineBlocksService = disciplineBlocksService;
         this.modelMapper = modelMapper;
         this.courseBlockValidator = courseBlockValidator;
     }
     @GetMapping
     public List<CourseBlockDTO> showCourseBlockList(){
-        return courseBlockService.getAll().stream().map(this::convertToDTO)
+        return disciplineBlocksService.getAll().stream().map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
 
@@ -39,7 +39,7 @@ public class CourseBlockController {
         if (bindingResult.hasErrors()){
             throw new ValidationException(bindingResult);
         }
-        courseBlockService.create(convertToEntity(courseBlockDTO));
+        disciplineBlocksService.create(convertToEntity(courseBlockDTO));
         return new RedirectView("redirect:/course_blocks");
     }
 
@@ -51,26 +51,26 @@ public class CourseBlockController {
         if (bindingResult.hasErrors()){
             throw new ValidationException(bindingResult);
         }
-        courseBlockService.update(id, convertToEntity(courseBlockDTO));
+        disciplineBlocksService.update(id, convertToEntity(courseBlockDTO));
         return new RedirectView("redirect:/course_blocks");
     }
 
     @GetMapping("/{id}")
     public CourseBlockDTO findById(@PathVariable Long id){
-        return convertToDTO(courseBlockService.readById(id).orElse(null));
+        return convertToDTO(disciplineBlocksService.readById(id).orElse(null));
     }
 
     @DeleteMapping("/{id}")
     public RedirectView deleteCourseBlock(@PathVariable Long id){
-        courseBlockService.delete(id);
+        disciplineBlocksService.delete(id);
         return new RedirectView("redirect:/course_blocks");
     }
 
-    private CourseBlock convertToEntity(CourseBlockDTO courseBlockDTO){
-        return modelMapper.map(courseBlockDTO, CourseBlock.class);
+    private DisciplineBlocks convertToEntity(CourseBlockDTO courseBlockDTO){
+        return modelMapper.map(courseBlockDTO, DisciplineBlocks.class);
     }
 
-    private CourseBlockDTO convertToDTO(CourseBlock courseBlock){
-        return modelMapper.map(courseBlock, CourseBlockDTO.class);
+    private CourseBlockDTO convertToDTO(DisciplineBlocks disciplineBlocks){
+        return modelMapper.map(disciplineBlocks, CourseBlockDTO.class);
     }
 }

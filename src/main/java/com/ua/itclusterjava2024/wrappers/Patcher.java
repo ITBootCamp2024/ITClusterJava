@@ -5,29 +5,26 @@ import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Field;
 
+import java.lang.reflect.Field;
+
+import org.springframework.stereotype.Component;
+
 @Component
-public class Patcher {
-    public static void teachersPatcher(Teachers existingTeacher, Teachers incompleteTeacher) throws IllegalAccessException {
+public class Patcher<T> {
 
-        //GET THE COMPILED VERSION OF THE CLASS
-        Class<?> internClass = Teachers.class;
-        Field[] internFields = internClass.getDeclaredFields();
-        System.out.println(internFields.length);
-        for (Field field : internFields) {
-            System.out.println(field.getName());
-            //CANT ACCESS IF THE FIELD IS PRIVATE
+    public void patch(T existingObject, T incompleteObject) throws IllegalAccessException {
+        Class<?> objectClass = existingObject.getClass();
+        Field[] fields = objectClass.getDeclaredFields();
+
+        for (Field field : fields) {
             field.setAccessible(true);
-
-            //CHECK IF THE VALUE OF THE FIELD IS NOT NULL, IF NOT UPDATE EXISTING INTERN
-            Object value = field.get(incompleteTeacher);
+            Object value = field.get(incompleteObject);
             if (value != null) {
-                field.set(existingTeacher, value);
+                field.set(existingObject, value);
             }
-            //MAKE THE FIELD PRIVATE AGAIN
             field.setAccessible(false);
         }
-
     }
-
 }
+
 

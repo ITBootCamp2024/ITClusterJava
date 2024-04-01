@@ -1,9 +1,9 @@
 package com.ua.itclusterjava2024.controller;
 
 import com.ua.itclusterjava2024.dto.ProgramsLevelDTO;
-import com.ua.itclusterjava2024.entity.ProgramsLevel;
+import com.ua.itclusterjava2024.entity.EducationLevels;
 import com.ua.itclusterjava2024.exceptions.ValidationException;
-import com.ua.itclusterjava2024.service.interfaces.ProgramsLevelService;
+import com.ua.itclusterjava2024.service.interfaces.EducationLevelService;
 import com.ua.itclusterjava2024.validators.ProgramsLevelValidator;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
@@ -16,29 +16,29 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/programs_levels")
-public class ProgramsLevelController {
+@RequestMapping("/education_levels")
+public class EducationLevelController {
 
-    private final ProgramsLevelService programsLevelService;
+    private final EducationLevelService educationLevelService;
     private final ModelMapper modelMapper;
     private final ProgramsLevelValidator programsLevelValidator;
 
     @Autowired
-    public ProgramsLevelController(ProgramsLevelService programsLevelService, ModelMapper modelMapper, ProgramsLevelValidator programsLevelValidator) {
-        this.programsLevelService = programsLevelService;
+    public EducationLevelController(EducationLevelService educationLevelService, ModelMapper modelMapper, ProgramsLevelValidator programsLevelValidator) {
+        this.educationLevelService = educationLevelService;
         this.modelMapper = modelMapper;
         this.programsLevelValidator = programsLevelValidator;
     }
 
     @GetMapping
     public List<ProgramsLevelDTO> findAll() {
-        return programsLevelService.getAll().stream().map(this::convertToDTO)
+        return educationLevelService.getAll().stream().map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
     public ProgramsLevelDTO findById(@PathVariable long id) {
-        return convertToDTO(programsLevelService.readById(id).orElse(null));
+        return convertToDTO(educationLevelService.readById(id).orElse(null));
     }
 
     @PostMapping
@@ -47,7 +47,7 @@ public class ProgramsLevelController {
         if (bindingResult.hasErrors()){
             throw new ValidationException(bindingResult);
         }
-        programsLevelService.create(convertToEntity(programsLevelDTO));
+        educationLevelService.create(convertToEntity(programsLevelDTO));
         return new RedirectView("/programs_levels");
     }
 
@@ -60,21 +60,21 @@ public class ProgramsLevelController {
         if (bindingResult.hasErrors()){
             throw new ValidationException(bindingResult);
         }
-        programsLevelService.update(id, convertToEntity(programsLevelDTO));
+        educationLevelService.update(id, convertToEntity(programsLevelDTO));
         return new RedirectView("/programs_levels");
     }
 
     @DeleteMapping("/{id}")
     public RedirectView delete(@PathVariable long id) {
-        programsLevelService.delete(id);
+        educationLevelService.delete(id);
         return new RedirectView("/programs_levels");
     }
 
-    private ProgramsLevel convertToEntity(ProgramsLevelDTO programsLevelDTO){
-        return modelMapper.map(programsLevelDTO, ProgramsLevel.class);
+    private EducationLevels convertToEntity(ProgramsLevelDTO programsLevelDTO){
+        return modelMapper.map(programsLevelDTO, EducationLevels.class);
     }
 
-    private ProgramsLevelDTO convertToDTO(ProgramsLevel programsLevel){
-        return modelMapper.map(programsLevel, ProgramsLevelDTO.class);
+    private ProgramsLevelDTO convertToDTO(EducationLevels educationLevels){
+        return modelMapper.map(educationLevels, ProgramsLevelDTO.class);
     }
 }

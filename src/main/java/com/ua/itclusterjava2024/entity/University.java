@@ -25,7 +25,7 @@ public class University {
     private String abbr;
 
     @Column(name = "programs_list_url")
-    private String programsListUrl;
+    private String programs_list_url;
 
     @Column(name = "url")
     private String url;

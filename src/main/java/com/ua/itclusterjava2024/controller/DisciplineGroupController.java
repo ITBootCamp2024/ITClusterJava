@@ -1,9 +1,9 @@
 package com.ua.itclusterjava2024.controller;
 
 import com.ua.itclusterjava2024.dto.CourseGroupDTO;
-import com.ua.itclusterjava2024.entity.CourseGroup;
+import com.ua.itclusterjava2024.entity.DisciplineGroup;
 import com.ua.itclusterjava2024.exceptions.ValidationException;
-import com.ua.itclusterjava2024.service.interfaces.CourseGroupService;
+import com.ua.itclusterjava2024.service.interfaces.DisciplineGroupService;
 import com.ua.itclusterjava2024.validators.CourseGroupValidator;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
@@ -16,20 +16,20 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/course_groupes")
-public class CourseGroupController {
-    private final CourseGroupService courseGroupService;
+public class DisciplineGroupController {
+    private final DisciplineGroupService disciplineGroupService;
     private final ModelMapper modelMapper;
     private final CourseGroupValidator courseGroupValidator;
 
-    public CourseGroupController(CourseGroupService courseGroupService, ModelMapper modelMapper, CourseGroupValidator courseGroupValidator) {
-        this.courseGroupService = courseGroupService;
+    public DisciplineGroupController(DisciplineGroupService disciplineGroupService, ModelMapper modelMapper, CourseGroupValidator courseGroupValidator) {
+        this.disciplineGroupService = disciplineGroupService;
         this.modelMapper = modelMapper;
         this.courseGroupValidator = courseGroupValidator;
     }
 
     @GetMapping
     public List<CourseGroupDTO> showCourseGroupesList(){
-        return courseGroupService.getAll().stream().map(this::convertToDTO)
+        return disciplineGroupService.getAll().stream().map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
 
@@ -40,7 +40,7 @@ public class CourseGroupController {
         if (bindingResult.hasErrors()){
             throw new ValidationException(bindingResult);
         }
-        courseGroupService.create(convertToEntity(courseGroupDTO));
+        disciplineGroupService.create(convertToEntity(courseGroupDTO));
         return new RedirectView("/course_groupes");
     }
 
@@ -52,26 +52,26 @@ public class CourseGroupController {
         if (bindingResult.hasErrors()){
             throw new ValidationException(bindingResult);
         }
-        courseGroupService.update(id, convertToEntity(courseGroupDTO));
+        disciplineGroupService.update(id, convertToEntity(courseGroupDTO));
         return new RedirectView("/course_groupes");
     }
 
     @GetMapping("/{id}")
     public CourseGroupDTO findById(@PathVariable Long id){
-        return convertToDTO(courseGroupService.readById(id).orElse(null));
+        return convertToDTO(disciplineGroupService.readById(id).orElse(null));
     }
 
     @DeleteMapping("/{id}")
     public RedirectView deleteCourseGroup(@PathVariable Long id){
-        courseGroupService.delete(id);
+        disciplineGroupService.delete(id);
         return new RedirectView("/course_groupes");
     }
 
-    private CourseGroup convertToEntity(CourseGroupDTO courseGroupDTO){
-        return modelMapper.map(courseGroupDTO, CourseGroup.class);
+    private DisciplineGroup convertToEntity(CourseGroupDTO courseGroupDTO){
+        return modelMapper.map(courseGroupDTO, DisciplineGroup.class);
     }
 
-    private CourseGroupDTO convertToDTO(CourseGroup courseGroup){
-        return modelMapper.map(courseGroup, CourseGroupDTO.class);
+    private CourseGroupDTO convertToDTO(DisciplineGroup disciplineGroup){
+        return modelMapper.map(disciplineGroup, CourseGroupDTO.class);
     }
 }

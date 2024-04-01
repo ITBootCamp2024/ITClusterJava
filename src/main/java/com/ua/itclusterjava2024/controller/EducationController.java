@@ -1,9 +1,9 @@
 package com.ua.itclusterjava2024.controller;
 
 import com.ua.itclusterjava2024.dto.ProgramsDTO;
-import com.ua.itclusterjava2024.entity.Programs;
+import com.ua.itclusterjava2024.entity.EducationPrograms;
 import com.ua.itclusterjava2024.exceptions.ValidationException;
-import com.ua.itclusterjava2024.service.interfaces.ProgramsService;
+import com.ua.itclusterjava2024.service.interfaces.EducationProgramsService;
 
 import com.ua.itclusterjava2024.validators.ProgramsValidator;
 import jakarta.validation.Valid;
@@ -13,35 +13,33 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/programs")
-public class ProgramsController {
-    private final ProgramsService programsService;
+public class EducationController {
+    private final EducationProgramsService educationProgramsService;
 
     private final ModelMapper modelMapper;
     private final ProgramsValidator programsValidator;
 
     @Autowired
-    public ProgramsController(ProgramsService programsService, ModelMapper modelMapper, ProgramsValidator programsValidator) {
-        this.programsService = programsService;
+    public EducationController(EducationProgramsService educationProgramsService, ModelMapper modelMapper, ProgramsValidator programsValidator) {
+        this.educationProgramsService = educationProgramsService;
         this.modelMapper = modelMapper;
         this.programsValidator = programsValidator;
     }
 
     @GetMapping
     public List<ProgramsDTO> findAll() {
-        return programsService.getAll().stream().map(this::convertToDTO)
+        return educationProgramsService.getAll().stream().map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
     public ProgramsDTO findById(@PathVariable long id) {
-        return convertToDTO(programsService.readById(id).orElse(null));
+        return convertToDTO(educationProgramsService.readById(id).orElse(null));
     }
 
     @PostMapping
@@ -50,7 +48,7 @@ public class ProgramsController {
         if (bindingResult.hasErrors()){
             throw new ValidationException(bindingResult);
         }
-        programsService.create(convertToEntity(programsDTO));
+        educationProgramsService.create(convertToEntity(programsDTO));
         return new RedirectView("/programs");
     }
 
@@ -63,21 +61,21 @@ public class ProgramsController {
         if (bindingResult.hasErrors()){
             throw new ValidationException(bindingResult);
         }
-        programsService.update(id, convertToEntity(programsDTO));
+        educationProgramsService.update(id, convertToEntity(programsDTO));
         return new RedirectView("/course_blocks");
     }
 
     @DeleteMapping("/{id}")
     public RedirectView delete(@PathVariable long id) {
-        programsService.delete(id);
+        educationProgramsService.delete(id);
         return new RedirectView("/programs");
     }
 
-    private Programs convertToEntity(ProgramsDTO programsDTO){
-        return modelMapper.map(programsDTO, Programs.class);
+    private EducationPrograms convertToEntity(ProgramsDTO programsDTO){
+        return modelMapper.map(programsDTO, EducationPrograms.class);
     }
 
-    private ProgramsDTO convertToDTO(Programs programs){
-        return modelMapper.map(programs, ProgramsDTO.class);
+    private ProgramsDTO convertToDTO(EducationPrograms educationPrograms){
+        return modelMapper.map(educationPrograms, ProgramsDTO.class);
     }
 }

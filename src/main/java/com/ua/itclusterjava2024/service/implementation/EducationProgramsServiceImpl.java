@@ -1,8 +1,8 @@
 package com.ua.itclusterjava2024.service.implementation;
 
-import com.ua.itclusterjava2024.entity.Programs;
+import com.ua.itclusterjava2024.entity.EducationPrograms;
 import com.ua.itclusterjava2024.repository.ProgramsRepository;
-import com.ua.itclusterjava2024.service.interfaces.ProgramsService;
+import com.ua.itclusterjava2024.service.interfaces.EducationProgramsService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -11,26 +11,26 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ProgramsServiceImpl implements ProgramsService {
+public class EducationProgramsServiceImpl implements EducationProgramsService {
 
     private final ProgramsRepository programsRepository;
 
-    public ProgramsServiceImpl(ProgramsRepository programsRepository) {
+    public EducationProgramsServiceImpl(ProgramsRepository programsRepository) {
         this.programsRepository = programsRepository;
     }
 
     @Override
-    public Programs create(Programs programs) {
-        return programsRepository.save(programs);
+    public EducationPrograms create(EducationPrograms educationPrograms) {
+        return programsRepository.save(educationPrograms);
     }
 
     @Override
-    public Optional<Programs> readById(long id) {
+    public Optional<EducationPrograms> readById(long id) {
         return programsRepository.findById(id);
     }
 
     @Override
-    public Programs update(long id, Programs t) {
+    public EducationPrograms update(long id, EducationPrograms t) {
         t.setId(id);
         return programsRepository.save(t);
     }
@@ -41,11 +41,11 @@ public class ProgramsServiceImpl implements ProgramsService {
     }
 
     @Override
-    public Page<Programs> getAll(Pageable pageable) {
+    public Page<EducationPrograms> getAll(Pageable pageable) {
         return programsRepository.findAll(pageable);    }
 
     @Override
-    public List<Programs> getAll() {
+    public List<EducationPrograms> getAll() {
         return programsRepository.findAll();
     }
 }

@@ -1,8 +1,8 @@
 package com.ua.itclusterjava2024.service.implementation;
 
-import com.ua.itclusterjava2024.entity.ProgramsLevel;
+import com.ua.itclusterjava2024.entity.EducationLevels;
 import com.ua.itclusterjava2024.repository.ProgramsLevelRepository;
-import com.ua.itclusterjava2024.service.interfaces.ProgramsLevelService;
+import com.ua.itclusterjava2024.service.interfaces.EducationLevelService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -11,28 +11,28 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ProgramsLevelServiceImpl implements ProgramsLevelService {
+public class EducationLevelsServiceImpl implements EducationLevelService {
 
     private final ProgramsLevelRepository programsLevelRepository;
 
-    public ProgramsLevelServiceImpl(ProgramsLevelRepository programsLevelRepository) {
+    public EducationLevelsServiceImpl(ProgramsLevelRepository programsLevelRepository) {
         this.programsLevelRepository = programsLevelRepository;
     }
 
     @Override
-    public ProgramsLevel create(ProgramsLevel programsLevel) {
-        return programsLevelRepository.save(programsLevel);
+    public EducationLevels create(EducationLevels educationLevels) {
+        return programsLevelRepository.save(educationLevels);
     }
 
     @Override
-    public Optional<ProgramsLevel> readById(long id) {
+    public Optional<EducationLevels> readById(long id) {
         return programsLevelRepository.findById(id);
     }
 
     @Override
-    public ProgramsLevel update(long id, ProgramsLevel programsLevel) {
-        programsLevel.setId(id);
-        return programsLevelRepository.save(programsLevel);
+    public EducationLevels update(long id, EducationLevels educationLevels) {
+        educationLevels.setId(id);
+        return programsLevelRepository.save(educationLevels);
     }
 
     @Override
@@ -41,12 +41,12 @@ public class ProgramsLevelServiceImpl implements ProgramsLevelService {
     }
 
     @Override
-    public Page<ProgramsLevel> getAll(Pageable pageable) {
+    public Page<EducationLevels> getAll(Pageable pageable) {
         return programsLevelRepository.findAll(pageable);
     }
 
     @Override
-    public List<ProgramsLevel> getAll() {
+    public List<EducationLevels> getAll() {
         return programsLevelRepository.findAll();
     }
 }

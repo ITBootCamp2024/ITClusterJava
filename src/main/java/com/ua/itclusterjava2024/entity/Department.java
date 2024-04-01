@@ -17,7 +17,7 @@ public class Department {
 
     @ManyToOne
     @JoinColumn(name = "university_id")
-    private University university_id;
+    private University university;
 
     @Column(name = "description")
     private String description;
