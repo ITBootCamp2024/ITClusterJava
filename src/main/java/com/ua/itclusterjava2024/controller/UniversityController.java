@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/university")
+@RequestMapping("/universities")
 public class UniversityController {
 
     private final UniversityService universityService;
@@ -40,9 +40,9 @@ public class UniversityController {
     }
 
     @GetMapping
-    public PageWrapper<UniversityDTO> findAll(@RequestParam(defaultValue = "0") int page) {
+    public PageWrapper<UniversityDTO> findAll(@RequestParam(defaultValue = "1") int page) {
         int pageSize = 20;
-        PageRequest pageable = PageRequest.of(page, pageSize);
+        PageRequest pageable = PageRequest.of(page-1, pageSize);
         Page<UniversityDTO> universityPage = universityService.getAll(pageable).map(this::convertToDTO);
 
         PageWrapper<UniversityDTO> pageWrapper = new PageWrapper<>();

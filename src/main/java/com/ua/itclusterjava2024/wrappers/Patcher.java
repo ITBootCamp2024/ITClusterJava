@@ -13,7 +13,6 @@ import org.springframework.stereotype.Component;
 public class Patcher<T> {
 
     public void patch(T existingObject, T incompleteObject) throws IllegalAccessException {
-        // Отримуємо клас об'єкта
         Class<?> objectClass = existingObject.getClass();
         Field[] fields = objectClass.getDeclaredFields();
 
