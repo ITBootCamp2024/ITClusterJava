@@ -1,6 +1,7 @@
 package com.ua.itclusterjava2024.wrappers;
 
 import com.ua.itclusterjava2024.entity.Teachers;
+import com.ua.itclusterjava2024.entity.University;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Field;
@@ -8,6 +9,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Field;
 
 import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.view.RedirectView;
 
 @Component
 public class Patcher<T> {
@@ -25,6 +27,8 @@ public class Patcher<T> {
             field.setAccessible(false);
         }
     }
+
+
 }
 
 
