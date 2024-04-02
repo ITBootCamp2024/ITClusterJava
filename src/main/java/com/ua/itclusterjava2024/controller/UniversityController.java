@@ -57,6 +57,7 @@ public class UniversityController {
         return convertToDTO(universityService.readById(id).orElse(null));
     }
 
+    @CrossOrigin
     @PostMapping
     public RedirectView save(@RequestBody @Valid UniversityDTO universityDTO, BindingResult bindingResult) {
         universityValidator.validate(universityDTO, bindingResult);
@@ -68,6 +69,7 @@ public class UniversityController {
     }
 
     //TODO приямається сутність, а не DTO
+    @CrossOrigin
     @PatchMapping("/{id}")
     public RedirectView update(@PathVariable("id") Long id,
                                @RequestBody University university,
