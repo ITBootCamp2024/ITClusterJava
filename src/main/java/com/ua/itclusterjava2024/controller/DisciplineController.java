@@ -1,6 +1,6 @@
 package com.ua.itclusterjava2024.controller;
 
-import com.ua.itclusterjava2024.dto.CourseDTO;
+import com.ua.itclusterjava2024.dto.DisciplinesDTO;
 import com.ua.itclusterjava2024.entity.Disciplines;
 import com.ua.itclusterjava2024.exceptions.ValidationException;
 import com.ua.itclusterjava2024.service.interfaces.DisciplineService;
@@ -30,17 +30,17 @@ public class DisciplineController {
     }
 
     @GetMapping
-    public List<CourseDTO> findAll() {
+    public List<DisciplinesDTO> findAll() {
         return disciplineService.getAll().stream().map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
     @GetMapping("/{id}")
-    public CourseDTO findById(@PathVariable long id) {
+    public DisciplinesDTO findById(@PathVariable long id) {
         return convertToDTO(disciplineService.readById(id).orElse(null));
     }
 
     @PostMapping
-    public RedirectView save(@RequestBody @Valid CourseDTO courseDTO,
+    public RedirectView save(@RequestBody @Valid DisciplinesDTO courseDTO,
                              BindingResult bindingResult) {
         courseValidator.validate(courseDTO, bindingResult);
         if (bindingResult.hasErrors()){
@@ -52,7 +52,7 @@ public class DisciplineController {
 
     @PatchMapping("/{id}")
     public RedirectView update(@PathVariable("id") Long id,
-            @RequestBody @Valid CourseDTO courseDTO,
+            @RequestBody @Valid DisciplinesDTO courseDTO,
                                BindingResult bindingResult
     ) {
         courseValidator.validate(courseDTO, bindingResult);
@@ -69,11 +69,11 @@ public class DisciplineController {
         return new RedirectView("/course");
     }
 
-    private Disciplines convertToEntity(CourseDTO courseDTO){
+    private Disciplines convertToEntity(DisciplinesDTO courseDTO){
         return modelMapper.map(courseDTO, Disciplines.class);
     }
 
-    private CourseDTO convertToDTO(Disciplines disciplines){
-        return modelMapper.map(disciplines, CourseDTO.class);
+    private DisciplinesDTO convertToDTO(Disciplines disciplines){
+        return modelMapper.map(disciplines, DisciplinesDTO.class);
     }
 }

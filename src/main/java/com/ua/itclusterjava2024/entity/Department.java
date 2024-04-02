@@ -9,6 +9,7 @@ import lombok.Data;
 public class Department {
 
     @Id
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 

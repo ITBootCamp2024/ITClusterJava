@@ -1,6 +1,6 @@
 package com.ua.itclusterjava2024.service.implementation;
 
-import com.ua.itclusterjava2024.entity.DisciplineGroup;
+import com.ua.itclusterjava2024.entity.DisciplineGroups;
 import com.ua.itclusterjava2024.repository.DisciplineGroupRepository;
 import com.ua.itclusterjava2024.service.interfaces.DisciplineGroupService;
 import org.springframework.data.domain.Page;
@@ -20,19 +20,19 @@ public class DisciplineGroupServiceImpl implements DisciplineGroupService {
     }
 
     @Override
-    public DisciplineGroup create(DisciplineGroup disciplineGroup) {
-        return disciplineGroupRepository.save(disciplineGroup);
+    public DisciplineGroups create(DisciplineGroups disciplineGroups) {
+        return disciplineGroupRepository.save(disciplineGroups);
     }
 
     @Override
-    public Optional<DisciplineGroup> readById(long id) {
+    public Optional<DisciplineGroups> readById(long id) {
         return disciplineGroupRepository.findById(id);
     }
 
     @Override
-    public DisciplineGroup update(long id, DisciplineGroup disciplineGroup) {
-        disciplineGroup.setId(id);
-        return disciplineGroupRepository.save(disciplineGroup);
+    public DisciplineGroups update(long id, DisciplineGroups disciplineGroups) {
+        disciplineGroups.setId(id);
+        return disciplineGroupRepository.save(disciplineGroups);
     }
 
     @Override
@@ -41,12 +41,12 @@ public class DisciplineGroupServiceImpl implements DisciplineGroupService {
     }
 
     @Override
-    public List<DisciplineGroup> getAll() {
+    public List<DisciplineGroups> getAll() {
         return disciplineGroupRepository.findAll();
     }
 
     @Override
-    public Page<DisciplineGroup> getAll(Pageable pageable) {
+    public Page<DisciplineGroups> getAll(Pageable pageable) {
         return disciplineGroupRepository.findAll(pageable);
     }
 }

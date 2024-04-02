@@ -1,9 +1,7 @@
 package com.ua.itclusterjava2024.dto;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,9 +12,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @Builder
-public class SpecialtyDTO {
+public class DisciplineGroupsDTO {
     private Long id;
-    private String code;
     private String name;
-    private String standardUrl;
+    private String description;
+    private DisciplineBlocksDTO block;
+    private String disciplineUrl;
 }

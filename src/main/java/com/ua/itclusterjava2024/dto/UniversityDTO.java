@@ -1,5 +1,6 @@
 package com.ua.itclusterjava2024.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.Column;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotEmpty;
@@ -11,17 +12,11 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UniversityDTO {
-    @Id
-    long id;
-
-    @Size(max = 200, message = "Name of university have to contain up to 200 symbols")
+    private Long id;
     private String name;
-
-    @Size(max = 20, message = "Shortname of university have to contain up to 20 symbols")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String abbr;
-
-    @Size(max = 100, message = "Site link of university have to contain up to 100 symbols")
-    private String programs_list_url;
-
+    private String programsListUrl;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String url;
 }

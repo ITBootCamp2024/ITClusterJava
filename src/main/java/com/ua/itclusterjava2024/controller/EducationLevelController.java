@@ -1,6 +1,6 @@
 package com.ua.itclusterjava2024.controller;
 
-import com.ua.itclusterjava2024.dto.ProgramsLevelDTO;
+import com.ua.itclusterjava2024.dto.EducationLevelsDTO;
 import com.ua.itclusterjava2024.entity.EducationLevels;
 import com.ua.itclusterjava2024.exceptions.ValidationException;
 import com.ua.itclusterjava2024.service.interfaces.EducationLevelService;
@@ -31,36 +31,36 @@ public class EducationLevelController {
     }
 
     @GetMapping
-    public List<ProgramsLevelDTO> findAll() {
+    public List<EducationLevelsDTO> findAll() {
         return educationLevelService.getAll().stream().map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
-    public ProgramsLevelDTO findById(@PathVariable long id) {
+    public EducationLevelsDTO findById(@PathVariable long id) {
         return convertToDTO(educationLevelService.readById(id).orElse(null));
     }
 
     @PostMapping
-    public RedirectView save(@RequestBody @Valid ProgramsLevelDTO programsLevelDTO, BindingResult bindingResult) {
-        programsLevelValidator.validate(programsLevelDTO, bindingResult);
+    public RedirectView save(@RequestBody @Valid EducationLevelsDTO educationLevelsDTO, BindingResult bindingResult) {
+        programsLevelValidator.validate(educationLevelsDTO, bindingResult);
         if (bindingResult.hasErrors()){
             throw new ValidationException(bindingResult);
         }
-        educationLevelService.create(convertToEntity(programsLevelDTO));
+        educationLevelService.create(convertToEntity(educationLevelsDTO));
         return new RedirectView("/programs_levels");
     }
 
     @PatchMapping("/{id}")
     public RedirectView update(@PathVariable("id") Long id,
-            @RequestBody @Valid ProgramsLevelDTO programsLevelDTO,
+            @RequestBody @Valid EducationLevelsDTO educationLevelsDTO,
                                BindingResult bindingResult
     ) {
-        programsLevelValidator.validate(programsLevelDTO, bindingResult);
+        programsLevelValidator.validate(educationLevelsDTO, bindingResult);
         if (bindingResult.hasErrors()){
             throw new ValidationException(bindingResult);
         }
-        educationLevelService.update(id, convertToEntity(programsLevelDTO));
+        educationLevelService.update(id, convertToEntity(educationLevelsDTO));
         return new RedirectView("/programs_levels");
     }
 
@@ -70,11 +70,11 @@ public class EducationLevelController {
         return new RedirectView("/programs_levels");
     }
 
-    private EducationLevels convertToEntity(ProgramsLevelDTO programsLevelDTO){
-        return modelMapper.map(programsLevelDTO, EducationLevels.class);
+    private EducationLevels convertToEntity(EducationLevelsDTO educationLevelsDTO){
+        return modelMapper.map(educationLevelsDTO, EducationLevels.class);
     }
 
-    private ProgramsLevelDTO convertToDTO(EducationLevels educationLevels){
-        return modelMapper.map(educationLevels, ProgramsLevelDTO.class);
+    private EducationLevelsDTO convertToDTO(EducationLevels educationLevels){
+        return modelMapper.map(educationLevels, EducationLevelsDTO.class);
     }
 }

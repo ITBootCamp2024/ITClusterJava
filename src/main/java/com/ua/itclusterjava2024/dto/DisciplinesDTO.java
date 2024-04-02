@@ -9,7 +9,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class DegreeDTO {
-    private long id;
+public class DisciplinesDTO {
+    private Long id;
     private String name;
+    private Long teacherId;
+    private Long disciplineGroupId;
+    private Long educationProgramId;
+    private String syllabusLink;
+    private String educationPlanUrl;
 }
