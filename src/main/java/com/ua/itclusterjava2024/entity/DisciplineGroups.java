@@ -12,8 +12,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "discipline_groups")
-public class DisciplineGroup {
+public class DisciplineGroups {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     @Id
     Long id;
 

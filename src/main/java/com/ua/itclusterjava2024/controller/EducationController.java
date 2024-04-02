@@ -1,6 +1,6 @@
 package com.ua.itclusterjava2024.controller;
 
-import com.ua.itclusterjava2024.dto.ProgramsDTO;
+import com.ua.itclusterjava2024.dto.EducationProgramsDTO;
 import com.ua.itclusterjava2024.entity.EducationPrograms;
 import com.ua.itclusterjava2024.exceptions.ValidationException;
 import com.ua.itclusterjava2024.service.interfaces.EducationProgramsService;
@@ -32,36 +32,36 @@ public class EducationController {
     }
 
     @GetMapping
-    public List<ProgramsDTO> findAll() {
+    public List<EducationProgramsDTO> findAll() {
         return educationProgramsService.getAll().stream().map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
-    public ProgramsDTO findById(@PathVariable long id) {
+    public EducationProgramsDTO findById(@PathVariable long id) {
         return convertToDTO(educationProgramsService.readById(id).orElse(null));
     }
 
     @PostMapping
-    public RedirectView save(@RequestBody @Valid ProgramsDTO programsDTO, BindingResult bindingResult) {
-        programsValidator.validate(programsDTO, bindingResult);
+    public RedirectView save(@RequestBody @Valid EducationProgramsDTO educationProgramsDTO, BindingResult bindingResult) {
+        programsValidator.validate(educationProgramsDTO, bindingResult);
         if (bindingResult.hasErrors()){
             throw new ValidationException(bindingResult);
         }
-        educationProgramsService.create(convertToEntity(programsDTO));
+        educationProgramsService.create(convertToEntity(educationProgramsDTO));
         return new RedirectView("/programs");
     }
 
     @PatchMapping("/{id}")
     public RedirectView update(@PathVariable("id") Long id,
-            @RequestBody @Valid ProgramsDTO programsDTO,
+            @RequestBody @Valid EducationProgramsDTO educationProgramsDTO,
                                BindingResult bindingResult
     ) {
-        programsValidator.validate(programsDTO, bindingResult);
+        programsValidator.validate(educationProgramsDTO, bindingResult);
         if (bindingResult.hasErrors()){
             throw new ValidationException(bindingResult);
         }
-        educationProgramsService.update(id, convertToEntity(programsDTO));
+        educationProgramsService.update(id, convertToEntity(educationProgramsDTO));
         return new RedirectView("/course_blocks");
     }
 
@@ -71,11 +71,11 @@ public class EducationController {
         return new RedirectView("/programs");
     }
 
-    private EducationPrograms convertToEntity(ProgramsDTO programsDTO){
-        return modelMapper.map(programsDTO, EducationPrograms.class);
+    private EducationPrograms convertToEntity(EducationProgramsDTO educationProgramsDTO){
+        return modelMapper.map(educationProgramsDTO, EducationPrograms.class);
     }
 
-    private ProgramsDTO convertToDTO(EducationPrograms educationPrograms){
-        return modelMapper.map(educationPrograms, ProgramsDTO.class);
+    private EducationProgramsDTO convertToDTO(EducationPrograms educationPrograms){
+        return modelMapper.map(educationPrograms, EducationProgramsDTO.class);
     }
 }

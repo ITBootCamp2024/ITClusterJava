@@ -56,13 +56,14 @@ public class UniversityController {
 
     @CrossOrigin
     @PostMapping
-    public RedirectView save(@RequestBody @Valid UniversityDTO universityDTO, BindingResult bindingResult) {
+    public PageWrapper<UniversityDTO> save(@RequestBody @Valid UniversityDTO universityDTO, BindingResult bindingResult) {
         universityValidator.validate(universityDTO, bindingResult);
         if (bindingResult.hasErrors()) {
             throw new ValidationException(bindingResult);
         }
         universityService.create(convertToEntity(universityDTO));
-        return new RedirectView("/universities");
+        return findAll(1);
+        //        return new RedirectView("/universities");
     }
 
     //TODO приямається сутність, а не DTO
@@ -77,7 +78,7 @@ public class UniversityController {
             e.printStackTrace();
         }
 
-        universityService.update(id,existingUniversity);
+        universityService.update(id, existingUniversity);
         return findAll(1);
 //        return new RedirectView("/universities");
     }

@@ -1,7 +1,6 @@
 package com.ua.itclusterjava2024.validators;
 
-import com.ua.itclusterjava2024.dto.ProgramsLevelDTO;
-import jakarta.validation.Valid;
+import com.ua.itclusterjava2024.dto.EducationLevelsDTO;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
@@ -10,14 +9,14 @@ import org.springframework.validation.Validator;
 public class ProgramsLevelValidator implements Validator {
     @Override
     public boolean supports(Class<?> clazz) {
-        return ProgramsLevelDTO.class.equals(clazz);
+        return EducationLevelsDTO.class.equals(clazz);
     }
 
     @Override
     public void validate(Object target, Errors errors) {
-        ProgramsLevelDTO programsLevelDTO = (ProgramsLevelDTO) target;
+        EducationLevelsDTO educationLevelsDTO = (EducationLevelsDTO) target;
 
-        if (checkNullAndEmpty(programsLevelDTO.getName())) {
+        if (checkNullAndEmpty(educationLevelsDTO.getName())) {
             errors.rejectValue("name", "", "Name mustn't be empty");
         }
     }

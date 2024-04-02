@@ -4,16 +4,20 @@ import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
-public class ProgramsLevelDTO {
-    @Id
-    long id;
-    @NotEmpty
-    @Size(max = 100, message = "Name of program level have to contain up to 100 symbols")
+@Builder
+public class EducationProgramsDTO {
+    private Long id;
     private String name;
+    private EducationLevelsDTO educationLevels;
+    private String guarantor;
+    private DepartmentDTO department;
+    private String programUrl;
+    private String syllabusLink;
+    private SpecialtyDTO specialty;
 }

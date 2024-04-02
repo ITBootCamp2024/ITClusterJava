@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,26 +13,15 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class TeachersDTO {
-    @Id
-    private long id;
-
-    @NotEmpty
-    @Size(max = 100, message = "Teacher's name must contain up to 100 characters")
+    private Long id;
     private String name;
-
     private PositionDTO position;
     private DegreeDTO degree;
     private UniversityDTO university;
     private DepartmentDTO department;
-
-    @Email
-    @NotEmpty
-    @Size(max = 100, message = "Teacher's email must contain up to 100 characters")
     private String email;
-
-    @NotEmpty
-    @Size(max = 100, message = "Teacher's comments must contain up to 100 characters")
     private String comments;
 }
 

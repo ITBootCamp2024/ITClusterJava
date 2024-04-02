@@ -14,14 +14,14 @@ public class SpecialtyValidator implements Validator {
 
     @Override
     public void validate(Object target, Errors errors) {
-        SpecialtyDTO specialtyDTO = (SpecialtyDTO) target;
-
-        if (checkNullAndEmpty(specialtyDTO.getName())) {
-            errors.rejectValue("name", "", "Name mustn't be empty");
-        }
-        if (checkNullAndEmpty(specialtyDTO.getLink_standart())) {
-            errors.rejectValue("link_standart", "", "Link standart mustn't be empty");
-        }
+//        SpecialtyDTO specialtyDTO = (SpecialtyDTO) target;
+//
+//        if (checkNullAndEmpty(specialtyDTO.getName())) {
+//            errors.rejectValue("name", "", "Name mustn't be empty");
+//        }
+//        if (checkNullAndEmpty(specialtyDTO.getLink_standart())) {
+//            errors.rejectValue("link_standart", "", "Link standart mustn't be empty");
+//        }
 
     }
 

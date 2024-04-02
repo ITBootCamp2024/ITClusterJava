@@ -1,6 +1,6 @@
 package com.ua.itclusterjava2024.validators;
 
-import com.ua.itclusterjava2024.dto.CourseGroupDTO;
+import com.ua.itclusterjava2024.dto.DisciplineGroupsDTO;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
@@ -9,17 +9,17 @@ import org.springframework.validation.Validator;
 public class CourseGroupValidator implements Validator {
     @Override
     public boolean supports(Class<?> clazz) {
-        return CourseGroupDTO.class.equals(clazz);
+        return DisciplineGroupsDTO.class.equals(clazz);
     }
 
     @Override
     public void validate(Object target, Errors errors) {
-        CourseGroupDTO courseGroupDTO = (CourseGroupDTO) target;
+        DisciplineGroupsDTO disciplineGroupsDTO = (DisciplineGroupsDTO) target;
 
-        if (checkNullAndEmpty(courseGroupDTO.getName())) {
+        if (checkNullAndEmpty(disciplineGroupsDTO.getName())) {
             errors.rejectValue("name", "", "Name mustn't be empty");
         }
-        if (checkNullAndEmpty(courseGroupDTO.getDescription())) {
+        if (checkNullAndEmpty(disciplineGroupsDTO.getDescription())) {
             errors.rejectValue("description", "", "Description mustn't be empty");
         }
     }

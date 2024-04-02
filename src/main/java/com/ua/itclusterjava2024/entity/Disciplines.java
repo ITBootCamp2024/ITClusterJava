@@ -30,7 +30,7 @@ public class Disciplines {
 
     @ManyToOne
     @JoinColumn(name = "discipline_group_id")
-    private DisciplineGroup disciplineGroup;
+    private DisciplineGroups disciplineGroups;
 
     @ManyToOne
     @JoinColumn(name = "education_program_id")
@@ -41,7 +41,7 @@ public class Disciplines {
     @Pattern(regexp = "https?://.", message = "Incorrect format URL")
     private String syllabusLink;
 
-    @Column(name = "education_plan__url", nullable = false)
+    @Column(name = "education_plan_url", nullable = false)
     @Size(max = 100, message = "Syllabus Link have to contain up to 200 symbols")
     @Pattern(regexp = "https?://.", message = "Incorrect format URL")
     private String educationPlanUrl;

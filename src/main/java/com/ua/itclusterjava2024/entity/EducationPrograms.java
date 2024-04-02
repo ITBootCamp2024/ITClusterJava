@@ -38,12 +38,12 @@ public class EducationPrograms {
     @Column(name = "program_url", nullable = false)
     @NotEmpty
     @Size(max = 200, message = "Program link have to contain up to 200 symbols")
-    private String program_url;
+    private String programUrl;
 
-    @Column(name = "syllabus_link", nullable = false)
+    @Column(name = "syllabus_url", nullable = false)
     @NotEmpty
     @Size(max = 200, message = "Syllabus link have to contain up to 200 symbols")
-    private String syllabus_link;
+    private String syllabusLink;
     @ManyToOne
     @JoinColumn(name = "specialty_id")
     private Specialty specialty;

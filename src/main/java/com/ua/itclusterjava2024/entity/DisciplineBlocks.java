@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 @Table(name="discipline_blocks")
 public class DisciplineBlocks {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     @Id
     Long id;
 
