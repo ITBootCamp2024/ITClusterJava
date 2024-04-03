@@ -2,7 +2,7 @@ package com.ua.itclusterjava2024.service.implementation;
 
 import com.ua.itclusterjava2024.entity.Disciplines;
 import com.ua.itclusterjava2024.repository.DisciplineRepository;
-import com.ua.itclusterjava2024.service.interfaces.DisciplineService;
+import com.ua.itclusterjava2024.service.interfaces.DisciplinesService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class DisciplinesServiceImpl implements DisciplineService {
+public class DisciplinesServiceImpl implements DisciplinesService {
 
     private final DisciplineRepository disciplineRepository;
 

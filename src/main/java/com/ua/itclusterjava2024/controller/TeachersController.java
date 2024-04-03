@@ -2,7 +2,7 @@ package com.ua.itclusterjava2024.controller;
 
 import com.ua.itclusterjava2024.dto.*;
 import com.ua.itclusterjava2024.entity.Department;
-import com.ua.itclusterjava2024.entity.EducationLevels;
+import com.ua.itclusterjava2024.entity.EducationLevel;
 import com.ua.itclusterjava2024.entity.Position;
 import com.ua.itclusterjava2024.exceptions.NotFoundException;
 import com.ua.itclusterjava2024.service.implementation.*;
@@ -91,12 +91,12 @@ public class TeachersController {
     public Teachers convertToEntity(TeachersDTO dto) {
         Teachers teacher = modelMapper.map(dto, Teachers.class);
         Position position = positionService.readById(dto.getPosition().getId()).orElseThrow();
-        EducationLevels degree = educationLevel.readById(dto.getEducationLevels().getId())
+        EducationLevel educationLevel = this.educationLevel.readById(dto.getEducation_level().getId())
                 .orElseThrow(() -> new NotFoundException("Degree not found"));
         Department department = departmentService.readById(dto.getDepartment().getId())
                 .orElseThrow(() -> new NotFoundException("Department not found"));
         teacher.setPosition(position);
-        teacher.setEducationLevel(degree);
+        teacher.setEducation_level(educationLevel);
         teacher.setDepartment(department);
         return teacher;
     }
@@ -104,7 +104,7 @@ public class TeachersController {
     public TeachersDTO convertToDTO(Teachers teacher) {
         TeachersDTO dto = modelMapper.map(teacher, TeachersDTO.class);
         dto.setPosition(new PositionDTO(teacher.getPosition().getId(), teacher.getPosition().getName()));
-        dto.setEducationLevels(EducationLevelsDTO.builder().id(teacher.getEducationLevel().getId()).name(teacher.getEducationLevel().getName()).build());
+        dto.setEducation_level(EducationLevelDTO.builder().id(teacher.getEducation_level().getId()).name(teacher.getEducation_level().getName()).build());
         dto.setDepartment(DepartmentDTO.builder().id(teacher.getDepartment().getId())
                 .name(teacher.getDepartment().getName())
                 .build());

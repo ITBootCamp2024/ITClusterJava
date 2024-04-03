@@ -1,40 +1,55 @@
 package com.ua.itclusterjava2024.controller;
 
-import com.ua.itclusterjava2024.dto.EducationProgramsDTO;
+import com.ua.itclusterjava2024.dto.*;
+import com.ua.itclusterjava2024.entity.Department;
+import com.ua.itclusterjava2024.entity.EducationLevel;
 import com.ua.itclusterjava2024.entity.EducationPrograms;
-import com.ua.itclusterjava2024.exceptions.ValidationException;
+import com.ua.itclusterjava2024.exceptions.NotFoundException;
+import com.ua.itclusterjava2024.service.interfaces.DepartmentService;
+import com.ua.itclusterjava2024.service.interfaces.EducationLevelsService;
 import com.ua.itclusterjava2024.service.interfaces.EducationProgramsService;
 
 import com.ua.itclusterjava2024.validators.ProgramsValidator;
-import jakarta.validation.Valid;
+import com.ua.itclusterjava2024.wrappers.PageWrapper;
+import com.ua.itclusterjava2024.wrappers.Patcher;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.view.RedirectView;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/education-programs")
 public class EducationProgramsController {
     private final EducationProgramsService educationProgramsService;
-
     private final ModelMapper modelMapper;
     private final ProgramsValidator programsValidator;
+    @Autowired
+    Patcher patcher;
+    private EducationLevelsService educationLevelService;
+    private DepartmentService departmentService;
 
     @Autowired
-    public EducationProgramsController(EducationProgramsService educationProgramsService, ModelMapper modelMapper, ProgramsValidator programsValidator) {
+    public EducationProgramsController(EducationProgramsService educationProgramsService, ModelMapper modelMapper, ProgramsValidator programsValidator, EducationLevelsService educationLevelService, DepartmentService departmentService) {
         this.educationProgramsService = educationProgramsService;
         this.modelMapper = modelMapper;
         this.programsValidator = programsValidator;
+        this.educationLevelService = educationLevelService;
+        this.departmentService = departmentService;
     }
 
     @GetMapping
-    public List<EducationProgramsDTO> findAll() {
-        return educationProgramsService.getAll().stream().map(this::convertToDTO)
-                .collect(Collectors.toList());
+    public PageWrapper<EducationProgramsDTO> findAll(@RequestParam(defaultValue = "1") int page) {
+        int pageSize = 20;
+        PageRequest pageable = PageRequest.of(page - 1, pageSize);
+        Page<EducationProgramsDTO> educationProgramsPage = educationProgramsService.getAll(pageable).map(this::convertToDTO);
+
+        PageWrapper<EducationProgramsDTO> pageWrapper = new PageWrapper<>();
+        pageWrapper.setContent(educationProgramsPage.getContent());
+        pageWrapper.setPageNumber(educationProgramsPage.getNumber());
+        pageWrapper.setTotalElements(educationProgramsPage.getTotalElements());
+        return pageWrapper;
     }
 
     @GetMapping("/{id}")
@@ -43,39 +58,61 @@ public class EducationProgramsController {
     }
 
     @PostMapping
-    public RedirectView save(@RequestBody @Valid EducationProgramsDTO educationProgramsDTO, BindingResult bindingResult) {
-        programsValidator.validate(educationProgramsDTO, bindingResult);
-        if (bindingResult.hasErrors()){
-            throw new ValidationException(bindingResult);
-        }
+    public PageWrapper<EducationProgramsDTO> save(@RequestBody EducationProgramsDTO educationProgramsDTO, BindingResult bindingResult) {
         educationProgramsService.create(convertToEntity(educationProgramsDTO));
-        return new RedirectView("/education-programs");
+        return findAll(1);
     }
 
     @PatchMapping("/{id}")
-    public RedirectView update(@PathVariable("id") Long id,
-            @RequestBody @Valid EducationProgramsDTO educationProgramsDTO,
-                               BindingResult bindingResult
+    public PageWrapper<EducationProgramsDTO> update(@PathVariable("id") Long id,
+                                                    @RequestBody EducationPrograms educationPrograms
     ) {
-        programsValidator.validate(educationProgramsDTO, bindingResult);
-        if (bindingResult.hasErrors()){
-            throw new ValidationException(bindingResult);
+        EducationPrograms existingTeacher = educationProgramsService.readById(id).orElse(null);
+        try {
+            patcher.patch(existingTeacher, educationPrograms);
+            educationProgramsService.create(existingTeacher);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        educationProgramsService.update(id, convertToEntity(educationProgramsDTO));
-        return new RedirectView("/education-programs");
+        return findAll(1);
     }
 
     @DeleteMapping("/{id}")
-    public RedirectView delete(@PathVariable long id) {
+    public PageWrapper<EducationProgramsDTO> delete(@PathVariable long id) {
         educationProgramsService.delete(id);
-        return new RedirectView("/education-programs");
+        return findAll(1);
     }
 
-    private EducationPrograms convertToEntity(EducationProgramsDTO educationProgramsDTO){
-        return modelMapper.map(educationProgramsDTO, EducationPrograms.class);
+    private EducationPrograms convertToEntity(EducationProgramsDTO dto) {
+        EducationPrograms educationPrograms = modelMapper.map(dto, EducationPrograms.class);
+
+        EducationLevel educationLevel = educationLevelService.readById(dto.getEducation_level().getId())
+                .orElseThrow(() -> new NotFoundException("Education Level not found"));
+        Department department = departmentService.readById(dto.getDepartment().getId())
+                .orElseThrow(() -> new NotFoundException("Department not found"));
+
+        educationPrograms.setEducation_level(educationLevel);
+        educationPrograms.setDepartment(department);
+
+        return educationPrograms;
     }
 
-    private EducationProgramsDTO convertToDTO(EducationPrograms educationPrograms){
-        return modelMapper.map(educationPrograms, EducationProgramsDTO.class);
+    public EducationProgramsDTO convertToDTO(EducationPrograms educationPrograms) {
+        EducationProgramsDTO dto = modelMapper.map(educationPrograms, EducationProgramsDTO.class);
+        dto.setSpecialty(SpecialtyDTO.builder().id(educationPrograms.getSpecialty().getId())
+                .code(educationPrograms.getSpecialty().getCode()).build());
+        dto.setEducation_level(EducationLevelDTO.builder()
+                .id(educationPrograms.getEducation_level().getId())
+                .education_level(educationPrograms.getEducation_level().getEducation_level())
+                .name(educationPrograms.getEducation_level().getName())
+                .build());
+        dto.setUniversity(UniversityDTO.builder().id(educationPrograms.getDepartment().getUniversity().getId())
+                .name(educationPrograms.getDepartment().getUniversity().getName()).build());
+        dto.setDepartment(DepartmentDTO.builder()
+                .id(educationPrograms.getDepartment().getId())
+                .url(educationPrograms.getDepartment().getUrl())
+                .name(educationPrograms.getDepartment().getName())
+                .build());
+        return dto;
     }
 }

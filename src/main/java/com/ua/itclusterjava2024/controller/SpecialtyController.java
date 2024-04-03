@@ -30,9 +30,9 @@ public class SpecialtyController {
     }
 
     @GetMapping
-    public Page<SpecialtyDTO> findAll(@RequestParam(defaultValue = "0") int page) {
+    public Page<SpecialtyDTO> findAll(@RequestParam(defaultValue = "1") int page) {
         int pageSize = 20;
-        PageRequest pageable = PageRequest.of(page, pageSize);
+        PageRequest pageable = PageRequest.of(page-1, pageSize);
         return specialtyService.getAll(pageable).map(this::convertToDTO);
     }
 
