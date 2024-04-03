@@ -18,7 +18,7 @@ public class TeachersDTO {
     private Long id;
     private String name;
     private PositionDTO position;
-    private DegreeDTO degree;
+    private EducationLevelsDTO educationLevels;
     private UniversityDTO university;
     private DepartmentDTO department;
     private String email;

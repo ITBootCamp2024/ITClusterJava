@@ -14,6 +14,6 @@ import lombok.NoArgsConstructor;
 @Builder
 public class EducationLevelsDTO {
     private Long id;
-    private String educationLevel;
+    private String education_level;
     private String name;
 }

@@ -17,7 +17,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.view.RedirectView;
 
 @RestController
 @RequestMapping("/universities")
@@ -63,10 +62,8 @@ public class UniversityController {
         }
         universityService.create(convertToEntity(universityDTO));
         return findAll(1);
-        //        return new RedirectView("/universities");
     }
 
-    //TODO приямається сутність, а не DTO
     @CrossOrigin
     @PatchMapping("/{id}")
     public PageWrapper<UniversityDTO> update(@PathVariable Long id, @RequestBody University updatedUniversity) {
@@ -80,13 +77,12 @@ public class UniversityController {
 
         universityService.update(id, existingUniversity);
         return findAll(1);
-//        return new RedirectView("/universities");
     }
 
     @DeleteMapping("/{id}")
-    public RedirectView delete(@PathVariable long id) {
+    public PageWrapper<UniversityDTO> delete(@PathVariable long id) {
         universityService.delete(id);
-        return new RedirectView("/universities");
+        return findAll(1);
     }
 
     private University convertToEntity(UniversityDTO universityDTO) {

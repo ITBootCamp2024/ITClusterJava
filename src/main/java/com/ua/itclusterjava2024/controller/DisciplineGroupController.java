@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/course_groupes")
+@RequestMapping("/discipline-groups")
 public class DisciplineGroupController {
     private final DisciplineGroupService disciplineGroupService;
     private final ModelMapper modelMapper;
@@ -41,7 +41,7 @@ public class DisciplineGroupController {
             throw new ValidationException(bindingResult);
         }
         disciplineGroupService.create(convertToEntity(disciplineGroupsDTO));
-        return new RedirectView("/course_groupes");
+        return new RedirectView("/discipline-groups");
     }
 
     @PatchMapping("/{id}")
@@ -53,7 +53,7 @@ public class DisciplineGroupController {
             throw new ValidationException(bindingResult);
         }
         disciplineGroupService.update(id, convertToEntity(disciplineGroupsDTO));
-        return new RedirectView("/course_groupes");
+        return new RedirectView("/discipline-groups");
     }
 
     @GetMapping("/{id}")
@@ -64,7 +64,7 @@ public class DisciplineGroupController {
     @DeleteMapping("/{id}")
     public RedirectView deleteCourseGroup(@PathVariable Long id){
         disciplineGroupService.delete(id);
-        return new RedirectView("/course_groupes");
+        return new RedirectView("/discipline-groups");
     }
 
     private DisciplineGroups convertToEntity(DisciplineGroupsDTO disciplineGroupsDTO){

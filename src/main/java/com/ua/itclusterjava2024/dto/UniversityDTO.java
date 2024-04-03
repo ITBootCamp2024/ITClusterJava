@@ -16,7 +16,8 @@ public class UniversityDTO {
     private String name;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String abbr;
-    private String programsListUrl;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private String programs_list_url;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String url;
 }

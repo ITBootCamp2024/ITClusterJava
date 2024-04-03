@@ -3,6 +3,7 @@ package com.ua.itclusterjava2024.controller;
 import com.ua.itclusterjava2024.dto.DisciplineBlocksDTO;
 import com.ua.itclusterjava2024.entity.DisciplineBlocks;
 import com.ua.itclusterjava2024.exceptions.ValidationException;
+import com.ua.itclusterjava2024.service.implementation.DisciplineBlocksServiceImpl;
 import com.ua.itclusterjava2024.service.interfaces.DisciplineBlocksService;
 import com.ua.itclusterjava2024.validators.CourseBlockValidator;
 import jakarta.validation.Valid;
@@ -15,7 +16,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/course_blocks")
+@RequestMapping("/discipline-blocks")
 public class DisciplineBlocksController {
     private final DisciplineBlocksService disciplineBlocksService;
     private final ModelMapper modelMapper;
@@ -33,18 +34,18 @@ public class DisciplineBlocksController {
     }
 
     @PostMapping
-    public RedirectView saveCourseBlock(@RequestBody @Valid DisciplineBlocksDTO disciplineBlocksDTO,
+    public RedirectView save(@RequestBody @Valid DisciplineBlocksDTO disciplineBlocksDTO,
                                         BindingResult bindingResult){
         courseBlockValidator.validate(disciplineBlocksDTO, bindingResult);
         if (bindingResult.hasErrors()){
             throw new ValidationException(bindingResult);
         }
         disciplineBlocksService.create(convertToEntity(disciplineBlocksDTO));
-        return new RedirectView("redirect:/course_blocks");
+        return new RedirectView("redirect:/discipline-blocks");
     }
 
     @PatchMapping("/{id}")
-    public RedirectView updateCourseBlock(@PathVariable("id") Long id,
+    public RedirectView update(@PathVariable("id") Long id,
                                          @RequestBody @Valid DisciplineBlocksDTO disciplineBlocksDTO,
                                           BindingResult bindingResult){
         courseBlockValidator.validate(disciplineBlocksDTO, bindingResult);
@@ -52,7 +53,7 @@ public class DisciplineBlocksController {
             throw new ValidationException(bindingResult);
         }
         disciplineBlocksService.update(id, convertToEntity(disciplineBlocksDTO));
-        return new RedirectView("redirect:/course_blocks");
+        return new RedirectView("redirect:/discipline-blocks");
     }
 
     @GetMapping("/{id}")
@@ -61,9 +62,9 @@ public class DisciplineBlocksController {
     }
 
     @DeleteMapping("/{id}")
-    public RedirectView deleteCourseBlock(@PathVariable Long id){
+    public RedirectView delete(@PathVariable Long id){
         disciplineBlocksService.delete(id);
-        return new RedirectView("redirect:/course_blocks");
+        return new RedirectView("redirect:/discipline-blocks");
     }
 
     private DisciplineBlocks convertToEntity(DisciplineBlocksDTO disciplineBlocksDTO){
