@@ -1,5 +1,6 @@
 package com.ua.itclusterjava2024.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.Column;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotEmpty;
@@ -16,7 +17,13 @@ import lombok.NoArgsConstructor;
 @Builder
 public class SpecialtyDTO {
     private Long id;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+
     private String code;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+
     private String name;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+
     private String standardUrl;
 }

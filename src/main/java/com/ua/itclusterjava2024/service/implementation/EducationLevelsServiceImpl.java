@@ -1,6 +1,6 @@
 package com.ua.itclusterjava2024.service.implementation;
 
-import com.ua.itclusterjava2024.entity.EducationLevels;
+import com.ua.itclusterjava2024.entity.EducationLevel;
 import com.ua.itclusterjava2024.repository.ProgramsLevelRepository;
 import com.ua.itclusterjava2024.service.interfaces.EducationLevelsService;
 import org.springframework.data.domain.Page;
@@ -20,19 +20,19 @@ public class EducationLevelsServiceImpl implements EducationLevelsService {
     }
 
     @Override
-    public EducationLevels create(EducationLevels educationLevels) {
-        return programsLevelRepository.save(educationLevels);
+    public EducationLevel create(EducationLevel educationLevel) {
+        return programsLevelRepository.save(educationLevel);
     }
 
     @Override
-    public Optional<EducationLevels> readById(long id) {
+    public Optional<EducationLevel> readById(long id) {
         return programsLevelRepository.findById(id);
     }
 
     @Override
-    public EducationLevels update(long id, EducationLevels educationLevels) {
-        educationLevels.setId(id);
-        return programsLevelRepository.save(educationLevels);
+    public EducationLevel update(long id, EducationLevel educationLevel) {
+        educationLevel.setId(id);
+        return programsLevelRepository.save(educationLevel);
     }
 
     @Override
@@ -41,12 +41,12 @@ public class EducationLevelsServiceImpl implements EducationLevelsService {
     }
 
     @Override
-    public Page<EducationLevels> getAll(Pageable pageable) {
+    public Page<EducationLevel> getAll(Pageable pageable) {
         return programsLevelRepository.findAll(pageable);
     }
 
     @Override
-    public List<EducationLevels> getAll() {
+    public List<EducationLevel> getAll() {
         return programsLevelRepository.findAll();
     }
 }

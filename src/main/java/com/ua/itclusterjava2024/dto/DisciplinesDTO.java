@@ -15,17 +15,21 @@ public class DisciplinesDTO {
     private String name;
     @JsonInclude(JsonInclude.Include.NON_NULL)
 
-    private Long teacherId;
+    private TeachersDTO teacher;
     @JsonInclude(JsonInclude.Include.NON_NULL)
 
-    private Long disciplineGroupId;
+    private DisciplineBlocksDTO discipline_block;
     @JsonInclude(JsonInclude.Include.NON_NULL)
 
-    private Long educationProgramId;
+    private DisciplineGroupsDTO discipline_group;
     @JsonInclude(JsonInclude.Include.NON_NULL)
 
-    private String syllabusLink;
+    private EducationProgramsDTO education_program;
+
     @JsonInclude(JsonInclude.Include.NON_NULL)
 
-    private String educationPlanUrl;
+    private String syllabus_url;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+
+    private String education_plan_url;
 }

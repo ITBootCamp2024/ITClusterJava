@@ -1,9 +1,6 @@
 package com.ua.itclusterjava2024.dto;
 
-import jakarta.persistence.Id;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Size;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,11 +14,23 @@ import lombok.NoArgsConstructor;
 public class TeachersDTO {
     private Long id;
     private String name;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+
     private PositionDTO position;
-    private EducationLevelsDTO educationLevels;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+
+    private EducationLevelDTO education_level;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+
     private UniversityDTO university;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+
     private DepartmentDTO department;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+
     private String email;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+
     private String comments;
 }
 

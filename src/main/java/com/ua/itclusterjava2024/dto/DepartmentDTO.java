@@ -13,6 +13,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class DepartmentDTO {
     private Long id;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private String url;
     private String name;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -26,9 +28,6 @@ public class DepartmentDTO {
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String phone;
-
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    private String url;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private UniversityDTO university;

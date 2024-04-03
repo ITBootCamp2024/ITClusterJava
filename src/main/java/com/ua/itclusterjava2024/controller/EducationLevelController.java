@@ -1,7 +1,7 @@
 package com.ua.itclusterjava2024.controller;
 
-import com.ua.itclusterjava2024.dto.EducationLevelsDTO;
-import com.ua.itclusterjava2024.entity.EducationLevels;
+import com.ua.itclusterjava2024.dto.EducationLevelDTO;
+import com.ua.itclusterjava2024.entity.EducationLevel;
 import com.ua.itclusterjava2024.exceptions.ValidationException;
 import com.ua.itclusterjava2024.service.interfaces.EducationLevelsService;
 import com.ua.itclusterjava2024.validators.ProgramsLevelValidator;
@@ -17,50 +17,50 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/education-levels")
-public class EducationLevelsController {
+public class EducationLevelController {
 
     private final EducationLevelsService educationLevelsService;
     private final ModelMapper modelMapper;
     private final ProgramsLevelValidator programsLevelValidator;
 
     @Autowired
-    public EducationLevelsController(EducationLevelsService educationLevelsService, ModelMapper modelMapper, ProgramsLevelValidator programsLevelValidator) {
+    public EducationLevelController(EducationLevelsService educationLevelsService, ModelMapper modelMapper, ProgramsLevelValidator programsLevelValidator) {
         this.educationLevelsService = educationLevelsService;
         this.modelMapper = modelMapper;
         this.programsLevelValidator = programsLevelValidator;
     }
 
     @GetMapping
-    public List<EducationLevelsDTO> findAll() {
+    public List<EducationLevelDTO> findAll() {
         return educationLevelsService.getAll().stream().map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
-    public EducationLevelsDTO findById(@PathVariable long id) {
+    public EducationLevelDTO findById(@PathVariable long id) {
         return convertToDTO(educationLevelsService.readById(id).orElse(null));
     }
 
     @PostMapping
-    public RedirectView save(@RequestBody @Valid EducationLevelsDTO educationLevelsDTO, BindingResult bindingResult) {
-        programsLevelValidator.validate(educationLevelsDTO, bindingResult);
+    public RedirectView save(@RequestBody @Valid EducationLevelDTO educationLevelDTO, BindingResult bindingResult) {
+        programsLevelValidator.validate(educationLevelDTO, bindingResult);
         if (bindingResult.hasErrors()){
             throw new ValidationException(bindingResult);
         }
-        educationLevelsService.create(convertToEntity(educationLevelsDTO));
+        educationLevelsService.create(convertToEntity(educationLevelDTO));
         return new RedirectView("/education-levels");
     }
 
     @PatchMapping("/{id}")
     public RedirectView update(@PathVariable("id") Long id,
-            @RequestBody @Valid EducationLevelsDTO educationLevelsDTO,
+            @RequestBody @Valid EducationLevelDTO educationLevelDTO,
                                BindingResult bindingResult
     ) {
-        programsLevelValidator.validate(educationLevelsDTO, bindingResult);
+        programsLevelValidator.validate(educationLevelDTO, bindingResult);
         if (bindingResult.hasErrors()){
             throw new ValidationException(bindingResult);
         }
-        educationLevelsService.update(id, convertToEntity(educationLevelsDTO));
+        educationLevelsService.update(id, convertToEntity(educationLevelDTO));
         return new RedirectView("/education-levels");
     }
 
@@ -70,11 +70,11 @@ public class EducationLevelsController {
         return new RedirectView("/education-levels");
     }
 
-    private EducationLevels convertToEntity(EducationLevelsDTO educationLevelsDTO){
-        return modelMapper.map(educationLevelsDTO, EducationLevels.class);
+    private EducationLevel convertToEntity(EducationLevelDTO educationLevelDTO){
+        return modelMapper.map(educationLevelDTO, EducationLevel.class);
     }
 
-    private EducationLevelsDTO convertToDTO(EducationLevels educationLevels){
-        return modelMapper.map(educationLevels, EducationLevelsDTO.class);
+    private EducationLevelDTO convertToDTO(EducationLevel educationLevel){
+        return modelMapper.map(educationLevel, EducationLevelDTO.class);
     }
 }
