@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
 @RestController
-@RequestMapping("/specialty")
+@RequestMapping("/specialties")
 public class SpecialtyController {
 
     private final SpecialtyService specialtyService;
@@ -48,7 +48,7 @@ public class SpecialtyController {
             throw new ValidationException(bindingResult);
         }
         specialtyService.create(convertToEntity(specialtyDTO));
-        return new RedirectView("/specialty");
+        return new RedirectView("/specialties");
     }
 
     @PatchMapping("/{id}")
@@ -61,13 +61,13 @@ public class SpecialtyController {
             throw new ValidationException(bindingResult);
         }
          specialtyService.update(id, convertToEntity(specialtyDTO));
-        return new RedirectView("/specialty");
+        return new RedirectView("/specialties");
     }
 
     @DeleteMapping("/{id}")
     public RedirectView delete(@PathVariable long id) {
         specialtyService.delete(id);
-        return new RedirectView("/specialty");
+        return new RedirectView("/specialties");
     }
 
     private Specialty convertToEntity(SpecialtyDTO specialtyDTO){

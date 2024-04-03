@@ -2,7 +2,7 @@ package com.ua.itclusterjava2024.service.implementation;
 
 import com.ua.itclusterjava2024.entity.EducationLevels;
 import com.ua.itclusterjava2024.repository.ProgramsLevelRepository;
-import com.ua.itclusterjava2024.service.interfaces.EducationLevelService;
+import com.ua.itclusterjava2024.service.interfaces.EducationLevelsService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class EducationLevelsServiceImpl implements EducationLevelService {
+public class EducationLevelsServiceImpl implements EducationLevelsService {
 
     private final ProgramsLevelRepository programsLevelRepository;
 

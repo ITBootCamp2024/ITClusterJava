@@ -17,15 +17,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/programs")
-public class EducationController {
+@RequestMapping("/education-programs")
+public class EducationProgramsController {
     private final EducationProgramsService educationProgramsService;
 
     private final ModelMapper modelMapper;
     private final ProgramsValidator programsValidator;
 
     @Autowired
-    public EducationController(EducationProgramsService educationProgramsService, ModelMapper modelMapper, ProgramsValidator programsValidator) {
+    public EducationProgramsController(EducationProgramsService educationProgramsService, ModelMapper modelMapper, ProgramsValidator programsValidator) {
         this.educationProgramsService = educationProgramsService;
         this.modelMapper = modelMapper;
         this.programsValidator = programsValidator;
@@ -49,7 +49,7 @@ public class EducationController {
             throw new ValidationException(bindingResult);
         }
         educationProgramsService.create(convertToEntity(educationProgramsDTO));
-        return new RedirectView("/programs");
+        return new RedirectView("/education-programs");
     }
 
     @PatchMapping("/{id}")
@@ -62,13 +62,13 @@ public class EducationController {
             throw new ValidationException(bindingResult);
         }
         educationProgramsService.update(id, convertToEntity(educationProgramsDTO));
-        return new RedirectView("/course_blocks");
+        return new RedirectView("/education-programs");
     }
 
     @DeleteMapping("/{id}")
     public RedirectView delete(@PathVariable long id) {
         educationProgramsService.delete(id);
-        return new RedirectView("/programs");
+        return new RedirectView("/education-programs");
     }
 
     private EducationPrograms convertToEntity(EducationProgramsDTO educationProgramsDTO){

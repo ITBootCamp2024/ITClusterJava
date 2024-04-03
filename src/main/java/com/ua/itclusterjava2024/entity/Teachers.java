@@ -17,8 +17,8 @@ public class Teachers {
     @JoinColumn(name = "position_id")
     private Position position;
     @ManyToOne
-    @JoinColumn(name = "degree_id")
-    private Degree degree;
+    @JoinColumn(name = "education_level_id")
+    private EducationLevels educationLevel;
     @ManyToOne
     @JoinColumn(name = "department_id")
     private Department department;
