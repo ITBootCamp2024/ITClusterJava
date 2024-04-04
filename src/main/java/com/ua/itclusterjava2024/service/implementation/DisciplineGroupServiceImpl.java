@@ -1,7 +1,7 @@
 package com.ua.itclusterjava2024.service.implementation;
 
 import com.ua.itclusterjava2024.entity.DisciplineGroups;
-import com.ua.itclusterjava2024.repository.DisciplineGroupRepository;
+import com.ua.itclusterjava2024.repository.DisciplineGroupsRepository;
 import com.ua.itclusterjava2024.service.interfaces.DisciplineGroupService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,40 +13,40 @@ import java.util.Optional;
 @Service
 public class DisciplineGroupServiceImpl implements DisciplineGroupService {
 
-    private final DisciplineGroupRepository disciplineGroupRepository;
+    private final DisciplineGroupsRepository disciplineGroupsRepository;
 
-    public DisciplineGroupServiceImpl(DisciplineGroupRepository disciplineGroupRepository) {
-        this.disciplineGroupRepository = disciplineGroupRepository;
+    public DisciplineGroupServiceImpl(DisciplineGroupsRepository disciplineGroupsRepository) {
+        this.disciplineGroupsRepository = disciplineGroupsRepository;
     }
 
     @Override
     public DisciplineGroups create(DisciplineGroups disciplineGroups) {
-        return disciplineGroupRepository.save(disciplineGroups);
+        return disciplineGroupsRepository.save(disciplineGroups);
     }
 
     @Override
     public Optional<DisciplineGroups> readById(long id) {
-        return disciplineGroupRepository.findById(id);
+        return disciplineGroupsRepository.findById(id);
     }
 
     @Override
     public DisciplineGroups update(long id, DisciplineGroups disciplineGroups) {
         disciplineGroups.setId(id);
-        return disciplineGroupRepository.save(disciplineGroups);
+        return disciplineGroupsRepository.save(disciplineGroups);
     }
 
     @Override
     public void delete(long id) {
-        disciplineGroupRepository.deleteById(id);
+        disciplineGroupsRepository.deleteById(id);
     }
 
     @Override
     public List<DisciplineGroups> getAll() {
-        return disciplineGroupRepository.findAll();
+        return disciplineGroupsRepository.findAll();
     }
 
     @Override
     public Page<DisciplineGroups> getAll(Pageable pageable) {
-        return disciplineGroupRepository.findAll(pageable);
+        return disciplineGroupsRepository.findAll(pageable);
     }
 }

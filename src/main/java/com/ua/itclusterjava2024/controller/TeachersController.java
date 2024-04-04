@@ -103,7 +103,7 @@ public class TeachersController {
 
     public TeachersDTO convertToDTO(Teachers teacher) {
         TeachersDTO dto = modelMapper.map(teacher, TeachersDTO.class);
-        dto.setPosition(new PositionDTO(teacher.getPosition().getId(), teacher.getPosition().getName()));
+        dto.setPosition(PositionDTO.builder().id(teacher.getPosition().getId()).name(teacher.getPosition().getName()).build());
         dto.setEducation_level(EducationLevelDTO.builder().id(teacher.getEducation_level().getId()).name(teacher.getEducation_level().getName()).build());
         dto.setDepartment(DepartmentDTO.builder().id(teacher.getDepartment().getId())
                 .name(teacher.getDepartment().getName())
