@@ -1,7 +1,7 @@
 package com.ua.itclusterjava2024.service.implementation;
 
 import com.ua.itclusterjava2024.entity.Disciplines;
-import com.ua.itclusterjava2024.repository.DisciplineRepository;
+import com.ua.itclusterjava2024.repository.DisciplinesRepository;
 import com.ua.itclusterjava2024.service.interfaces.DisciplinesService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,40 +13,40 @@ import java.util.Optional;
 @Service
 public class DisciplinesServiceImpl implements DisciplinesService {
 
-    private final DisciplineRepository disciplineRepository;
+    private final DisciplinesRepository disciplinesRepository;
 
-    public DisciplinesServiceImpl(DisciplineRepository disciplineRepository) {
-        this.disciplineRepository = disciplineRepository;
+    public DisciplinesServiceImpl(DisciplinesRepository disciplinesRepository) {
+        this.disciplinesRepository = disciplinesRepository;
     }
 
     @Override
     public Disciplines create(Disciplines disciplines) {
-        return disciplineRepository.save(disciplines);
+        return disciplinesRepository.save(disciplines);
     }
 
     @Override
     public Optional<Disciplines> readById(long id) {
-        return disciplineRepository.findById(id);
+        return disciplinesRepository.findById(id);
     }
 
     @Override
     public Disciplines update(long id, Disciplines disciplines) {
         disciplines.setId(id);
-        return disciplineRepository.save(disciplines);
+        return disciplinesRepository.save(disciplines);
     }
 
     @Override
     public void delete(long id) {
-        disciplineRepository.deleteById(id);
+        disciplinesRepository.deleteById(id);
     }
 
     @Override
     public List<Disciplines> getAll() {
-        return disciplineRepository.findAll();
+        return disciplinesRepository.findAll();
     }
 
     @Override
     public Page<Disciplines> getAll(Pageable pageable) {
-        return disciplineRepository.findAll(pageable);
+        return disciplinesRepository.findAll(pageable);
     }
 }

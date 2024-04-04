@@ -1,13 +1,12 @@
 package com.ua.itclusterjava2024.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import jakarta.persistence.Id;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -21,4 +20,7 @@ public class DisciplineBlocksDTO {
     @JsonInclude(JsonInclude.Include.NON_NULL)
 
     private String description;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+//поле необхідне для ServiceInfo
+    private List<DisciplineGroupsDTO> disciplineGroups;
 }

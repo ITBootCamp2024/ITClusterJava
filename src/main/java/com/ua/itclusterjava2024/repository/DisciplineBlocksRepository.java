@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface DisciplineBlockRepository extends JpaRepository<DisciplineBlocks, Long> {
+public interface DisciplineBlocksRepository extends JpaRepository<DisciplineBlocks, Long> {
 
 }

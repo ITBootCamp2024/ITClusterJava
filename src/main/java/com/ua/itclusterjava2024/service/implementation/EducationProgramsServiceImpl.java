@@ -1,7 +1,7 @@
 package com.ua.itclusterjava2024.service.implementation;
 
 import com.ua.itclusterjava2024.entity.EducationPrograms;
-import com.ua.itclusterjava2024.repository.ProgramsRepository;
+import com.ua.itclusterjava2024.repository.EducationProgramsRepository;
 import com.ua.itclusterjava2024.service.interfaces.EducationProgramsService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,39 +13,39 @@ import java.util.Optional;
 @Service
 public class EducationProgramsServiceImpl implements EducationProgramsService {
 
-    private final ProgramsRepository programsRepository;
+    private final EducationProgramsRepository educationProgramsRepository;
 
-    public EducationProgramsServiceImpl(ProgramsRepository programsRepository) {
-        this.programsRepository = programsRepository;
+    public EducationProgramsServiceImpl(EducationProgramsRepository educationProgramsRepository) {
+        this.educationProgramsRepository = educationProgramsRepository;
     }
 
     @Override
     public EducationPrograms create(EducationPrograms educationPrograms) {
-        return programsRepository.save(educationPrograms);
+        return educationProgramsRepository.save(educationPrograms);
     }
 
     @Override
     public Optional<EducationPrograms> readById(long id) {
-        return programsRepository.findById(id);
+        return educationProgramsRepository.findById(id);
     }
 
     @Override
     public EducationPrograms update(long id, EducationPrograms t) {
         t.setId(id);
-        return programsRepository.save(t);
+        return educationProgramsRepository.save(t);
     }
 
     @Override
     public void delete(long id) {
-        programsRepository.deleteById(id);
+        educationProgramsRepository.deleteById(id);
     }
 
     @Override
     public Page<EducationPrograms> getAll(Pageable pageable) {
-        return programsRepository.findAll(pageable);    }
+        return educationProgramsRepository.findAll(pageable);    }
 
     @Override
     public List<EducationPrograms> getAll() {
-        return programsRepository.findAll();
+        return educationProgramsRepository.findAll();
     }
 }
