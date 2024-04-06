@@ -2,9 +2,13 @@ package com.ua.itclusterjava2024.controller;
 
 import com.ua.itclusterjava2024.dto.DepartmentDTO;
 import com.ua.itclusterjava2024.dto.TeachersDTO;
+import com.ua.itclusterjava2024.dto.UniversityDTO;
 import com.ua.itclusterjava2024.entity.Department;
+import com.ua.itclusterjava2024.entity.University;
+import com.ua.itclusterjava2024.exceptions.NotFoundException;
 import com.ua.itclusterjava2024.exceptions.ValidationException;
 import com.ua.itclusterjava2024.service.interfaces.DepartmentService;
+import com.ua.itclusterjava2024.service.interfaces.UniversityService;
 import com.ua.itclusterjava2024.validators.CourseBlockValidator;
 import com.ua.itclusterjava2024.wrappers.PageWrapper;
 import com.ua.itclusterjava2024.wrappers.Patcher;
@@ -25,14 +29,16 @@ import java.util.stream.Collectors;
 @RequestMapping( "/department")
 public class DepartmentController {
     private final DepartmentService departmentService;
+    private final UniversityService universityService;
     private final ModelMapper modelMapper;
 
     @Autowired
     Patcher patcher;
     private final CourseBlockValidator courseBlockValidator;
 
-    public DepartmentController(DepartmentService departmentService, ModelMapper modelMapper, CourseBlockValidator courseBlockValidator) {
+    public DepartmentController(DepartmentService departmentService, UniversityService universityService, ModelMapper modelMapper, CourseBlockValidator courseBlockValidator) {
         this.departmentService = departmentService;
+        this.universityService = universityService;
         this.modelMapper = modelMapper;
         this.courseBlockValidator = courseBlockValidator;
     }
@@ -40,7 +46,7 @@ public class DepartmentController {
     public PageWrapper<DepartmentDTO> findAll(@RequestParam(defaultValue = "1") int page){
         int pageSize = 20;
         PageRequest pageable = PageRequest.of(page - 1, pageSize);
-        Page<DepartmentDTO> departmentPage = departmentService.getAll(pageable).map(teachers -> convertToDTO(teachers));
+        Page<DepartmentDTO> departmentPage = departmentService.getAll(pageable).map(this::convertToDTO);
 
         PageWrapper<DepartmentDTO> pageWrapper = new PageWrapper<>();
         pageWrapper.setContent(departmentPage.getContent());
@@ -91,10 +97,20 @@ public class DepartmentController {
     }
 
     private Department convertToEntity(DepartmentDTO departmentDTO){
-        return modelMapper.map(departmentDTO, Department.class);
+        Department department = modelMapper.map(departmentDTO, Department.class);
+        University university = universityService.readById(departmentDTO.getUniversity().getId())
+                .orElseThrow(() -> new NotFoundException("University is not found"));
+
+        department.setUniversity(university);
+        return department;
     }
 
     private DepartmentDTO convertToDTO(Department department){
-        return modelMapper.map(department, DepartmentDTO.class);
+        DepartmentDTO departmentDTO = modelMapper.map(department, DepartmentDTO.class);
+        departmentDTO.setUniversity(UniversityDTO.builder()
+                .id(department.getUniversity().getId())
+                .name(department.getUniversity().getName()).build());
+
+        return departmentDTO;
     }
 }
