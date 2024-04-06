@@ -1,6 +1,6 @@
 package com.ua.itclusterjava2024.config;
 
-import org.springframework.context.annotation.Configuration;
+/*import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -14,12 +14,11 @@ public class CorsConfig implements WebMvcConfigurer {
                 .allowedOrigins("*")
                 .allowedMethods("*")
                 .allowedHeaders("*")
-                .allowedOriginPatterns("*")
-                .allowCredentials(true);
+                .allowedOriginPatterns("*");
     }
-}
+}*/
 
-/*import jakarta.servlet.Filter;
+import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
@@ -74,4 +73,4 @@ public class CorsConfig implements Filter,WebMvcConfigurer {
 
     }
 
-}*/
+}
