@@ -1,13 +1,18 @@
 package com.ua.itclusterjava2024.controller;
 
 import com.ua.itclusterjava2024.dto.EducationLevelDTO;
+import com.ua.itclusterjava2024.dto.TeachersDTO;
 import com.ua.itclusterjava2024.entity.EducationLevel;
 import com.ua.itclusterjava2024.exceptions.ValidationException;
 import com.ua.itclusterjava2024.service.interfaces.EducationLevelsService;
 import com.ua.itclusterjava2024.validators.ProgramsLevelValidator;
+import com.ua.itclusterjava2024.wrappers.PageWrapper;
+import com.ua.itclusterjava2024.wrappers.Patcher;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
@@ -24,6 +29,9 @@ public class EducationLevelController {
     private final ProgramsLevelValidator programsLevelValidator;
 
     @Autowired
+    Patcher patcher;
+
+    @Autowired
     public EducationLevelController(EducationLevelsService educationLevelsService, ModelMapper modelMapper, ProgramsLevelValidator programsLevelValidator) {
         this.educationLevelsService = educationLevelsService;
         this.modelMapper = modelMapper;
@@ -31,9 +39,17 @@ public class EducationLevelController {
     }
 
     @GetMapping
-    public List<EducationLevelDTO> findAll() {
-        return educationLevelsService.getAll().stream().map(this::convertToDTO)
-                .collect(Collectors.toList());
+    public PageWrapper<EducationLevelDTO> findAll(@RequestParam(defaultValue = "1") int page) {
+        int pageSize = 20;
+        PageRequest pageable = PageRequest.of(page - 1, pageSize);
+        Page<EducationLevelDTO> levelsPage = educationLevelsService.getAll(pageable).map(this::convertToDTO);
+
+        PageWrapper<EducationLevelDTO> pageWrapper = new PageWrapper<>();
+        pageWrapper.setContent(levelsPage.getContent());
+        pageWrapper.setPageNumber(levelsPage.getNumber());
+        pageWrapper.setTotalElements(levelsPage.getTotalElements());
+
+        return pageWrapper;
     }
 
     @GetMapping("/{id}")
@@ -42,32 +58,31 @@ public class EducationLevelController {
     }
 
     @PostMapping
-    public RedirectView save(@RequestBody @Valid EducationLevelDTO educationLevelDTO, BindingResult bindingResult) {
-        programsLevelValidator.validate(educationLevelDTO, bindingResult);
-        if (bindingResult.hasErrors()){
-            throw new ValidationException(bindingResult);
-        }
+    public PageWrapper<EducationLevelDTO> save(@RequestBody EducationLevelDTO educationLevelDTO, BindingResult bindingResult) {
         educationLevelsService.create(convertToEntity(educationLevelDTO));
-        return new RedirectView("/education-levels");
+        return findAll(1);
     }
 
     @PatchMapping("/{id}")
-    public RedirectView update(@PathVariable("id") Long id,
-            @RequestBody @Valid EducationLevelDTO educationLevelDTO,
-                               BindingResult bindingResult
+    public PageWrapper<EducationLevelDTO> update(@PathVariable("id") Long id,
+                                                 @RequestBody EducationLevel levels,
+                                                 BindingResult bindingResult
     ) {
-        programsLevelValidator.validate(educationLevelDTO, bindingResult);
-        if (bindingResult.hasErrors()){
-            throw new ValidationException(bindingResult);
+         EducationLevel level = educationLevelsService.readById(id).orElse(null);
+
+        try {
+            patcher.patch(level, levels);
+            educationLevelsService.create(level);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        educationLevelsService.update(id, convertToEntity(educationLevelDTO));
-        return new RedirectView("/education-levels");
+        return findAll(1);
     }
 
     @DeleteMapping("/{id}")
-    public RedirectView delete(@PathVariable long id) {
+    public PageWrapper<EducationLevelDTO> delete(@PathVariable long id) {
         educationLevelsService.delete(id);
-        return new RedirectView("/education-levels");
+        return findAll(1);
     }
 
     private EducationLevel convertToEntity(EducationLevelDTO educationLevelDTO){
