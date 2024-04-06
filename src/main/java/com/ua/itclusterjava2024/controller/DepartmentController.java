@@ -25,7 +25,7 @@ import org.springframework.web.servlet.view.RedirectView;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Controller
+@RestController
 @RequestMapping( "/department")
 public class DepartmentController {
     private final DepartmentService departmentService;
@@ -42,11 +42,11 @@ public class DepartmentController {
         this.modelMapper = modelMapper;
         this.courseBlockValidator = courseBlockValidator;
     }
-    @GetMapping
+    @GetMapping()
     public PageWrapper<DepartmentDTO> findAll(@RequestParam(defaultValue = "1") int page){
         int pageSize = 20;
         PageRequest pageable = PageRequest.of(page - 1, pageSize);
-        Page<DepartmentDTO> departmentPage = departmentService.getAll(pageable).map(this::convertToDTO);
+        Page<DepartmentDTO> departmentPage = departmentService.getAll(pageable).map(department -> convertToDTO(department));
 
         PageWrapper<DepartmentDTO> pageWrapper = new PageWrapper<>();
         pageWrapper.setContent(departmentPage.getContent());
@@ -112,5 +112,6 @@ public class DepartmentController {
                 .name(department.getUniversity().getName()).build());
 
         return departmentDTO;
+        //return modelMapper.map(department, DepartmentDTO.class);
     }
 }
