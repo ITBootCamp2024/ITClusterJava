@@ -1,10 +1,13 @@
 package com.ua.itclusterjava2024.controller;
 
 import com.ua.itclusterjava2024.dto.SpecialtyDTO;
+import com.ua.itclusterjava2024.dto.TeachersDTO;
 import com.ua.itclusterjava2024.entity.Specialty;
 import com.ua.itclusterjava2024.exceptions.ValidationException;
 import com.ua.itclusterjava2024.service.interfaces.SpecialtyService;
 import com.ua.itclusterjava2024.validators.SpecialtyValidator;
+import com.ua.itclusterjava2024.wrappers.PageWrapper;
+import com.ua.itclusterjava2024.wrappers.Patcher;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +26,9 @@ public class SpecialtyController {
     private final SpecialtyValidator specialtyValidator;
 
     @Autowired
+    Patcher patcher;
+
+    @Autowired
     public SpecialtyController(SpecialtyService specialtyService, ModelMapper modelMapper, SpecialtyValidator specialtyValidator) {
         this.specialtyService = specialtyService;
         this.modelMapper = modelMapper;
@@ -30,10 +36,16 @@ public class SpecialtyController {
     }
 
     @GetMapping
-    public Page<SpecialtyDTO> findAll(@RequestParam(defaultValue = "1") int page) {
+    public PageWrapper<SpecialtyDTO> findAll(@RequestParam(defaultValue = "1") int page) {
         int pageSize = 20;
-        PageRequest pageable = PageRequest.of(page-1, pageSize);
-        return specialtyService.getAll(pageable).map(this::convertToDTO);
+        PageRequest pageable = PageRequest.of(page - 1, pageSize);
+        Page<SpecialtyDTO> specialtyPage =  specialtyService.getAll(pageable).map(this::convertToDTO);
+
+        PageWrapper<SpecialtyDTO> pageWrapper = new PageWrapper<>();
+        pageWrapper.setContent(specialtyPage.getContent());
+        pageWrapper.setPageNumber(specialtyPage.getNumber());
+        pageWrapper.setTotalElements(specialtyPage.getTotalElements());
+        return pageWrapper;
     }
 
     @GetMapping("/{id}")
@@ -42,32 +54,40 @@ public class SpecialtyController {
     }
 
     @PostMapping
-    public RedirectView save(@RequestBody @Valid SpecialtyDTO specialtyDTO, BindingResult bindingResult) {
-        specialtyValidator.validate(specialtyDTO, bindingResult);
-        if (bindingResult.hasErrors()){
-            throw new ValidationException(bindingResult);
-        }
+    public PageWrapper<SpecialtyDTO> save(@RequestBody @Valid SpecialtyDTO specialtyDTO, BindingResult bindingResult) {
+//        specialtyValidator.validate(specialtyDTO, bindingResult);
+//        if (bindingResult.hasErrors()){
+//            throw new ValidationException(bindingResult);
+//        }
         specialtyService.create(convertToEntity(specialtyDTO));
-        return new RedirectView("/specialties");
+        return findAll(1);//new RedirectView("/specialties");
     }
 
     @PatchMapping("/{id}")
-    public RedirectView update(@PathVariable("id") Long id,
-            @RequestBody @Valid SpecialtyDTO specialtyDTO,
-                               BindingResult bindingResult
-    ) {
-        specialtyValidator.validate(specialtyDTO, bindingResult);
-        if (bindingResult.hasErrors()){
-            throw new ValidationException(bindingResult);
+    public PageWrapper<SpecialtyDTO> update(@PathVariable("id") Long id,
+            @RequestBody Specialty specialties//, BindingResult bindingResult
+    )
+    {
+//        specialtyValidator.validate(specialtyDTO, bindingResult);
+//        if (bindingResult.hasErrors()){
+//            throw new ValidationException(bindingResult);
+//        }
+//         specialtyService.update(id, convertToEntity(specialtyDTO));
+
+        Specialty specialty = specialtyService.readById(id).orElse(null);
+        try{
+            patcher.patch(specialty, specialties);
+            specialtyService.create(specialty);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
         }
-         specialtyService.update(id, convertToEntity(specialtyDTO));
-        return new RedirectView("/specialties");
+        return findAll(1);//new RedirectView("/specialties");
     }
 
     @DeleteMapping("/{id}")
-    public RedirectView delete(@PathVariable long id) {
+    public PageWrapper<SpecialtyDTO> delete(@PathVariable long id) {
         specialtyService.delete(id);
-        return new RedirectView("/specialties");
+        return findAll(1);//new RedirectView("/specialties");
     }
 
     private Specialty convertToEntity(SpecialtyDTO specialtyDTO){
