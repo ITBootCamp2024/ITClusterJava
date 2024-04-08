@@ -1,6 +1,7 @@
 package com.ua.itclusterjava2024.controller;
 
 import com.ua.itclusterjava2024.dto.DepartmentDTO;
+import com.ua.itclusterjava2024.dto.ServiceInfoDTO;
 import com.ua.itclusterjava2024.dto.TeachersDTO;
 import com.ua.itclusterjava2024.dto.UniversityDTO;
 import com.ua.itclusterjava2024.entity.Department;
@@ -24,6 +25,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -53,6 +55,7 @@ public class DepartmentController {
 
         PageWrapper<DepartmentDTO> pageWrapper = new PageWrapper<>();
         pageWrapper.setContent(departments);
+        List<UniversityDTO> universityDTOS = new ArrayList<>();
         pageWrapper.setTotalElements(departments.size());
         return pageWrapper;
     }
