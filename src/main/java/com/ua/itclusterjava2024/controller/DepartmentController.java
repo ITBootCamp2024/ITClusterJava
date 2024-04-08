@@ -53,9 +53,18 @@ public class DepartmentController {
                 .map(this::convertToDTO)
                 .toList();
 
+        List<UniversityDTO> universityDTOs = universityService.getAll()
+                .stream()
+                .map(u -> UniversityDTO.builder()
+                        .id(u.getId())
+                        .name(u.getName())
+                        .abbr(u.getAbbr())
+                        .build())
+                .collect(Collectors.toList());
+
         PageWrapper<DepartmentDTO> pageWrapper = new PageWrapper<>();
         pageWrapper.setContent(departments);
-        List<UniversityDTO> universityDTOS = new ArrayList<>();
+        pageWrapper.setService_info(ServiceInfoDTO.builder().university(universityDTOs).build());
         pageWrapper.setTotalElements(departments.size());
         return pageWrapper;
     }
