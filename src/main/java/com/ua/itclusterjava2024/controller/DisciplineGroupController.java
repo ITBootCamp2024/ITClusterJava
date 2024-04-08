@@ -41,7 +41,6 @@ public class DisciplineGroupController {
 
         PageWrapper<DisciplineGroupsDTO> pageWrapper = new PageWrapper<>();
         pageWrapper.setContent(disciplineGroupsPage.getContent());
-        pageWrapper.setPageNumber(disciplineGroupsPage.getNumber());
         pageWrapper.setTotalElements(disciplineGroupsPage.getTotalElements());
         return pageWrapper;
     }

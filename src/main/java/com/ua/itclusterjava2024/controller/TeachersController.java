@@ -53,7 +53,6 @@ public class TeachersController {
 
         PageWrapper<TeachersDTO> pageWrapper = new PageWrapper<>();
         pageWrapper.setContent(teachersPage.getContent());
-        pageWrapper.setPageNumber(teachersPage.getNumber());
         pageWrapper.setTotalElements(teachersPage.getTotalElements());
         return pageWrapper;
     }

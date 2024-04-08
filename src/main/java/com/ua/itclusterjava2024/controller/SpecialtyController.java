@@ -43,7 +43,6 @@ public class SpecialtyController {
 
         PageWrapper<SpecialtyDTO> pageWrapper = new PageWrapper<>();
         pageWrapper.setContent(specialtyPage.getContent());
-        pageWrapper.setPageNumber(specialtyPage.getNumber());
         pageWrapper.setTotalElements(specialtyPage.getTotalElements());
         return pageWrapper;
     }

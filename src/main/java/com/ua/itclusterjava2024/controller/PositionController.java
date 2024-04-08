@@ -38,7 +38,6 @@ public class PositionController {
 
         PageWrapper<PositionDTO> pageWrapper = new PageWrapper<>();
         pageWrapper.setContent(positionPage.getContent());
-        pageWrapper.setPageNumber(positionPage.getNumber());
         pageWrapper.setTotalElements(positionPage.getTotalElements());
         return pageWrapper;
     }

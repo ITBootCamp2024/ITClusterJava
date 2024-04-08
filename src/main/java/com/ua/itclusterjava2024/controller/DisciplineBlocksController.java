@@ -43,7 +43,6 @@ public class DisciplineBlocksController {
 
         PageWrapper<DisciplineBlocksDTO> pageWrapper = new PageWrapper<>();
         pageWrapper.setContent(disciplineBlocksPage.getContent());
-        pageWrapper.setPageNumber(disciplineBlocksPage.getNumber());
         pageWrapper.setTotalElements(disciplineBlocksPage.getTotalElements());
         return pageWrapper;
     }

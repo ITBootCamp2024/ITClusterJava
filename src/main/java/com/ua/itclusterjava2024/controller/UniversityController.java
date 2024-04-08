@@ -43,7 +43,6 @@ public class UniversityController {
 
         PageWrapper<UniversityDTO> pageWrapper = new PageWrapper<>();
         pageWrapper.setContent(universityPage.getContent());
-        pageWrapper.setPageNumber(universityPage.getNumber());
         pageWrapper.setTotalElements(universityPage.getTotalElements());
         return pageWrapper;
     }

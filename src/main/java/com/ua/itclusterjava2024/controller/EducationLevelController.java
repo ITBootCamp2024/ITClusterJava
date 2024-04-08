@@ -46,7 +46,6 @@ public class EducationLevelController {
 
         PageWrapper<EducationLevelDTO> pageWrapper = new PageWrapper<>();
         pageWrapper.setContent(levelsPage.getContent());
-        pageWrapper.setPageNumber(levelsPage.getNumber());
         pageWrapper.setTotalElements(levelsPage.getTotalElements());
 
         return pageWrapper;

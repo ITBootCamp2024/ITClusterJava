@@ -10,9 +10,7 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 public class PageWrapper<T> {
-
     private List<T> content;
-    private int pageNumber;
     private long totalElements;
 }
 

@@ -47,7 +47,6 @@ public class EducationProgramsController {
 
         PageWrapper<EducationProgramsDTO> pageWrapper = new PageWrapper<>();
         pageWrapper.setContent(educationProgramsPage.getContent());
-        pageWrapper.setPageNumber(educationProgramsPage.getNumber());
         pageWrapper.setTotalElements(educationProgramsPage.getTotalElements());
         return pageWrapper;
     }

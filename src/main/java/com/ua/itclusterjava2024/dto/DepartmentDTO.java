@@ -7,15 +7,19 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class DepartmentDTO {
     private Long id;
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    private String url;
+
     private String name;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private UniversityDTO university;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String description;
@@ -27,9 +31,9 @@ public class DepartmentDTO {
     private String email;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private String phone;
+    private List<String> phone;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private UniversityDTO university;
+    private String url;
 }
 
