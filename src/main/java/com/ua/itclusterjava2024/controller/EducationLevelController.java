@@ -39,14 +39,12 @@ public class EducationLevelController {
     }
 
     @GetMapping
-    public PageWrapper<EducationLevelDTO> findAll(@RequestParam(defaultValue = "1") int page) {
-        int pageSize = 20;
-        PageRequest pageable = PageRequest.of(page - 1, pageSize);
-        Page<EducationLevelDTO> levelsPage = educationLevelsService.getAll(pageable).map(this::convertToDTO);
+    public PageWrapper<EducationLevelDTO> findAll() {
+        List<EducationLevelDTO> levelsPage = educationLevelsService.getAll().stream().map(this::convertToDTO).toList();
 
         PageWrapper<EducationLevelDTO> pageWrapper = new PageWrapper<>();
-        pageWrapper.setContent(levelsPage.getContent());
-        pageWrapper.setTotalElements(levelsPage.getTotalElements());
+        pageWrapper.setContent(levelsPage);
+        pageWrapper.setTotalElements(levelsPage.size());
 
         return pageWrapper;
     }
@@ -59,7 +57,7 @@ public class EducationLevelController {
     @PostMapping
     public PageWrapper<EducationLevelDTO> save(@RequestBody EducationLevelDTO educationLevelDTO, BindingResult bindingResult) {
         educationLevelsService.create(convertToEntity(educationLevelDTO));
-        return findAll(1);
+        return findAll();
     }
 
     @PatchMapping("/{id}")
@@ -75,13 +73,13 @@ public class EducationLevelController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return findAll(1);
+        return findAll();
     }
 
     @DeleteMapping("/{id}")
     public PageWrapper<EducationLevelDTO> delete(@PathVariable long id) {
         educationLevelsService.delete(id);
-        return findAll(1);
+        return findAll();
     }
 
     private EducationLevel convertToEntity(EducationLevelDTO educationLevelDTO){
