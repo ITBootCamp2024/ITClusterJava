@@ -18,6 +18,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/universities")
 public class UniversityController {
@@ -36,14 +38,12 @@ public class UniversityController {
     }
 
     @GetMapping
-    public PageWrapper<UniversityDTO> findAll(@RequestParam(defaultValue = "1") int page) {
-        int pageSize = 20;
-        PageRequest pageable = PageRequest.of(page - 1, pageSize);
-        Page<UniversityDTO> universityPage = universityService.getAll(pageable).map(this::convertToDTO);
+    public PageWrapper<UniversityDTO> findAll() {
+        List<UniversityDTO> universityPage = universityService.getAll().stream().map(this::convertToDTO).toList();
 
         PageWrapper<UniversityDTO> pageWrapper = new PageWrapper<>();
-        pageWrapper.setContent(universityPage.getContent());
-        pageWrapper.setTotalElements(universityPage.getTotalElements());
+        pageWrapper.setContent(universityPage);
+        pageWrapper.setTotalElements(universityPage.size());
         return pageWrapper;
     }
 
@@ -60,7 +60,7 @@ public class UniversityController {
             throw new ValidationException(bindingResult);
         }
         universityService.create(convertToEntity(universityDTO));
-        return findAll(1);
+        return findAll();
     }
 
     @CrossOrigin
@@ -75,13 +75,13 @@ public class UniversityController {
         }
 
         universityService.update(id, existingUniversity);
-        return findAll(1);
+        return findAll();
     }
 
     @DeleteMapping("/{id}")
     public PageWrapper<UniversityDTO> delete(@PathVariable long id) {
         universityService.delete(id);
-        return findAll(1);
+        return findAll();
     }
 
     private University convertToEntity(UniversityDTO universityDTO) {

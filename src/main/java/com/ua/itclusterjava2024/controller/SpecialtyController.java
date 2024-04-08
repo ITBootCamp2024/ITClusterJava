@@ -17,6 +17,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/specialties")
 public class SpecialtyController {
@@ -36,14 +38,12 @@ public class SpecialtyController {
     }
 
     @GetMapping
-    public PageWrapper<SpecialtyDTO> findAll(@RequestParam(defaultValue = "1") int page) {
-        int pageSize = 20;
-        PageRequest pageable = PageRequest.of(page - 1, pageSize);
-        Page<SpecialtyDTO> specialtyPage =  specialtyService.getAll(pageable).map(this::convertToDTO);
+    public PageWrapper<SpecialtyDTO> findAll() {
+        List<SpecialtyDTO> specialtyPage =  specialtyService.getAll().stream().map(this::convertToDTO).toList();
 
         PageWrapper<SpecialtyDTO> pageWrapper = new PageWrapper<>();
-        pageWrapper.setContent(specialtyPage.getContent());
-        pageWrapper.setTotalElements(specialtyPage.getTotalElements());
+        pageWrapper.setContent(specialtyPage);
+        pageWrapper.setTotalElements(specialtyPage.size());
         return pageWrapper;
     }
 
@@ -59,7 +59,7 @@ public class SpecialtyController {
 //            throw new ValidationException(bindingResult);
 //        }
         specialtyService.create(convertToEntity(specialtyDTO));
-        return findAll(1);//new RedirectView("/specialties");
+        return findAll();//new RedirectView("/specialties");
     }
 
     @PatchMapping("/{id}")
@@ -80,13 +80,13 @@ public class SpecialtyController {
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
-        return findAll(1);//new RedirectView("/specialties");
+        return findAll();//new RedirectView("/specialties");
     }
 
     @DeleteMapping("/{id}")
     public PageWrapper<SpecialtyDTO> delete(@PathVariable long id) {
         specialtyService.delete(id);
-        return findAll(1);//new RedirectView("/specialties");
+        return findAll();//new RedirectView("/specialties");
     }
 
     private Specialty convertToEntity(SpecialtyDTO specialtyDTO){

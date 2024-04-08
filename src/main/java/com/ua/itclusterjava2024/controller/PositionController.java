@@ -15,6 +15,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/position")
 public class PositionController {
@@ -31,14 +33,12 @@ public class PositionController {
     }
 
     @GetMapping
-    public PageWrapper<PositionDTO> findAll(@RequestParam(defaultValue = "1") int page) {
-        int pageSize = 20;
-        PageRequest pageable = PageRequest.of(page - 1, pageSize);
-        Page<PositionDTO> positionPage = positionService.getAll(pageable).map(this::convertToDTO);
+    public PageWrapper<PositionDTO> findAll() {
+        List<PositionDTO> positionPage = positionService.getAll().stream().map(this::convertToDTO).toList();
 
         PageWrapper<PositionDTO> pageWrapper = new PageWrapper<>();
-        pageWrapper.setContent(positionPage.getContent());
-        pageWrapper.setTotalElements(positionPage.getTotalElements());
+        pageWrapper.setContent(positionPage);
+        pageWrapper.setTotalElements(positionPage.size());
         return pageWrapper;
     }
 
@@ -50,7 +50,7 @@ public class PositionController {
             throw new ValidationException(bindingResult);
         }
         positionService.create(convertToEntity(positionDTO));
-        return findAll(1);
+        return findAll();
     }
 
     @CrossOrigin
@@ -65,7 +65,7 @@ public class PositionController {
         }
 
         positionService.update(id, existingPosition);
-        return findAll(1);
+        return findAll();
     }
 
     @GetMapping("/{id}")
@@ -76,7 +76,7 @@ public class PositionController {
     @DeleteMapping("/{id}")
     public PageWrapper<PositionDTO> delete(@PathVariable Long id){
         positionService.delete(id);
-        return findAll(1);
+        return findAll();
     }
 
     private Position convertToEntity(PositionDTO positionDTO) {
