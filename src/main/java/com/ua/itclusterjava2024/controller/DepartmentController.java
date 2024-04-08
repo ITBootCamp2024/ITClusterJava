@@ -2,30 +2,20 @@ package com.ua.itclusterjava2024.controller;
 
 import com.ua.itclusterjava2024.dto.DepartmentDTO;
 import com.ua.itclusterjava2024.dto.ServiceInfoDTO;
-import com.ua.itclusterjava2024.dto.TeachersDTO;
 import com.ua.itclusterjava2024.dto.UniversityDTO;
 import com.ua.itclusterjava2024.entity.Department;
 import com.ua.itclusterjava2024.entity.University;
-import com.ua.itclusterjava2024.exceptions.NotFoundException;
-import com.ua.itclusterjava2024.exceptions.ValidationException;
 import com.ua.itclusterjava2024.service.interfaces.DepartmentService;
 import com.ua.itclusterjava2024.service.interfaces.UniversityService;
 import com.ua.itclusterjava2024.validators.CourseBlockValidator;
 import com.ua.itclusterjava2024.wrappers.PageWrapper;
 import com.ua.itclusterjava2024.wrappers.Patcher;
-import jakarta.validation.Valid;
-import org.apache.coyote.Response;
+import org.hibernate.Hibernate;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.view.RedirectView;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -82,17 +72,18 @@ public class DepartmentController {
 
     @PatchMapping("/{id}")
     public PageWrapper<DepartmentDTO> update(@PathVariable("id") Long id,
-                                             @RequestBody Department departments,
+                                             @RequestBody DepartmentDTO departmentsDTO,
                                              BindingResult bindingResult){
 //        courseBlockValidator.validate(departmentDTO, bindingResult);
 //        if (bindingResult.hasErrors()){
 //            throw new ValidationException(bindingResult);
 //        }
-        Department department = departmentService.readById(id).orElse(null);
 
+        Department existingDepartment = departmentService.readById(id).orElse(null);
+        Department updatedDepartment = convertToEntity(departmentsDTO);
         try{
-            patcher.patch(department, departments);
-            departmentService.create(department);
+            patcher.patch(existingDepartment, updatedDepartment);
+            departmentService.create(existingDepartment);
         }catch(Exception e){
             e.printStackTrace();
         }
@@ -112,10 +103,16 @@ public class DepartmentController {
 
     private Department convertToEntity(DepartmentDTO departmentDTO){
         Department department = modelMapper.map(departmentDTO, Department.class);
-        University university = universityService.readById(departmentDTO.getUniversity().getId())
-                .orElseThrow(() -> new NotFoundException("University is not found"));
 
-        department.setUniversity(university);
+        if (departmentDTO.getPhone() != null && !departmentDTO.getPhone().isEmpty()) {
+            String phoneNumbers = String.join(",", departmentDTO.getPhone());
+            department.setPhone(phoneNumbers);
+        }
+
+        if (departmentDTO.getUniversity() != null) {
+            University university = modelMapper.map(departmentDTO.getUniversity(), University.class);
+            department.setUniversity(university);
+        }
         return department;
     }
 
