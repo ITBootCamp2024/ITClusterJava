@@ -5,12 +5,11 @@ import com.ua.itclusterjava2024.dto.ServiceInfoDTO;
 import com.ua.itclusterjava2024.dto.UniversityDTO;
 import com.ua.itclusterjava2024.entity.Department;
 import com.ua.itclusterjava2024.entity.University;
+import com.ua.itclusterjava2024.service.implementation.ServiceInfoService;
 import com.ua.itclusterjava2024.service.interfaces.DepartmentService;
-import com.ua.itclusterjava2024.service.interfaces.UniversityService;
 import com.ua.itclusterjava2024.validators.CourseBlockValidator;
 import com.ua.itclusterjava2024.wrappers.PageWrapper;
 import com.ua.itclusterjava2024.wrappers.Patcher;
-import org.hibernate.Hibernate;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
@@ -21,47 +20,41 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping( "/department")
+@RequestMapping("/department")
 public class DepartmentController {
     private final DepartmentService departmentService;
-    private final UniversityService universityService;
     private final ModelMapper modelMapper;
+
+    private final ServiceInfoService serviceInfoService;
 
     @Autowired
     Patcher patcher;
     private final CourseBlockValidator courseBlockValidator;
 
-    public DepartmentController(DepartmentService departmentService, UniversityService universityService, ModelMapper modelMapper, CourseBlockValidator courseBlockValidator) {
+    public DepartmentController(DepartmentService departmentService, ModelMapper modelMapper, ServiceInfoService serviceInfoService, CourseBlockValidator courseBlockValidator) {
         this.departmentService = departmentService;
-        this.universityService = universityService;
         this.modelMapper = modelMapper;
+        this.serviceInfoService = serviceInfoService;
         this.courseBlockValidator = courseBlockValidator;
     }
+
     @GetMapping()
-    public PageWrapper<DepartmentDTO> findAll(){
+    public PageWrapper<DepartmentDTO> findAll() {
         List<DepartmentDTO> departments = departmentService.getAll().stream()
                 .map(this::convertToDTO)
                 .toList();
 
-        List<UniversityDTO> universityDTOs = universityService.getAll()
-                .stream()
-                .map(u -> UniversityDTO.builder()
-                        .id(u.getId())
-                        .name(u.getName())
-                        .abbr(u.getAbbr())
-                        .build())
-                .collect(Collectors.toList());
 
         PageWrapper<DepartmentDTO> pageWrapper = new PageWrapper<>();
         pageWrapper.setContent(departments);
-        pageWrapper.setService_info(ServiceInfoDTO.builder().university(universityDTOs).build());
+        pageWrapper.setService_info(prepareServiceInfo());
         pageWrapper.setTotalElements(departments.size());
         return pageWrapper;
     }
 
     @PostMapping
     public PageWrapper<DepartmentDTO> save(@RequestBody DepartmentDTO departmentDTO,
-                             BindingResult bindingResult){
+                                           BindingResult bindingResult) {
 //        courseBlockValidator.validate(departmentDTO, bindingResult);
 //        if (bindingResult.hasErrors()){
 //            throw new ValidationException(bindingResult);
@@ -73,7 +66,7 @@ public class DepartmentController {
     @PatchMapping("/{id}")
     public PageWrapper<DepartmentDTO> update(@PathVariable("id") Long id,
                                              @RequestBody DepartmentDTO departmentsDTO,
-                                             BindingResult bindingResult){
+                                             BindingResult bindingResult) {
 //        courseBlockValidator.validate(departmentDTO, bindingResult);
 //        if (bindingResult.hasErrors()){
 //            throw new ValidationException(bindingResult);
@@ -81,27 +74,27 @@ public class DepartmentController {
 
         Department existingDepartment = departmentService.readById(id).orElse(null);
         Department updatedDepartment = convertToEntity(departmentsDTO);
-        try{
+        try {
             patcher.patch(existingDepartment, updatedDepartment);
             departmentService.create(existingDepartment);
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return findAll();
     }
 
     @GetMapping("/{id}")
-    public DepartmentDTO findById(@PathVariable Long id){
+    public DepartmentDTO findById(@PathVariable Long id) {
         return convertToDTO(departmentService.readById(id).orElse(null));
     }
 
     @DeleteMapping("/{id}")
-    public PageWrapper<DepartmentDTO> delete(@PathVariable Long id){
+    public PageWrapper<DepartmentDTO> delete(@PathVariable Long id) {
         departmentService.delete(id);
         return findAll();
     }
 
-    private Department convertToEntity(DepartmentDTO departmentDTO){
+    private Department convertToEntity(DepartmentDTO departmentDTO) {
         Department department = modelMapper.map(departmentDTO, Department.class);
 
         if (departmentDTO.getPhone() != null && !departmentDTO.getPhone().isEmpty()) {
@@ -116,7 +109,7 @@ public class DepartmentController {
         return department;
     }
 
-    private DepartmentDTO convertToDTO(Department department){
+    private DepartmentDTO convertToDTO(Department department) {
         DepartmentDTO departmentDTO = modelMapper.map(department, DepartmentDTO.class);
 
         if (department.getPhone() != null && !department.getPhone().isEmpty()) {
@@ -127,5 +120,21 @@ public class DepartmentController {
                 .id(department.getUniversity().getId())
                 .name(department.getUniversity().getName()).build());
         return departmentDTO;
+    }
+
+    private List<UniversityDTO> prepareUniversities() {
+        return serviceInfoService.getAllUniversities().stream()
+                .map(u -> UniversityDTO.builder()
+                        .id(u.getId())
+                        .name(u.getName())
+                        .abbr(u.getAbbr())
+                        .build())
+                .collect(Collectors.toList());
+    }
+
+    private ServiceInfoDTO prepareServiceInfo() {
+        ServiceInfoDTO serviceInfo = new ServiceInfoDTO();
+        serviceInfo.setUniversity(prepareUniversities());
+        return serviceInfo;
     }
 }
