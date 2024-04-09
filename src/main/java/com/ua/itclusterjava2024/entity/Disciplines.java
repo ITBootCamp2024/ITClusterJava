@@ -37,12 +37,14 @@ public class Disciplines {
     EducationPrograms education_program;
 
     @Column(name = "syllabus_url", nullable = false)
-    @Size(max = 100, message = "Syllabus Link have to contain up to 200 symbols")
+    @NotEmpty
+    @Size(max = 255, message = "Syllabus Link have to contain up to 255 symbols")
 //    @Pattern(regexp = "https?://.", message = "Incorrect format URL")
     private String syllabus_url;
 
     @Column(name = "education_plan_url", nullable = false)
-    @Size(max = 100, message = "Syllabus Link have to contain up to 200 symbols")
+    @NotEmpty
+    @Size(max = 255, message = "Syllabus Link have to contain up to 255 symbols")
  //   @Pattern(regexp = "https?://.", message = "Incorrect format URL")
     private String education_plan_url;
 

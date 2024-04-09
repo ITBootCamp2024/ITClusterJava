@@ -20,15 +20,23 @@ public class University {
     private Long id;
 
     @Column(name = "name")
+    @NotEmpty
+    @Size(max = 150, message = "Name of university have to contain up to 150 symbols")
     private String name;
 
     @Column(name = "abbr")
+    @NotEmpty
+    @Size(max = 45, message = "Abbr of university have to contain up to 45 symbols")
     private String abbr;
 
     @Column(name = "programs_list_url")
+    @NotEmpty
+    @Size(max = 255, message = "Programs_list_url of university have to contain up to 255 symbols")
     private String programs_list_url;
 
     @Column(name = "url")
+    @NotEmpty
+    @Size(max = 255, message = "Url of university have to contain up to 255 symbols")
     private String url;
 
 }

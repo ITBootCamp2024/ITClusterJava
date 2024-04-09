@@ -31,19 +31,21 @@ public class EducationPrograms {
     @NotEmpty
     @Size(max = 100, message = "guarantor have to contain up to 100 symbols")
     private String guarantor;
+
     @ManyToOne
     @JoinColumn(name = "department_id")
     private Department department;
 
     @Column(name = "program_url", nullable = false)
     @NotEmpty
-    @Size(max = 200, message = "Program link have to contain up to 200 symbols")
+    @Size(max = 255, message = "Program link have to contain up to 255 symbols")
     private String program_url;
 
     @Column(name = "syllabus_url", nullable = false)
     @NotEmpty
-    @Size(max = 200, message = "Syllabus link have to contain up to 200 symbols")
+    @Size(max = 255, message = "Syllabus link have to contain up to 255 symbols")
     private String syllabus_url;
+
     @ManyToOne
     @JoinColumn(name = "specialty_id")
     private Specialty specialty;

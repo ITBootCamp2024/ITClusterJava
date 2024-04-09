@@ -25,14 +25,15 @@ public class DisciplineGroups {
 
     @Column(name = "description")
     @NotEmpty
-    @Size(max = 200, message = "Description of discipline block have to contain up to 200 symbols")
     String description;
+
     @ManyToOne
     @JoinColumn(name = "block_id")
     DisciplineBlocks block_id;
 
     @Column(name = "discipline_url")
     @NotEmpty
+    @Size(max = 255, message = "Discipline_url of discipline_groups have to contain up to 255 symbols")
     String discipline_url;
 
 }
