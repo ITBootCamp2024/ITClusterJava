@@ -20,16 +20,16 @@ public class Specialty {
 
     @Column(name = "code", nullable = false)
     @NotEmpty
-    @Size(max = 45, message = "Name of specialty have to contain up to 200 symbols")
+    @Size(max = 45, message = "Code of specialty have to contain up to 45 symbols")
     private String code;
     @Column(name = "name", nullable = false)
     @NotEmpty
-    @Size(max = 200, message = "Name of specialty have to contain up to 200 symbols")
+    @Size(max = 100, message = "Name of specialty have to contain up to 100 symbols")
     private String name;
 
     @Column(name = "standard_url", nullable = false)
     @NotEmpty
-    @Size(max = 200, message = "Standard_url of specialty have to contain up to 200 symbols")
+    @Size(max = 255, message = "Standard_url of specialty have to contain up to 255 symbols")
     private String standard_url;
 
 }

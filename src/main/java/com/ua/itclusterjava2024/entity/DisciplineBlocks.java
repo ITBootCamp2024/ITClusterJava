@@ -20,7 +20,7 @@ public class DisciplineBlocks {
 
     @Column(name="name", nullable = false)
     @NotEmpty
-    @Size(max = 100, message = "Name of discipline block have to contain up to 100 symbols")
+    @Size(max = 255, message = "Name of discipline block have to contain up to 255 symbols")
     String name;
 
     @Column(name="description")
