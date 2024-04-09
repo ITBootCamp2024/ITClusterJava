@@ -39,8 +39,10 @@ public class DisciplineGroupController {
     public PageWrapper<DisciplineGroupsDTO> findAll() {
         List<DisciplineGroupsDTO> disciplineGroupsPage = disciplineGroupService.getAll().stream().map(this::convertToDTO).toList();
 
+        List<DisciplineBlocksDTO> disciplineBlocks = disciplineBlocksService.getAll().stream().map(i -> DisciplineBlocksDTO.builder().id(i.getId()).name(i.getName()).build()).toList();
         PageWrapper<DisciplineGroupsDTO> pageWrapper = new PageWrapper<>();
         pageWrapper.setContent(disciplineGroupsPage);
+        pageWrapper.setService_info(ServiceInfoDTO.builder().disciplineBlocks(disciplineBlocks).build());
         pageWrapper.setTotalElements(disciplineGroupsPage.size());
         return pageWrapper;
     }

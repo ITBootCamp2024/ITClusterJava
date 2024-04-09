@@ -24,5 +24,5 @@ public class DisciplineGroupsDTO {
     private DisciplineBlocksDTO block;
     @JsonInclude(JsonInclude.Include.NON_NULL)
 
-    private String disciplineUrl;
+    private String discipline_url;
 }
