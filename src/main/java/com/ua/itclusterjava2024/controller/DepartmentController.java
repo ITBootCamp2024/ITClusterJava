@@ -37,6 +37,7 @@ public class DepartmentController {
         this.modelMapper = modelMapper;
         this.courseBlockValidator = courseBlockValidator;
     }
+
     @GetMapping()
     public PageWrapper<DepartmentDTO> findAll(){
         List<DepartmentDTO> departments = departmentService.getAll().stream()

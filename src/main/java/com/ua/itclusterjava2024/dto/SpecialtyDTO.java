@@ -25,5 +25,5 @@ public class SpecialtyDTO {
     private String name;
     @JsonInclude(JsonInclude.Include.NON_NULL)
 
-    private String standardUrl;
+    private String standard_url;
 }
