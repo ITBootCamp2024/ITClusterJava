@@ -22,6 +22,7 @@ public class Specialty {
     @NotEmpty
     @Size(max = 45, message = "Code of specialty have to contain up to 45 symbols")
     private String code;
+
     @Column(name = "name", nullable = false)
     @NotEmpty
     @Size(max = 100, message = "Name of specialty have to contain up to 100 symbols")

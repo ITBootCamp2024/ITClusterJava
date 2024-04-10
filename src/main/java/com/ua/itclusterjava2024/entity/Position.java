@@ -23,5 +23,6 @@ public class Position {
     private String name;
 
     @Column(name = "description")
+    @NotEmpty
     private String description;
 }
