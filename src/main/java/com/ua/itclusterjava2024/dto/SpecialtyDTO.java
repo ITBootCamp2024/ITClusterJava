@@ -17,13 +17,19 @@ import lombok.NoArgsConstructor;
 @Builder
 public class SpecialtyDTO {
     private Long id;
-    @JsonInclude(JsonInclude.Include.NON_NULL)
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @NotEmpty
+    @Size(max = 45, message = "Code of specialty have to contain up to 45 symbols")
     private String code;
-    @JsonInclude(JsonInclude.Include.NON_NULL)
 
+    @NotEmpty
+    @Size(max = 100, message = "Name of specialty have to contain up to 100 symbols")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String name;
-    @JsonInclude(JsonInclude.Include.NON_NULL)
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @NotEmpty
+    @Size(max = 255, message = "Standard_url of specialty have to contain up to 255 symbols")
     private String standardUrl;
 }

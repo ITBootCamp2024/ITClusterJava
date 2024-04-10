@@ -17,6 +17,7 @@ public class EducationLevel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
+
     @Column(name = "education_level", nullable = false)
     @NotEmpty
     @Size(max = 45, message = "Name of education level have to contain up to 45 symbols")
