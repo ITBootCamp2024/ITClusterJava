@@ -1,23 +1,22 @@
 package com.ua.itclusterjava2024.controller;
 
 import com.ua.itclusterjava2024.dto.*;
-import com.ua.itclusterjava2024.entity.Department;
-import com.ua.itclusterjava2024.entity.EducationLevel;
-import com.ua.itclusterjava2024.entity.Position;
+import com.ua.itclusterjava2024.entity.*;
 import com.ua.itclusterjava2024.exceptions.NotFoundException;
 import com.ua.itclusterjava2024.service.implementation.*;
 import com.ua.itclusterjava2024.service.interfaces.*;
 import com.ua.itclusterjava2024.wrappers.PageWrapper;
-import com.ua.itclusterjava2024.entity.Teachers;
 import com.ua.itclusterjava2024.service.implementation.TeachersServiceImpl;
 import com.ua.itclusterjava2024.validators.TeachersValidator;
 import com.ua.itclusterjava2024.wrappers.Patcher;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @RestController
@@ -25,36 +24,47 @@ import org.springframework.web.bind.annotation.*;
 public class TeachersController {
 
     private final TeachersService teachersService;
-    private final EducationLevelsService educationLevel;
+    private final EducationLevelsService educationLevelService;
     private final PositionService positionService;
     private final DepartmentService departmentService;
     private final UniversityService universityService;
+    private final ServiceInfoService serviceInfoService;
     private final ModelMapper modelMapper;
     @Autowired
     Patcher patcher;
     private final TeachersValidator teachersValidator;
 
     @Autowired
-    public TeachersController(TeachersServiceImpl teachersService, EducationLevelsService educationLevelsService, PositionServiceImpl positionService, DepartmentServiceImpl departmentService, UniversityServiceImpl universityService, ModelMapper modelMapper, TeachersValidator teachersValidator) {
+    public TeachersController(TeachersServiceImpl teachersService, EducationLevelsService educationLevelsService, PositionServiceImpl positionService, DepartmentServiceImpl departmentService, UniversityServiceImpl universityService, ServiceInfoService serviceInfoService, ModelMapper modelMapper, TeachersValidator teachersValidator) {
         this.teachersService = teachersService;
-        this.educationLevel = educationLevelsService;
+        this.educationLevelService = educationLevelsService;
         this.positionService = positionService;
         this.departmentService = departmentService;
         this.universityService = universityService;
+        this.serviceInfoService = serviceInfoService;
         this.modelMapper = modelMapper;
         this.teachersValidator = teachersValidator;
     }
 
     @GetMapping
-    public PageWrapper<TeachersDTO> findAll(@RequestParam(defaultValue = "1") int page) {
-        int pageSize = 20;
-        PageRequest pageable = PageRequest.of(page - 1, pageSize);
-        Page<TeachersDTO> teachersPage = teachersService.getAll(pageable).map(teachers -> convertToDTO(teachers));
+    public PageWrapper<TeachersDTO> findAll() {
+        List<TeachersDTO> teachers = teachersService.getAll().stream().map(this::convertToDTO).toList();
+        List<PositionDTO> positions = positionService.getAll().stream().map(position -> PositionDTO.builder().id(position.getId()).name(position.getName()).build()).toList();
+        List<EducationLevelDTO> educationLevels = educationLevelService.getAll().stream().map(level -> EducationLevelDTO.builder().id(level.getId()).education_level(level.getEducation_level()).name(level.getName()).build()).toList();
+        List<UniversityDTO> universitiesDTO = new ArrayList<>();
+        List<University> universities = serviceInfoService.getAllUniversities();
+        universities.forEach(university -> {
+            List<Department> departments = serviceInfoService.getAllDepartmentsByUniversityId(university.getId());
+            List<DepartmentDTO> departmentsDTO = departments.stream()
+                    .map(department -> DepartmentDTO.builder().id(department.getId()).name(department.getName()).build())
+                    .toList();
 
+            universitiesDTO.add(UniversityDTO.builder().id(university.getId()).name(university.getName()).abbr(university.getAbbr()).department(departmentsDTO).build());
+        });
         PageWrapper<TeachersDTO> pageWrapper = new PageWrapper<>();
-        pageWrapper.setContent(teachersPage.getContent());
-        pageWrapper.setPageNumber(teachersPage.getNumber());
-        pageWrapper.setTotalElements(teachersPage.getTotalElements());
+        pageWrapper.setContent(teachers);
+        pageWrapper.setService_info(ServiceInfoDTO.builder().position(positions).education_levels(educationLevels).university(universitiesDTO).build());
+        pageWrapper.setTotalElements(teachers.size());
         return pageWrapper;
     }
 
@@ -67,14 +77,15 @@ public class TeachersController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return findAll(1);
+        findAll();
+        return findAll();
     }
 
 
     @DeleteMapping("/{id}")
     public PageWrapper<TeachersDTO> delete(@PathVariable long id) {
         teachersService.delete(id);
-        return findAll(1);
+        return findAll();
     }
 
     @GetMapping("/{id}")
@@ -85,13 +96,13 @@ public class TeachersController {
     @PostMapping
     public PageWrapper<TeachersDTO> save(@RequestBody TeachersDTO teachers, BindingResult bindingResult) {
         teachersService.create(convertToEntity(teachers));
-        return findAll(1);
+        return findAll();
     }
 
     public Teachers convertToEntity(TeachersDTO dto) {
         Teachers teacher = modelMapper.map(dto, Teachers.class);
         Position position = positionService.readById(dto.getPosition().getId()).orElseThrow();
-        EducationLevel educationLevel = this.educationLevel.readById(dto.getEducation_level().getId())
+        EducationLevel educationLevel = this.educationLevelService.readById(dto.getEducation_level().getId())
                 .orElseThrow(() -> new NotFoundException("Degree not found"));
         Department department = departmentService.readById(dto.getDepartment().getId())
                 .orElseThrow(() -> new NotFoundException("Department not found"));

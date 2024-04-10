@@ -2,17 +2,21 @@ package com.ua.itclusterjava2024.controller;
 
 import com.ua.itclusterjava2024.dto.*;
 import com.ua.itclusterjava2024.entity.*;
-import com.ua.itclusterjava2024.service.interfaces.*;
+import com.ua.itclusterjava2024.service.implementation.ServiceInfoService;
+import com.ua.itclusterjava2024.service.interfaces.DisciplineGroupService;
+import com.ua.itclusterjava2024.service.interfaces.DisciplinesService;
+import com.ua.itclusterjava2024.service.interfaces.EducationProgramsService;
+import com.ua.itclusterjava2024.service.interfaces.TeachersService;
 import com.ua.itclusterjava2024.validators.CourseValidator;
 import com.ua.itclusterjava2024.wrappers.PageWrapper;
 import com.ua.itclusterjava2024.wrappers.Patcher;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/disciplines")
@@ -21,33 +25,40 @@ public class DisciplineController {
     private final DisciplineGroupService disciplineGroupService;
     private final EducationProgramsService educationProgramsService;
     private final TeachersService teachersService;
+    private final ServiceInfoService serviceInfoService;
     private final ModelMapper modelMapper;
     private final CourseValidator disciplinesValidator;
     @Autowired
     Patcher patcher;
 
     @Autowired
-    public DisciplineController(DisciplinesService disciplineService, DisciplineGroupService disciplineGroupService, EducationProgramsService educationProgramsService, ModelMapper modelMapper, CourseValidator disciplinesValidator, DisciplinesService disciplinesService, TeachersService teachersService) {
+    public DisciplineController(DisciplinesService disciplineService, DisciplineGroupService disciplineGroupService, EducationProgramsService educationProgramsService, ModelMapper modelMapper, CourseValidator disciplinesValidator, TeachersService teachersService, ServiceInfoService serviceInfoService) {
         this.disciplinesService = disciplineService;
         this.disciplineGroupService = disciplineGroupService;
         this.educationProgramsService = educationProgramsService;
         this.modelMapper = modelMapper;
         this.disciplinesValidator = disciplinesValidator;
         this.teachersService = teachersService;
+        this.serviceInfoService = serviceInfoService;
     }
 
     @GetMapping
-    public PageWrapper<DisciplinesDTO> findAll(@RequestParam(defaultValue = "1") int page) {
-        int pageSize = 20;
-        PageRequest pageable = PageRequest.of(page - 1, pageSize);
-        Page<DisciplinesDTO> disciplinesPage = disciplinesService.getAll(pageable).map(this::convertToDTO);
+    public PageWrapper<DisciplinesDTO> findAll() {
+        List<DisciplinesDTO> disciplines = disciplinesService.getAll().stream()
+                .map(this::convertToDTO)
+                .toList();
+
+
+        ServiceInfoDTO serviceInfo = prepareServiceInfo();
 
         PageWrapper<DisciplinesDTO> pageWrapper = new PageWrapper<>();
-        pageWrapper.setContent(disciplinesPage.getContent());
-        pageWrapper.setPageNumber(disciplinesPage.getNumber());
-        pageWrapper.setTotalElements(disciplinesPage.getTotalElements());
+        pageWrapper.setContent(disciplines);
+        pageWrapper.setService_info(serviceInfo);
+        pageWrapper.setTotalElements(disciplines.size());
+
         return pageWrapper;
     }
+
 
     @GetMapping("/{id}")
     public DisciplinesDTO findById(@PathVariable long id) {
@@ -58,48 +69,53 @@ public class DisciplineController {
     public PageWrapper<DisciplinesDTO> save(@RequestBody @Valid DisciplinesDTO disciplinesDTO,
                                             BindingResult bindingResult) {
         disciplinesService.create(convertToEntity(disciplinesDTO));
-        return findAll(1);
+        return findAll();
     }
 
     @PatchMapping("/{id}")
     public PageWrapper<DisciplinesDTO> update(@PathVariable("id") Long id,
-                                              @RequestBody Disciplines disciplines,
-                                              BindingResult bindingResult
-    ) {
-        Disciplines existingTeacher = disciplinesService.readById(id).orElse(null);
+                                              @RequestBody DisciplinesDTO disciplinesDTO,
+                                              BindingResult bindingResult) {
+        Disciplines existingDiscipline = disciplinesService.readById(id).orElse(null);
+        Disciplines updatedDiscipline = convertToEntity(disciplinesDTO);
         try {
-            patcher.patch(existingTeacher, disciplines);
-            disciplinesService.create(existingTeacher);
+            patcher.patch(existingDiscipline, updatedDiscipline);
+            disciplinesService.create(existingDiscipline);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return findAll(1);
+        return findAll();
     }
 
     @DeleteMapping("/{id}")
     public PageWrapper<DisciplinesDTO> delete(@PathVariable long id) {
         disciplinesService.delete(id);
-        return findAll(1);
+        return findAll();
     }
 
     private Disciplines convertToEntity(DisciplinesDTO dto) {
         Disciplines disciplines = modelMapper.map(dto, Disciplines.class);
-        disciplines.setSyllabus_url(dto.getSyllabus_url());
-        disciplines.setEducation_plan_url(dto.getEducation_plan_url());
 
-        Teachers teacher = teachersService.readById(dto.getTeacher().getId())
-                .orElseThrow(() -> new RuntimeException("Teacher not found"));
-        disciplines.setTeachers(teacher);
+        if (dto.getTeacher() != null) {
+            Teachers teacher = teachersService.readById(dto.getTeacher().getId())
+                    .orElseThrow(() -> new RuntimeException("Teacher not found"));
+            disciplines.setTeachers(teacher);
+        }
 
-        DisciplineGroups disciplineGroup = disciplineGroupService.readById(dto.getDiscipline_group().getId())
-                .orElseThrow(() -> new RuntimeException("Discipline group not found"));
-        disciplines.setDiscipline_group(disciplineGroup);
+        if (dto.getDiscipline_group() != null) {
+            DisciplineGroups disciplineGroup = disciplineGroupService.readById(dto.getDiscipline_group().getId())
+                    .orElseThrow(() -> new RuntimeException("Discipline group not found"));
+            disciplines.setDiscipline_group(disciplineGroup);
+        }
 
-        EducationPrograms educationPrograms = educationProgramsService.readById(dto.getEducation_program().getId())
-                .orElseThrow(() -> new RuntimeException("Education program not found"));
-        disciplines.setEducation_program(educationPrograms);
+        if (dto.getEducation_program() != null) {
+            EducationPrograms educationProgram = educationProgramsService.readById(dto.getEducation_program().getId())
+                    .orElseThrow(() -> new RuntimeException("Education program not found"));
+            disciplines.setEducation_program(educationProgram);
+        }
 
-        return disciplines;    }
+        return disciplines;
+    }
 
     private DisciplinesDTO convertToDTO(Disciplines disciplines) {
         DisciplinesDTO dto = modelMapper.map(disciplines, DisciplinesDTO.class);
@@ -115,5 +131,48 @@ public class DisciplineController {
         dto.setSyllabus_url(disciplines.getSyllabus_url());
         dto.setEducation_plan_url(disciplines.getEducation_plan_url());
         return dto;
+    }
+
+    private ServiceInfoDTO prepareServiceInfo() {
+        ServiceInfoDTO serviceInfo = new ServiceInfoDTO();
+        serviceInfo.setTeachers(prepareTeachers());
+        serviceInfo.setEducation_program(prepareEducationPrograms());
+        serviceInfo.setDisciplineBlocks(prepareDisciplineBlocks());
+        return serviceInfo;
+    }
+
+    private List<TeachersDTO> prepareTeachers() {
+        return serviceInfoService.getAllTeachers().stream()
+                .map(teacher -> TeachersDTO.builder()
+                        .id(teacher.getId())
+                        .name(teacher.getName()).build())
+                .toList();
+    }
+
+    private List<EducationProgramsDTO> prepareEducationPrograms() {
+        return serviceInfoService.getAllEducationPrograms().stream()
+                .map(program -> EducationProgramsDTO.builder()
+                        .id(program.getId())
+                        .name(program.getName())
+                        .program_url(program.getProgram_url()).build())
+                .toList();
+    }
+
+    private List<DisciplineBlocksDTO> prepareDisciplineBlocks() {
+        return serviceInfoService.getAllDisciplineBlocks().stream()
+                .map(block -> DisciplineBlocksDTO.builder()
+                        .id(block.getId())
+                        .name(block.getName())
+                        .disciplineGroups(prepareDisciplineGroups(block))
+                        .build())
+                .toList();
+    }
+
+    private List<DisciplineGroupsDTO> prepareDisciplineGroups(DisciplineBlocks block) {
+        return serviceInfoService.getAllDisciplineGroupsByDisciplineBlocksId(block).stream()
+                .map(group -> DisciplineGroupsDTO.builder()
+                        .id(group.getId())
+                        .name(group.getName()).build())
+                .toList();
     }
 }

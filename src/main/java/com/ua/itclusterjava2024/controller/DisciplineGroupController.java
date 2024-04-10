@@ -16,6 +16,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/discipline-groups")
 public class DisciplineGroupController {
@@ -34,15 +36,14 @@ public class DisciplineGroupController {
     }
 
     @GetMapping
-    public PageWrapper<DisciplineGroupsDTO> findAll(@RequestParam(defaultValue = "1") int page) {
-        int pageSize = 20;
-        PageRequest pageable = PageRequest.of(page - 1, pageSize);
-        Page<DisciplineGroupsDTO> disciplineGroupsPage = disciplineGroupService.getAll(pageable).map(this::convertToDTO);
+    public PageWrapper<DisciplineGroupsDTO> findAll() {
+        List<DisciplineGroupsDTO> disciplineGroupsPage = disciplineGroupService.getAll().stream().map(this::convertToDTO).toList();
 
+        List<DisciplineBlocksDTO> disciplineBlocks = disciplineBlocksService.getAll().stream().map(i -> DisciplineBlocksDTO.builder().id(i.getId()).name(i.getName()).build()).toList();
         PageWrapper<DisciplineGroupsDTO> pageWrapper = new PageWrapper<>();
-        pageWrapper.setContent(disciplineGroupsPage.getContent());
-        pageWrapper.setPageNumber(disciplineGroupsPage.getNumber());
-        pageWrapper.setTotalElements(disciplineGroupsPage.getTotalElements());
+        pageWrapper.setContent(disciplineGroupsPage);
+        pageWrapper.setService_info(ServiceInfoDTO.builder().disciplineBlocks(disciplineBlocks).build());
+        pageWrapper.setTotalElements(disciplineGroupsPage.size());
         return pageWrapper;
     }
 
@@ -55,7 +56,7 @@ public class DisciplineGroupController {
             throw new ValidationException(bindingResult);
         }
         disciplineGroupService.create(convertToEntity(disciplineGroupsDTO));
-        return findAll(1);
+        return findAll();
     }
 
     @CrossOrigin
@@ -70,7 +71,7 @@ public class DisciplineGroupController {
         }
 
         disciplineGroupService.update(id, existingDisciplineGroups);
-        return findAll(1);
+        return findAll();
     }
 
     @GetMapping("/{id}")
@@ -81,7 +82,7 @@ public class DisciplineGroupController {
     @DeleteMapping("/{id}")
     public PageWrapper<DisciplineGroupsDTO> delete(@PathVariable Long id){
         disciplineGroupService.delete(id);
-        return findAll(1);
+        return findAll();
     }
 
     private DisciplineGroups convertToEntity(DisciplineGroupsDTO disciplineGroupsDTO){

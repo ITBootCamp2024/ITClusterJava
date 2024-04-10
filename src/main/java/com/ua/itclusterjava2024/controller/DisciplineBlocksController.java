@@ -36,15 +36,12 @@ public class DisciplineBlocksController {
         this.patcher = patcher;
     }
     @GetMapping
-    public PageWrapper<DisciplineBlocksDTO> findAll(@RequestParam(defaultValue = "1") int page) {
-        int pageSize = 20;
-        PageRequest pageable = PageRequest.of(page - 1, pageSize);
-        Page<DisciplineBlocksDTO> disciplineBlocksPage = disciplineBlocksService.getAll(pageable).map(this::convertToDTO);
+    public PageWrapper<DisciplineBlocksDTO> findAll() {
+        List<DisciplineBlocksDTO> disciplineBlocksPage = disciplineBlocksService.getAll().stream().map(this::convertToDTO).toList();
 
         PageWrapper<DisciplineBlocksDTO> pageWrapper = new PageWrapper<>();
-        pageWrapper.setContent(disciplineBlocksPage.getContent());
-        pageWrapper.setPageNumber(disciplineBlocksPage.getNumber());
-        pageWrapper.setTotalElements(disciplineBlocksPage.getTotalElements());
+        pageWrapper.setContent(disciplineBlocksPage);
+        pageWrapper.setTotalElements(disciplineBlocksPage.size());
         return pageWrapper;
     }
     @CrossOrigin
@@ -55,7 +52,7 @@ public class DisciplineBlocksController {
             throw new ValidationException(bindingResult);
         }
         disciplineBlocksService.create(convertToEntity(disciplineBlocksDTO));
-        return findAll(1);
+        return findAll();
     }
     @CrossOrigin
     @PatchMapping("/{id}")
@@ -69,7 +66,7 @@ public class DisciplineBlocksController {
         }
 
         disciplineBlocksService.update(id, existingDisciplineBlocks);
-        return findAll(1);
+        return findAll();
     }
 
     @GetMapping("/{id}")
@@ -80,7 +77,7 @@ public class DisciplineBlocksController {
     @DeleteMapping("/{id}")
     public PageWrapper<DisciplineBlocksDTO> delete(@PathVariable Long id){
         disciplineBlocksService.delete(id);
-        return findAll(1);
+        return findAll();
     }
 
     private DisciplineBlocks convertToEntity(DisciplineBlocksDTO disciplineBlocksDTO){

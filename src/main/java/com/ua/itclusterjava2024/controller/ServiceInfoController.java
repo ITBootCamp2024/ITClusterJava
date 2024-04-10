@@ -39,7 +39,6 @@ public class ServiceInfoController {
 
         PageWrapper<ServiceInfoDTO> pageWrapper = new PageWrapper<>();
         pageWrapper.setContent(pageOfServiceInfoDTO.getContent());
-        pageWrapper.setPageNumber(pageOfServiceInfoDTO.getNumber());
         pageWrapper.setTotalElements(pageOfServiceInfoDTO.getTotalElements());
         return pageWrapper;
     }
