@@ -9,6 +9,7 @@ import com.ua.itclusterjava2024.wrappers.PageWrapper;
 import com.ua.itclusterjava2024.service.implementation.TeachersServiceImpl;
 import com.ua.itclusterjava2024.validators.TeachersValidator;
 import com.ua.itclusterjava2024.wrappers.Patcher;
+import jakarta.persistence.EntityManager;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
@@ -16,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 @RestController
@@ -30,12 +30,14 @@ public class TeachersController {
     private final UniversityService universityService;
     private final ServiceInfoService serviceInfoService;
     private final ModelMapper modelMapper;
+    private final EntityManager entityManager;
+
     @Autowired
     Patcher patcher;
     private final TeachersValidator teachersValidator;
 
     @Autowired
-    public TeachersController(TeachersServiceImpl teachersService, EducationLevelsService educationLevelsService, PositionServiceImpl positionService, DepartmentServiceImpl departmentService, UniversityServiceImpl universityService, ServiceInfoService serviceInfoService, ModelMapper modelMapper, TeachersValidator teachersValidator) {
+    public TeachersController(TeachersServiceImpl teachersService, EducationLevelsService educationLevelsService, PositionServiceImpl positionService, DepartmentServiceImpl departmentService, UniversityServiceImpl universityService, ServiceInfoService serviceInfoService, ModelMapper modelMapper, EntityManager entityManager, TeachersValidator teachersValidator) {
         this.teachersService = teachersService;
         this.educationLevelService = educationLevelsService;
         this.positionService = positionService;
@@ -43,6 +45,7 @@ public class TeachersController {
         this.universityService = universityService;
         this.serviceInfoService = serviceInfoService;
         this.modelMapper = modelMapper;
+        this.entityManager = entityManager;
         this.teachersValidator = teachersValidator;
     }
 
@@ -69,15 +72,16 @@ public class TeachersController {
     }
 
     @PatchMapping("/{id}")
-    public PageWrapper<TeachersDTO> updateEntity(@PathVariable("id") Long id, @RequestBody Teachers teachers) {
-        Teachers existingTeacher = teachersService.readById(id).orElse(null);
+    public PageWrapper<TeachersDTO> updateEntity(@PathVariable("id") Long id, @RequestBody TeachersDTO teachersDTO) {
+        Teachers existingTeacher = teachersService.readById(id).orElseThrow(() -> new NotFoundException("Teacher with id " + id + " not found"));
+        Teachers teachers = convertToEntity(teachersDTO);
         try {
-            patcher.patch(existingTeacher, teachers);
-            teachersService.create(existingTeacher);
+            patcher.patch(existingTeacher, teachersDTO);
+            teachersService.update(id, existingTeacher);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        findAll();
+        entityManager.clear();
         return findAll();
     }
 
@@ -96,19 +100,28 @@ public class TeachersController {
     @PostMapping
     public PageWrapper<TeachersDTO> save(@RequestBody TeachersDTO teachers, BindingResult bindingResult) {
         teachersService.create(convertToEntity(teachers));
+        entityManager.clear();
         return findAll();
     }
 
     public Teachers convertToEntity(TeachersDTO dto) {
         Teachers teacher = modelMapper.map(dto, Teachers.class);
-        Position position = positionService.readById(dto.getPosition().getId()).orElseThrow();
-        EducationLevel educationLevel = this.educationLevelService.readById(dto.getEducation_level().getId())
-                .orElseThrow(() -> new NotFoundException("Degree not found"));
-        Department department = departmentService.readById(dto.getDepartment().getId())
-                .orElseThrow(() -> new NotFoundException("Department not found"));
-        teacher.setPosition(position);
-        teacher.setEducation_level(educationLevel);
-        teacher.setDepartment(department);
+        if (dto.getPosition() != null) {
+            teacher.setPosition(modelMapper.map(dto.getPosition(), Position.class));
+        }
+
+        if (dto.getPosition() != null) {
+            teacher.setPosition(modelMapper.map(dto.getPosition(), Position.class));
+        }
+
+        if (dto.getEducation_level() != null) {
+            teacher.setEducation_level(modelMapper.map(dto.getEducation_level(), EducationLevel.class));
+        }
+
+        if (dto.getDepartment() != null) {
+            teacher.setDepartment(modelMapper.map(dto.getDepartment(), Department.class));
+        }
+
         return teacher;
     }
 
