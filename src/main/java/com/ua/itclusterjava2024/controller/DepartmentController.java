@@ -12,6 +12,7 @@ import com.ua.itclusterjava2024.wrappers.PageWrapper;
 import com.ua.itclusterjava2024.wrappers.Patcher;
 import jakarta.persistence.EntityManager;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
@@ -27,6 +28,7 @@ public class DepartmentController {
     private final EntityManager entityManager;
     private final Patcher<Department> patcher;
 
+    @Autowired
     public DepartmentController(DepartmentService departmentService, ModelMapper modelMapper, ServiceInfoService serviceInfoService, EntityManager entityManager, Patcher<Department> patcher) {
         this.departmentService = departmentService;
         this.modelMapper = modelMapper;

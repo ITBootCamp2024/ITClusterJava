@@ -23,7 +23,7 @@ public class ServiceInfoController {
     private final ServiceInfoService serviceInfoService;
     private final ModelMapper modelMapper;
 
-
+    @Autowired
     public ServiceInfoController(ServiceInfoService serviceInfoService, ModelMapper modelMapper) {
         this.serviceInfoService = serviceInfoService;
         this.modelMapper = modelMapper;

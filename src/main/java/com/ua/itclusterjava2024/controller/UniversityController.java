@@ -2,7 +2,6 @@ package com.ua.itclusterjava2024.controller;
 
 import com.ua.itclusterjava2024.dto.UniversityDTO;
 import com.ua.itclusterjava2024.entity.University;
-
 import com.ua.itclusterjava2024.exceptions.NotFoundException;
 import com.ua.itclusterjava2024.exceptions.ValidationException;
 import com.ua.itclusterjava2024.service.interfaces.UniversityService;
@@ -12,10 +11,7 @@ import com.ua.itclusterjava2024.wrappers.Patcher;
 import jakarta.persistence.EntityManager;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 

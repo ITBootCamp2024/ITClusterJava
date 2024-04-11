@@ -3,11 +3,11 @@ package com.ua.itclusterjava2024.controller;
 import com.ua.itclusterjava2024.dto.*;
 import com.ua.itclusterjava2024.entity.*;
 import com.ua.itclusterjava2024.exceptions.NotFoundException;
-import com.ua.itclusterjava2024.service.implementation.*;
-import com.ua.itclusterjava2024.service.interfaces.*;
+import com.ua.itclusterjava2024.service.implementation.ServiceInfoService;
+import com.ua.itclusterjava2024.service.interfaces.EducationLevelsService;
+import com.ua.itclusterjava2024.service.interfaces.PositionService;
+import com.ua.itclusterjava2024.service.interfaces.TeachersService;
 import com.ua.itclusterjava2024.wrappers.PageWrapper;
-import com.ua.itclusterjava2024.service.implementation.TeachersServiceImpl;
-import com.ua.itclusterjava2024.validators.TeachersValidator;
 import com.ua.itclusterjava2024.wrappers.Patcher;
 import jakarta.persistence.EntityManager;
 import org.modelmapper.ModelMapper;
@@ -31,6 +31,7 @@ public class TeachersController {
     private final EntityManager entityManager;
     private final Patcher<Teachers> patcher;
 
+    @Autowired
     public TeachersController(TeachersService teachersService, EducationLevelsService educationLevelService, PositionService positionService, ServiceInfoService serviceInfoService, ModelMapper modelMapper, EntityManager entityManager, Patcher<Teachers> patcher) {
         this.teachersService = teachersService;
         this.educationLevelService = educationLevelService;
