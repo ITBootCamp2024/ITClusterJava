@@ -64,6 +64,7 @@ public class DepartmentController {
 //            throw new ValidationException(bindingResult);
 //        }
         departmentService.create(convertToEntity(departmentDTO));
+
         entityManager.clear();
         return findAll();
     }
