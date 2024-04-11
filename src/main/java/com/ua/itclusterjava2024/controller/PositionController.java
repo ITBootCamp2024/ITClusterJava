@@ -16,7 +16,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+@CrossOrigin
 @RestController
 @RequestMapping("/position")
 public class PositionController {
@@ -34,7 +34,9 @@ public class PositionController {
 
     @GetMapping
     public PageWrapper<PositionDTO> findAll() {
-        List<PositionDTO> positionPage = positionService.getAll().stream().map(this::convertToDTO).toList();
+        List<PositionDTO> positionPage = positionService.getAll().stream()
+                .map(this::convertToDTO)
+                .toList();
 
         PageWrapper<PositionDTO> pageWrapper = new PageWrapper<>();
         pageWrapper.setContent(positionPage);
@@ -42,7 +44,6 @@ public class PositionController {
         return pageWrapper;
     }
 
-    @CrossOrigin
     @PostMapping
     public PageWrapper<PositionDTO> save(@RequestBody @Valid PositionDTO positionDTO, BindingResult bindingResult) {
         positionValidator.validate(positionDTO, bindingResult);
@@ -53,18 +54,17 @@ public class PositionController {
         return findAll();
     }
 
-    @CrossOrigin
     @PatchMapping("/{id}")
-    public PageWrapper<PositionDTO> update(@PathVariable Long id, @RequestBody Position updatedPosition) {
+    public PageWrapper<PositionDTO> update(@PathVariable Long id, @RequestBody PositionDTO updatedPositionDTO) {
         Position existingPosition = positionService.readById(id)
                 .orElseThrow(() -> new NotFoundException("Position not found with id: " + id));
+        Position updatedPosition = convertToEntity(updatedPositionDTO);
         try {
             patcher.patch(existingPosition, updatedPosition);
+            positionService.update(id, existingPosition);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
-
-        positionService.update(id, existingPosition);
         return findAll();
     }
 

@@ -5,6 +5,7 @@ import com.ua.itclusterjava2024.dto.ServiceInfoDTO;
 import com.ua.itclusterjava2024.dto.UniversityDTO;
 import com.ua.itclusterjava2024.entity.Department;
 import com.ua.itclusterjava2024.entity.University;
+import com.ua.itclusterjava2024.exceptions.NotFoundException;
 import com.ua.itclusterjava2024.service.implementation.ServiceInfoService;
 import com.ua.itclusterjava2024.service.interfaces.DepartmentService;
 import com.ua.itclusterjava2024.validators.CourseBlockValidator;
@@ -19,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-
+@CrossOrigin
 @RestController
 @RequestMapping("/department")
 public class DepartmentController {
@@ -33,56 +34,43 @@ public class DepartmentController {
 
     @Autowired
     Patcher patcher;
-    private final CourseBlockValidator courseBlockValidator;
 
-    public DepartmentController(DepartmentService departmentService, ModelMapper modelMapper, ServiceInfoService serviceInfoService, CourseBlockValidator courseBlockValidator) {
+    public DepartmentController(DepartmentService departmentService, ModelMapper modelMapper, ServiceInfoService serviceInfoService) {
         this.departmentService = departmentService;
         this.modelMapper = modelMapper;
         this.serviceInfoService = serviceInfoService;
-        this.courseBlockValidator = courseBlockValidator;
     }
 
     @GetMapping()
     public PageWrapper<DepartmentDTO> findAll() {
-        List<DepartmentDTO> departments = departmentService.getAll().stream()
+        List<DepartmentDTO> departmentsPage = departmentService.getAll().stream()
                 .map(this::convertToDTO)
                 .toList();
 
 
         PageWrapper<DepartmentDTO> pageWrapper = new PageWrapper<>();
-        pageWrapper.setContent(departments);
+        pageWrapper.setContent(departmentsPage);
         pageWrapper.setService_info(prepareServiceInfo());
-        pageWrapper.setTotalElements(departments.size());
+        pageWrapper.setTotalElements(departmentsPage.size());
         return pageWrapper;
     }
 
     @PostMapping
-    public PageWrapper<DepartmentDTO> save(@RequestBody DepartmentDTO departmentDTO,
-                                           BindingResult bindingResult) {
-//        courseBlockValidator.validate(departmentDTO, bindingResult);
-//        if (bindingResult.hasErrors()){
-//            throw new ValidationException(bindingResult);
-//        }
+    public PageWrapper<DepartmentDTO> save(@RequestBody DepartmentDTO departmentDTO) {
         departmentService.create(convertToEntity(departmentDTO));
-
         entityManager.clear();
         return findAll();
     }
 
     @PatchMapping("/{id}")
     public PageWrapper<DepartmentDTO> update(@PathVariable("id") Long id,
-                                             @RequestBody DepartmentDTO departmentsDTO,
-                                             BindingResult bindingResult) {
-//        courseBlockValidator.validate(departmentDTO, bindingResult);
-//        if (bindingResult.hasErrors()){
-//            throw new ValidationException(bindingResult);
-//        }
-
-        Department existingDepartment = departmentService.readById(id).orElse(null);
+                                             @RequestBody DepartmentDTO departmentsDTO) {
+        Department existingDepartment = departmentService.readById(id).
+                orElseThrow(() -> new NotFoundException("Department not found with id: " + id));
         Department updatedDepartment = convertToEntity(departmentsDTO);
         try {
             patcher.patch(existingDepartment, updatedDepartment);
-            departmentService.create(existingDepartment);
+            departmentService.update(id, existingDepartment);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -120,8 +108,7 @@ public class DepartmentController {
         DepartmentDTO departmentDTO = modelMapper.map(department, DepartmentDTO.class);
 
         if (department.getPhone() != null && !department.getPhone().isEmpty()) {
-            List<String> phonesList = Arrays.asList(department.getPhone().split("\\s*,\\s*"));
-            departmentDTO.setPhone(phonesList);
+            departmentDTO.setPhone(Arrays.asList(department.getPhone().split("\\s*,\\s*")));
         }
         departmentDTO.setUniversity(UniversityDTO.builder()
                 .id(department.getUniversity().getId())
