@@ -28,7 +28,7 @@ public class DisciplineGroupController {
     private final EntityManager entityManager;
 
 
-    public DisciplineGroupController(DisciplineGroupService disciplineGroupService, DisciplineBlocksService disciplineBlocksService, ModelMapper modelMapper, CourseGroupValidator courseGroupValidator, Patcher patcher, EntityManager entityManager) {
+    public DisciplineGroupController(DisciplineGroupService disciplineGroupService, DisciplineBlocksService disciplineBlocksService, ModelMapper modelMapper, CourseGroupValidator courseGroupValidator, Patcher<DisciplineGroups> patcher, EntityManager entityManager) {
         this.disciplineGroupService = disciplineGroupService;
         this.disciplineBlocksService = disciplineBlocksService;
         this.modelMapper = modelMapper;

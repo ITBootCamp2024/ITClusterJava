@@ -26,27 +26,19 @@ public class TeachersController {
     private final TeachersService teachersService;
     private final EducationLevelsService educationLevelService;
     private final PositionService positionService;
-    private final DepartmentService departmentService;
-    private final UniversityService universityService;
     private final ServiceInfoService serviceInfoService;
     private final ModelMapper modelMapper;
     private final EntityManager entityManager;
+    private final Patcher<Teachers> patcher;
 
-    @Autowired
-    Patcher patcher;
-    private final TeachersValidator teachersValidator;
-
-    @Autowired
-    public TeachersController(TeachersServiceImpl teachersService, EducationLevelsService educationLevelsService, PositionServiceImpl positionService, DepartmentServiceImpl departmentService, UniversityServiceImpl universityService, ServiceInfoService serviceInfoService, ModelMapper modelMapper, EntityManager entityManager, TeachersValidator teachersValidator) {
+    public TeachersController(TeachersService teachersService, EducationLevelsService educationLevelService, PositionService positionService, ServiceInfoService serviceInfoService, ModelMapper modelMapper, EntityManager entityManager, Patcher<Teachers> patcher) {
         this.teachersService = teachersService;
-        this.educationLevelService = educationLevelsService;
+        this.educationLevelService = educationLevelService;
         this.positionService = positionService;
-        this.departmentService = departmentService;
-        this.universityService = universityService;
         this.serviceInfoService = serviceInfoService;
         this.modelMapper = modelMapper;
         this.entityManager = entityManager;
-        this.teachersValidator = teachersValidator;
+        this.patcher = patcher;
     }
 
     @GetMapping
@@ -76,7 +68,7 @@ public class TeachersController {
         Teachers existingTeacher = teachersService.readById(id).orElseThrow(() -> new NotFoundException("Teacher with id " + id + " not found"));
         Teachers teachers = convertToEntity(teachersDTO);
         try {
-            patcher.patch(existingTeacher, teachersDTO);
+            patcher.patch(existingTeacher, teachers);
             teachersService.update(id, existingTeacher);
         } catch (Exception e) {
             e.printStackTrace();

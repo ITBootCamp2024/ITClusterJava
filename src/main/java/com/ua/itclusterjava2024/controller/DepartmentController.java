@@ -8,13 +8,10 @@ import com.ua.itclusterjava2024.entity.University;
 import com.ua.itclusterjava2024.exceptions.NotFoundException;
 import com.ua.itclusterjava2024.service.implementation.ServiceInfoService;
 import com.ua.itclusterjava2024.service.interfaces.DepartmentService;
-import com.ua.itclusterjava2024.validators.CourseBlockValidator;
 import com.ua.itclusterjava2024.wrappers.PageWrapper;
 import com.ua.itclusterjava2024.wrappers.Patcher;
 import jakarta.persistence.EntityManager;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
@@ -26,19 +23,16 @@ import java.util.stream.Collectors;
 public class DepartmentController {
     private final DepartmentService departmentService;
     private final ModelMapper modelMapper;
-
     private final ServiceInfoService serviceInfoService;
+    private final EntityManager entityManager;
+    private final Patcher<Department> patcher;
 
-    @Autowired
-    private EntityManager entityManager;
-
-    @Autowired
-    Patcher patcher;
-
-    public DepartmentController(DepartmentService departmentService, ModelMapper modelMapper, ServiceInfoService serviceInfoService) {
+    public DepartmentController(DepartmentService departmentService, ModelMapper modelMapper, ServiceInfoService serviceInfoService, EntityManager entityManager, Patcher<Department> patcher) {
         this.departmentService = departmentService;
         this.modelMapper = modelMapper;
         this.serviceInfoService = serviceInfoService;
+        this.entityManager = entityManager;
+        this.patcher = patcher;
     }
 
     @GetMapping()

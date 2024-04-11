@@ -15,7 +15,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/education-levels")
 public class EducationLevelController {
-
     private final EducationLevelsService educationLevelsService;
     private final ModelMapper modelMapper;
     private final Patcher<EducationLevel> patcher;
