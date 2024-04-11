@@ -2,6 +2,7 @@ package com.ua.itclusterjava2024.controller;
 
 import com.ua.itclusterjava2024.dto.*;
 import com.ua.itclusterjava2024.entity.*;
+import com.ua.itclusterjava2024.exceptions.NotFoundException;
 import com.ua.itclusterjava2024.service.implementation.ServiceInfoService;
 import com.ua.itclusterjava2024.service.interfaces.DisciplinesService;
 import com.ua.itclusterjava2024.wrappers.PageWrapper;
@@ -65,8 +66,8 @@ public class DisciplineController {
     public PageWrapper<DisciplinesDTO> update(@PathVariable("id") Long id,
                                               @RequestBody DisciplinesDTO disciplinesDTO) {
         Disciplines existingDiscipline = disciplinesService.readById(id)
+                .orElseThrow(() -> new NotFoundException("Discipline with id " + id + " not found"));
 
-                .orElseThrow(() -> new RuntimeException("Discipline with id " + id + " not found"));
         Disciplines updatedDiscipline = convertToEntity(disciplinesDTO);
         try {
             patcher.patch(existingDiscipline, updatedDiscipline);
