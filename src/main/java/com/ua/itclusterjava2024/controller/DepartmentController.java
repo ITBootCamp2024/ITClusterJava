@@ -10,6 +10,7 @@ import com.ua.itclusterjava2024.service.interfaces.DepartmentService;
 import com.ua.itclusterjava2024.validators.CourseBlockValidator;
 import com.ua.itclusterjava2024.wrappers.PageWrapper;
 import com.ua.itclusterjava2024.wrappers.Patcher;
+import jakarta.persistence.EntityManager;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
@@ -26,6 +27,9 @@ public class DepartmentController {
     private final ModelMapper modelMapper;
 
     private final ServiceInfoService serviceInfoService;
+
+    @Autowired
+    private EntityManager entityManager;
 
     @Autowired
     Patcher patcher;
@@ -60,6 +64,7 @@ public class DepartmentController {
 //            throw new ValidationException(bindingResult);
 //        }
         departmentService.create(convertToEntity(departmentDTO));
+        entityManager.clear();
         return findAll();
     }
 
@@ -80,6 +85,7 @@ public class DepartmentController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        entityManager.clear();
         return findAll();
     }
 
