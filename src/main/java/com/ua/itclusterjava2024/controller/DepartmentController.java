@@ -47,7 +47,6 @@ public class DepartmentController {
                 .map(this::convertToDTO)
                 .toList();
 
-
         PageWrapper<DepartmentDTO> pageWrapper = new PageWrapper<>();
         pageWrapper.setContent(departmentsPage);
         pageWrapper.setService_info(prepareServiceInfo());
