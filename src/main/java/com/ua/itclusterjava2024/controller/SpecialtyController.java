@@ -1,22 +1,15 @@
 package com.ua.itclusterjava2024.controller;
 
 import com.ua.itclusterjava2024.dto.SpecialtyDTO;
-import com.ua.itclusterjava2024.dto.TeachersDTO;
 import com.ua.itclusterjava2024.entity.Specialty;
 import com.ua.itclusterjava2024.exceptions.NotFoundException;
-import com.ua.itclusterjava2024.exceptions.ValidationException;
 import com.ua.itclusterjava2024.service.interfaces.SpecialtyService;
-import com.ua.itclusterjava2024.validators.SpecialtyValidator;
 import com.ua.itclusterjava2024.wrappers.PageWrapper;
 import com.ua.itclusterjava2024.wrappers.Patcher;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.List;
 @CrossOrigin

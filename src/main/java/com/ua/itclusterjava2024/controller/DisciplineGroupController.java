@@ -12,6 +12,7 @@ import com.ua.itclusterjava2024.wrappers.Patcher;
 import jakarta.persistence.EntityManager;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,7 +28,7 @@ public class DisciplineGroupController {
     private final Patcher<DisciplineGroups> patcher;
     private final EntityManager entityManager;
 
-
+    @Autowired
     public DisciplineGroupController(DisciplineGroupService disciplineGroupService, DisciplineBlocksService disciplineBlocksService, ModelMapper modelMapper, CourseGroupValidator courseGroupValidator, Patcher<DisciplineGroups> patcher, EntityManager entityManager) {
         this.disciplineGroupService = disciplineGroupService;
         this.disciplineBlocksService = disciplineBlocksService;
