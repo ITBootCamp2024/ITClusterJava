@@ -31,6 +31,7 @@ public class DisciplinesServiceImpl implements DisciplinesService {
 
     @Override
     public Disciplines update(long id, Disciplines disciplines) {
+        // а тут виходить що ми ще раз сетаємо id, хоча воно вже є в об'єкті
         disciplines.setId(id);
         return disciplinesRepository.save(disciplines);
     }

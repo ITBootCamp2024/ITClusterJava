@@ -3,17 +3,13 @@ package com.ua.itclusterjava2024.controller;
 import com.ua.itclusterjava2024.dto.*;
 import com.ua.itclusterjava2024.entity.*;
 import com.ua.itclusterjava2024.service.implementation.ServiceInfoService;
-import com.ua.itclusterjava2024.service.interfaces.DisciplineGroupService;
 import com.ua.itclusterjava2024.service.interfaces.DisciplinesService;
-import com.ua.itclusterjava2024.service.interfaces.EducationProgramsService;
-import com.ua.itclusterjava2024.service.interfaces.TeachersService;
-import com.ua.itclusterjava2024.validators.CourseValidator;
 import com.ua.itclusterjava2024.wrappers.PageWrapper;
 import com.ua.itclusterjava2024.wrappers.Patcher;
+import jakarta.persistence.EntityManager;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,24 +18,18 @@ import java.util.List;
 @RequestMapping("/disciplines")
 public class DisciplineController {
     private final DisciplinesService disciplinesService;
-    private final DisciplineGroupService disciplineGroupService;
-    private final EducationProgramsService educationProgramsService;
-    private final TeachersService teachersService;
     private final ServiceInfoService serviceInfoService;
     private final ModelMapper modelMapper;
-    private final CourseValidator disciplinesValidator;
-    @Autowired
-    Patcher patcher;
+    private final EntityManager entityManager;
+    private final Patcher<Disciplines> patcher;
 
     @Autowired
-    public DisciplineController(DisciplinesService disciplineService, DisciplineGroupService disciplineGroupService, EducationProgramsService educationProgramsService, ModelMapper modelMapper, CourseValidator disciplinesValidator, TeachersService teachersService, ServiceInfoService serviceInfoService) {
+    public DisciplineController(DisciplinesService disciplineService, ModelMapper modelMapper, ServiceInfoService serviceInfoService, EntityManager entityManager, Patcher<Disciplines> patcher) {
         this.disciplinesService = disciplineService;
-        this.disciplineGroupService = disciplineGroupService;
-        this.educationProgramsService = educationProgramsService;
         this.modelMapper = modelMapper;
-        this.disciplinesValidator = disciplinesValidator;
-        this.teachersService = teachersService;
         this.serviceInfoService = serviceInfoService;
+        this.entityManager = entityManager;
+        this.patcher = patcher;
     }
 
     @GetMapping
@@ -47,7 +37,6 @@ public class DisciplineController {
         List<DisciplinesDTO> disciplines = disciplinesService.getAll().stream()
                 .map(this::convertToDTO)
                 .toList();
-
 
         ServiceInfoDTO serviceInfo = prepareServiceInfo();
 
@@ -66,24 +55,26 @@ public class DisciplineController {
     }
 
     @PostMapping
-    public PageWrapper<DisciplinesDTO> save(@RequestBody @Valid DisciplinesDTO disciplinesDTO,
-                                            BindingResult bindingResult) {
+    public PageWrapper<DisciplinesDTO> save(@RequestBody @Valid DisciplinesDTO disciplinesDTO) {
         disciplinesService.create(convertToEntity(disciplinesDTO));
+        entityManager.clear();
         return findAll();
     }
 
     @PatchMapping("/{id}")
     public PageWrapper<DisciplinesDTO> update(@PathVariable("id") Long id,
-                                              @RequestBody DisciplinesDTO disciplinesDTO,
-                                              BindingResult bindingResult) {
-        Disciplines existingDiscipline = disciplinesService.readById(id).orElse(null);
+                                              @RequestBody DisciplinesDTO disciplinesDTO) {
+        Disciplines existingDiscipline = disciplinesService.readById(id)
+
+                .orElseThrow(() -> new RuntimeException("Discipline with id " + id + " not found"));
         Disciplines updatedDiscipline = convertToEntity(disciplinesDTO);
         try {
             patcher.patch(existingDiscipline, updatedDiscipline);
-            disciplinesService.create(existingDiscipline);
+            disciplinesService.update(id, existingDiscipline);
         } catch (Exception e) {
             e.printStackTrace();
         }
+        entityManager.clear();
         return findAll();
     }
 
@@ -95,23 +86,20 @@ public class DisciplineController {
 
     private Disciplines convertToEntity(DisciplinesDTO dto) {
         Disciplines disciplines = modelMapper.map(dto, Disciplines.class);
-
         if (dto.getTeacher() != null) {
-            Teachers teacher = teachersService.readById(dto.getTeacher().getId())
-                    .orElseThrow(() -> new RuntimeException("Teacher not found"));
-            disciplines.setTeachers(teacher);
+            disciplines.setTeachers(modelMapper.map(dto.getTeacher(), Teachers.class));
         }
 
         if (dto.getDiscipline_group() != null) {
-            DisciplineGroups disciplineGroup = disciplineGroupService.readById(dto.getDiscipline_group().getId())
-                    .orElseThrow(() -> new RuntimeException("Discipline group not found"));
-            disciplines.setDiscipline_group(disciplineGroup);
+            disciplines.setDiscipline_group(modelMapper.map(dto.getDiscipline_group(), DisciplineGroups.class));
+            if (dto.getDiscipline_block() != null) {
+                disciplines.getDiscipline_group()
+                        .setBlock_id(modelMapper.map(dto.getDiscipline_block(), DisciplineBlocks.class));
+            }
         }
 
         if (dto.getEducation_program() != null) {
-            EducationPrograms educationProgram = educationProgramsService.readById(dto.getEducation_program().getId())
-                    .orElseThrow(() -> new RuntimeException("Education program not found"));
-            disciplines.setEducation_program(educationProgram);
+            disciplines.setEducation_program(modelMapper.map(dto.getEducation_program(), EducationPrograms.class));
         }
 
         return disciplines;
@@ -128,8 +116,6 @@ public class DisciplineController {
         dto.setEducation_program(EducationProgramsDTO.builder().id(disciplines.getEducation_program().getId())
                 .name(disciplines.getEducation_program().getName())
                 .program_url(disciplines.getEducation_program().getProgram_url()).build());
-        dto.setSyllabus_url(disciplines.getSyllabus_url());
-        dto.setEducation_plan_url(disciplines.getEducation_plan_url());
         return dto;
     }
 

@@ -34,7 +34,7 @@ public class Disciplines {
 
     @ManyToOne
     @JoinColumn(name = "education_program_id")
-    EducationPrograms education_program;
+    private EducationPrograms education_program;
 
     @Column(name = "syllabus_url", nullable = false)
     @NotEmpty
