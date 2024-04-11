@@ -21,11 +21,6 @@ public class DepartmentDTO {
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @NotEmpty
-    @Size(max = 255, message = "Url of department have to contain up to 255 symbols")
-    private String url;
-
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    @NotEmpty
     @Size(max = 100, message = "Name of department have to contain up to 100 symbols")
     private String name;
 
@@ -50,5 +45,10 @@ public class DepartmentDTO {
     @NotEmpty
     @Size(max = 45, message = "Phone of department have to contain up to 45 symbols")
     private List<String> phone;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @NotEmpty
+    @Size(max = 255, message = "Url of department have to contain up to 255 symbols")
+    private String url;
 }
 

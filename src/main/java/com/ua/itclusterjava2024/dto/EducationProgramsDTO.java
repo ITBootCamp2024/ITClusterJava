@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Data
 @Builder
 public class EducationProgramsDTO {
-    private long id;
+    private Long id;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private SpecialtyDTO specialty;

@@ -9,6 +9,7 @@ import com.ua.itclusterjava2024.service.interfaces.UniversityService;
 import com.ua.itclusterjava2024.validators.UniversityValidator;
 import com.ua.itclusterjava2024.wrappers.PageWrapper;
 import com.ua.itclusterjava2024.wrappers.Patcher;
+import jakarta.persistence.EntityManager;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/universities")
 public class UniversityController {
@@ -27,19 +29,22 @@ public class UniversityController {
     private final UniversityService universityService;
     private final ModelMapper modelMapper;
     private final UniversityValidator universityValidator;
-    private final Patcher patcher;
+    private final Patcher<University> patcher;
+    private final EntityManager entityManager;
 
     @Autowired
-    public UniversityController(UniversityService universityService, ModelMapper modelMapper, UniversityValidator universityValidator, Patcher patcher) {
+    public UniversityController(UniversityService universityService, ModelMapper modelMapper, UniversityValidator universityValidator, Patcher<University> patcher, EntityManager entityManager) {
         this.universityService = universityService;
         this.modelMapper = modelMapper;
         this.universityValidator = universityValidator;
         this.patcher = patcher;
+        this.entityManager = entityManager;
     }
 
     @GetMapping
     public PageWrapper<UniversityDTO> findAll() {
-        List<UniversityDTO> universityPage = universityService.getAll().stream().map(this::convertToDTO).toList();
+        List<UniversityDTO> universityPage = universityService.getAll()
+                .stream().map(this::convertToDTO).toList();
 
         PageWrapper<UniversityDTO> pageWrapper = new PageWrapper<>();
         pageWrapper.setContent(universityPage);
@@ -52,7 +57,7 @@ public class UniversityController {
         return convertToDTO(universityService.readById(id).orElse(null));
     }
 
-    @CrossOrigin
+
     @PostMapping
     public PageWrapper<UniversityDTO> save(@RequestBody @Valid UniversityDTO universityDTO, BindingResult bindingResult) {
         universityValidator.validate(universityDTO, bindingResult);
@@ -60,21 +65,21 @@ public class UniversityController {
             throw new ValidationException(bindingResult);
         }
         universityService.create(convertToEntity(universityDTO));
+        entityManager.clear();
         return findAll();
     }
 
-    @CrossOrigin
     @PatchMapping("/{id}")
     public PageWrapper<UniversityDTO> update(@PathVariable Long id, @RequestBody University updatedUniversity) {
         University existingUniversity = universityService.readById(id)
                 .orElseThrow(() -> new NotFoundException("University not found with id: " + id));
         try {
             patcher.patch(existingUniversity, updatedUniversity);
+            universityService.update(id, existingUniversity);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
-
-        universityService.update(id, existingUniversity);
+        entityManager.clear();
         return findAll();
     }
 
