@@ -23,9 +23,9 @@ public class PositionController {
     private final PositionService positionService;
     private final ModelMapper modelMapper;
     private final PositionValidator positionValidator;
-    private final Patcher patcher;
+    private final Patcher<Position> patcher;
 
-    public PositionController(PositionService positionService, ModelMapper modelMapper, PositionValidator positionValidator, Patcher patcher) {
+    public PositionController(PositionService positionService, ModelMapper modelMapper, PositionValidator positionValidator, Patcher<Position> patcher) {
         this.positionService = positionService;
         this.modelMapper = modelMapper;
         this.positionValidator = positionValidator;

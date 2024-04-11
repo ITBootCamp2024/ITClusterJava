@@ -22,11 +22,13 @@ import java.util.stream.Collectors;
 public class ServiceInfoController {
     private final ServiceInfoService serviceInfoService;
     private final ModelMapper modelMapper;
-    @Autowired
+
+
     public ServiceInfoController(ServiceInfoService serviceInfoService, ModelMapper modelMapper) {
         this.serviceInfoService = serviceInfoService;
         this.modelMapper = modelMapper;
     }
+
     @GetMapping
     public PageWrapper<ServiceInfoDTO> findAll(@RequestParam(defaultValue = "1") int page) {
         int pageSize = 20;

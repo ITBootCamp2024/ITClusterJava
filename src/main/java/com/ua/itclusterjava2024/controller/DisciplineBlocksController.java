@@ -27,9 +27,9 @@ public class DisciplineBlocksController {
     private final DisciplineBlocksService disciplineBlocksService;
     private final ModelMapper modelMapper;
     private final CourseBlockValidator courseBlockValidator;
-    private final Patcher patcher;
+    private final Patcher<DisciplineBlocks> patcher;
 
-    public DisciplineBlocksController(DisciplineBlocksService disciplineBlocksService, ModelMapper modelMapper, CourseBlockValidator courseBlockValidator, Patcher patcher) {
+    public DisciplineBlocksController(DisciplineBlocksService disciplineBlocksService, ModelMapper modelMapper, CourseBlockValidator courseBlockValidator, Patcher<DisciplineBlocks> patcher) {
         this.disciplineBlocksService = disciplineBlocksService;
         this.modelMapper = modelMapper;
         this.courseBlockValidator = courseBlockValidator;

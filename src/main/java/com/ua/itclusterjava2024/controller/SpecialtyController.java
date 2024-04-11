@@ -23,16 +23,14 @@ import java.util.List;
 @RestController
 @RequestMapping("/specialties")
 public class SpecialtyController {
-
     private final SpecialtyService specialtyService;
     private final ModelMapper modelMapper;
+    private final Patcher<Specialty> patcher;
 
     @Autowired
-    Patcher patcher;
-
-    @Autowired
-    public SpecialtyController(SpecialtyService specialtyService, ModelMapper modelMapper) {
+    public SpecialtyController(SpecialtyService specialtyService, ModelMapper modelMapper, Patcher<Specialty> patcher) {
         this.specialtyService = specialtyService;
+        this.patcher = patcher;
         this.modelMapper = modelMapper;
     }
 
