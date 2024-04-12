@@ -20,13 +20,15 @@ public class EducationProgramsDTO {
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @NotEmpty
-    @Size(max = 200, message = "Name of education_programs have to contain up to 200 symbols")
+    @Size(max = 255, message = "Name of education_programs have to contain up to 255 symbols")
     private String name;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
+    @NotEmpty
     private UniversityDTO university;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
+    @NotEmpty
     private EducationLevelDTO education_level;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -35,6 +37,7 @@ public class EducationProgramsDTO {
     private String guarantor;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
+    @NotEmpty
     private DepartmentDTO department;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
