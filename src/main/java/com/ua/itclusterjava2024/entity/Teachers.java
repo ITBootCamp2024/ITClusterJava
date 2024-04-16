@@ -24,9 +24,10 @@ public class Teachers {
     @JoinColumn(name = "position_id")
     private Position position;
 
-    @ManyToOne
-    @JoinColumn(name = "education_level_id")
-    private EducationLevel education_level;
+    @Column(name = "degree_level")
+    @NotEmpty
+    @Size(max = 50, message = "Degree level have to contain up to 50 symbols")
+    private String degree_level;
 
     @ManyToOne
     @JoinColumn(name = "department_id")
@@ -40,4 +41,8 @@ public class Teachers {
     @Column(name = "comments")
     @NotEmpty
     private String comments;
+
+    @ManyToOne
+    @JoinColumn(name = "role_id")
+    private Role role;
 }
