@@ -1,6 +1,5 @@
 package com.ua.itclusterjava2024.service.implementation;
 
-import com.ua.itclusterjava2024.entity.DisciplineBlocks;
 import com.ua.itclusterjava2024.entity.Position;
 import com.ua.itclusterjava2024.repository.PositionRepository;
 import com.ua.itclusterjava2024.service.interfaces.PositionService;

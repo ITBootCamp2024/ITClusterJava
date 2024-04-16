@@ -17,18 +17,23 @@ import lombok.NoArgsConstructor;
 public class TeachersDTO {
     private Long id;
     private String name;
-    @JsonInclude(JsonInclude.Include.NON_NULL)
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private PositionDTO position;
-    @JsonInclude(JsonInclude.Include.NON_NULL)
 
-    private EducationLevelDTO education_level;
     @JsonInclude(JsonInclude.Include.NON_NULL)
+    @NotEmpty
+    @Size(max = 50, message = "Degree level have to contain up to 50 symbols")
+    private String degree_level;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private UniversityDTO university;
-    @JsonInclude(JsonInclude.Include.NON_NULL)
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private DepartmentDTO department;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private RoleDTO role;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @NotEmpty
