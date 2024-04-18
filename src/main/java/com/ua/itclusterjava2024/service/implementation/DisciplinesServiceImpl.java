@@ -1,5 +1,6 @@
 package com.ua.itclusterjava2024.service.implementation;
 
+import com.ua.itclusterjava2024.dto.DisciplinesDTO;
 import com.ua.itclusterjava2024.entity.Disciplines;
 import com.ua.itclusterjava2024.repository.DisciplinesRepository;
 import com.ua.itclusterjava2024.service.interfaces.DisciplinesService;
@@ -31,7 +32,6 @@ public class DisciplinesServiceImpl implements DisciplinesService {
 
     @Override
     public Disciplines update(long id, Disciplines disciplines) {
-        // а тут виходить що ми ще раз сетаємо id, хоча воно вже є в об'єкті
         disciplines.setId(id);
         return disciplinesRepository.save(disciplines);
     }
@@ -49,5 +49,10 @@ public class DisciplinesServiceImpl implements DisciplinesService {
     @Override
     public Page<Disciplines> getAll(Pageable pageable) {
         return disciplinesRepository.findAll(pageable);
+    }
+
+    @Override
+    public List<Disciplines> findByTeacherId(Long teacherId) {
+        return disciplinesRepository.findByTeacherId(teacherId);
     }
 }
