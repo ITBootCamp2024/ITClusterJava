@@ -49,4 +49,9 @@ public class SyllabusesServiceImpl implements SyllabusesService {
     public Page<Syllabuses> getAll(Pageable pageable) {
         return syllabusesRepository.findAll(pageable);
     }
+
+    @Override
+    public List<Syllabuses> findByDisciplineId(Long disciplineId) {
+        return syllabusesRepository.findByDisciplineId(disciplineId);
+    }
 }

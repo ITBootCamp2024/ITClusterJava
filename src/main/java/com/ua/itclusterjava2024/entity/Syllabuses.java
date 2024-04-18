@@ -18,15 +18,10 @@ public class Syllabuses {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "url", nullable = false)
-    private String url;
-
-    @Column(name = "validation_status", nullable = false)
-    private String validation_status;
-
     @Column(name = "status", nullable = false)
     private String status;
 
-    @Column(name = "validation_event", nullable = false)
-    private String validation_event;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "discipline_id")
+    private Disciplines disciplines;
 }
