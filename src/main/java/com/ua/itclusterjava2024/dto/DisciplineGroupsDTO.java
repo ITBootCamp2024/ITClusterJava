@@ -31,5 +31,5 @@ public class DisciplineGroupsDTO {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @NotEmpty
     @Size(max = 255, message = "Discipline_url of discipline_groups have to contain up to 255 symbols")
-    private String disciplineUrl;
+    private String discipline_url;
 }
