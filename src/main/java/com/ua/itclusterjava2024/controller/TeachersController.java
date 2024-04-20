@@ -4,18 +4,14 @@ import com.ua.itclusterjava2024.dto.*;
 import com.ua.itclusterjava2024.entity.*;
 import com.ua.itclusterjava2024.exceptions.NotFoundException;
 import com.ua.itclusterjava2024.service.implementation.ServiceInfoService;
-import com.ua.itclusterjava2024.service.interfaces.PositionService;
-import com.ua.itclusterjava2024.service.interfaces.RoleService;
 import com.ua.itclusterjava2024.service.interfaces.TeachersService;
 import com.ua.itclusterjava2024.wrappers.PageWrapper;
 import com.ua.itclusterjava2024.wrappers.Patcher;
 import jakarta.persistence.EntityManager;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -24,16 +20,14 @@ import java.util.List;
 public class TeachersController {
 
     private final TeachersService teachersService;
-    private final PositionService positionService;
     private final ServiceInfoService serviceInfoService;
     private final ModelMapper modelMapper;
     private final EntityManager entityManager;
     private final Patcher<Teachers> patcher;
 
     @Autowired
-    public TeachersController(TeachersService teachersService, PositionService positionService, ServiceInfoService serviceInfoService, ModelMapper modelMapper, EntityManager entityManager, Patcher<Teachers> patcher) {
+    public TeachersController(TeachersService teachersService, ServiceInfoService serviceInfoService, ModelMapper modelMapper, EntityManager entityManager, Patcher<Teachers> patcher) {
         this.teachersService = teachersService;
-        this.positionService = positionService;
         this.serviceInfoService = serviceInfoService;
         this.modelMapper = modelMapper;
         this.entityManager = entityManager;
@@ -42,24 +36,16 @@ public class TeachersController {
 
     @GetMapping
     public PageWrapper<TeachersDTO> findAll() {
-        List<TeachersDTO> teachers = teachersService.getAll().stream().map(this::convertToDTO).toList();
-        List<PositionDTO> positions = positionService.getAll().stream().map(position -> PositionDTO.builder().id(position.getId()).name(position.getName()).build()).toList();
-        List<UniversityDTO> universitiesDTO = new ArrayList<>();
-        List<University> universities = serviceInfoService.getAllUniversities();
-        universities.forEach(university -> {
-            List<Department> departments = serviceInfoService.getAllDepartmentsByUniversityId(university.getId());
-            List<DepartmentDTO> departmentsDTO = departments.stream()
-                    .map(department -> DepartmentDTO.builder().id(department.getId()).name(department.getName()).build())
-                    .toList();
+        List<TeachersDTO> teachers = teachersService.getAll().stream()
+                .map(this::convertToDTO).toList();
 
-            universitiesDTO.add(UniversityDTO.builder().id(university.getId()).name(university.getName()).abbr(university.getAbbr()).department(departmentsDTO).build());
-        });
         PageWrapper<TeachersDTO> pageWrapper = new PageWrapper<>();
         pageWrapper.setContent(teachers);
-        pageWrapper.setService_info(ServiceInfoDTO.builder().position(positions).university(universitiesDTO).build());
+        pageWrapper.setService_info(prepareServiceInfo());
         pageWrapper.setTotalElements(teachers.size());
         return pageWrapper;
     }
+
 
     @PatchMapping("/{id}")
     public PageWrapper<TeachersDTO> updateEntity(@PathVariable("id") Long id, @RequestBody TeachersDTO teachersDTO) {
@@ -88,7 +74,7 @@ public class TeachersController {
     }
 
     @PostMapping
-    public PageWrapper<TeachersDTO> save(@RequestBody TeachersDTO teachers, BindingResult bindingResult) {
+    public PageWrapper<TeachersDTO> save(@RequestBody TeachersDTO teachers) {
         teachersService.create(convertToEntity(teachers));
         entityManager.clear();
         return findAll();
@@ -129,6 +115,38 @@ public class TeachersController {
         return dto;
     }
 
+    private ServiceInfoDTO prepareServiceInfo() {
+        return ServiceInfoDTO.builder()
+                .position(getPositions())
+                .university(getUniversities())
+                .build();
+
+    }
+
+    private List<UniversityDTO> getUniversities() {
+        return serviceInfoService.getAllUniversities().stream()
+                .map(university -> UniversityDTO.builder()
+                        .id(university.getId())
+                        .name(university.getName())
+                        .abbr(university.getAbbr())
+                        .department(serviceInfoService.getAllDepartmentsByUniversityId(university.getId()).stream()
+                                .map(department -> DepartmentDTO.builder()
+                                        .id(department.getId())
+                                        .name(department.getName())
+                                        .build())
+                                .toList())
+                        .build())
+                .toList();
+    }
+
+    private List<PositionDTO> getPositions() {
+        return serviceInfoService.getAllPositions().stream()
+                .map(position -> PositionDTO.builder()
+                        .id(position.getId())
+                        .name(position.getName())
+                        .build())
+                .toList();
+    }
 }
 
 
