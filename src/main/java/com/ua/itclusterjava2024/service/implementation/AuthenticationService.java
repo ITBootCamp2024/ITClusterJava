@@ -3,6 +3,7 @@ package com.ua.itclusterjava2024.service.implementation;
 import com.ua.itclusterjava2024.dto.response.LoginResponse;
 import com.ua.itclusterjava2024.dto.request.LoginRequest;
 import com.ua.itclusterjava2024.dto.request.RegisterRequest;
+import com.ua.itclusterjava2024.dto.response.RegisterResponse;
 import com.ua.itclusterjava2024.entity.User;
 import com.ua.itclusterjava2024.exceptions.NotFoundException;
 import com.ua.itclusterjava2024.repository.RoleRepository;
@@ -26,11 +27,11 @@ public class AuthenticationService {
 
 
     public LoginResponse signIn(LoginRequest request) {
+
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                 request.getEmail(),
                 request.getPassword()
         ));
-
 
         User user = (User) userService.userDetailsService()
                 .loadUserByUsername(request.getEmail());
@@ -43,7 +44,7 @@ public class AuthenticationService {
     }
 
 
-    public User signUp(RegisterRequest request) {
+    public RegisterResponse signUp(RegisterRequest request) {
         User user = User.builder()
                 .email(request.getEmail())
                 .passwordHash(passwordEncoder.encode(request.getPassword()))
@@ -57,8 +58,7 @@ public class AuthenticationService {
                 .emailConfirmed(false)
                 .build();
 
-        userService.create(user);
-        return user;
+        return new RegisterResponse(userService.create(user));
     }
 }
 

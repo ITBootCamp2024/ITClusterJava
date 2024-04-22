@@ -1,6 +1,8 @@
 package com.ua.itclusterjava2024.service.implementation;
 
 import com.ua.itclusterjava2024.entity.User;
+import com.ua.itclusterjava2024.exceptions.EmailAlreadyExistsException;
+import com.ua.itclusterjava2024.exceptions.NotFoundException;
 import com.ua.itclusterjava2024.repository.RoleRepository;
 import com.ua.itclusterjava2024.repository.UserRepository;
 import com.ua.itclusterjava2024.service.interfaces.UserService;
@@ -29,8 +31,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User create(User user) {
         if (userRepository.existsByEmail(user.getEmail())) {
-            // Must be custom exception
-            throw new RuntimeException("Registration failed: email already exists");
+            throw new EmailAlreadyExistsException("User with email " + user.getEmail() + " already exists");
         }
         return userRepository.save(user);
     }
@@ -38,29 +39,12 @@ public class UserServiceImpl implements UserService {
 
     public User getByEmail(String email) {
         return userRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+                .orElseThrow(() -> new UsernameNotFoundException("User with email " + email + " does not exist"));
     }
 
     // Get user by email
     public UserDetailsService userDetailsService() {
         return this::getByEmail;
-    }
-
-    // Get current user
-    public User getCurrentUser() {
-        // Получение имени пользователя из контекста Spring Security
-        var email = SecurityContextHolder.getContext().getAuthentication().getName();
-        return getByEmail(email);
-    }
-
-
-    // Видача прав адміністратора для поточного користувача (для тестування)
-    @Deprecated
-    public void getAdmin() {
-        var user = getCurrentUser();
-        user.setRole(roleRepository.findByName("admin")
-                .orElseThrow(() -> new RuntimeException("Роль не знайдена")));
-        userRepository.save(user);
     }
 
 
@@ -88,5 +72,24 @@ public class UserServiceImpl implements UserService {
     @Override
     public Page<User> getAll(Pageable pageable) {
         return userRepository.findAll(pageable);
+    }
+
+    // Для тестування
+
+    // Get current user
+    public User getCurrentUser() {
+        // Получение имени пользователя из контекста Spring Security
+        var email = SecurityContextHolder.getContext().getAuthentication().getName();
+        return getByEmail(email);
+    }
+
+
+    // Видача прав адміністратора для поточного користувача (для тестування)
+    @Deprecated
+    public void getAdmin() {
+        var user = getCurrentUser();
+        user.setRole(roleRepository.findByName("admin")
+                .orElseThrow(() -> new NotFoundException("Роль не знайдена")));
+        userRepository.save(user);
     }
 }
