@@ -12,11 +12,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class LoginResponse {
 
-    @JsonProperty("access_token")
+    @JsonProperty(value = "access_token", required = true)
     private String accessToken;
 
-    @JsonProperty("refresh_token")
+    @JsonProperty(value = "refresh_token", required = true)
     private String refreshToken;
 
+    @JsonProperty(required = true)
     private String role;
 }

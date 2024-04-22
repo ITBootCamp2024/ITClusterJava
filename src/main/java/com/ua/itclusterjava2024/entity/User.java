@@ -50,8 +50,7 @@ public class User implements UserDetails {
     private String passwordHash;
 
     @Size(max = 45)
-    @NotNull
-    @Column(name = "phone", nullable = false, length = 45)
+    @Column(name = "phone", length = 45)
     private String phone;
 
     @NotNull

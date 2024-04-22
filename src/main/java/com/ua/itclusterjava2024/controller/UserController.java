@@ -1,15 +1,17 @@
 package com.ua.itclusterjava2024.controller;
 
+import com.ua.itclusterjava2024.dto.response.ErrorResponse;
 import com.ua.itclusterjava2024.dto.response.LoginResponse;
 import com.ua.itclusterjava2024.dto.response.RegisterResponse;
 import com.ua.itclusterjava2024.dto.request.LoginRequest;
 import com.ua.itclusterjava2024.dto.request.RegisterRequest;
-import com.ua.itclusterjava2024.entity.User;
+import com.ua.itclusterjava2024.exceptions.EmailAlreadyExistsException;
 import com.ua.itclusterjava2024.service.implementation.AuthenticationService;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
@@ -19,25 +21,29 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final AuthenticationService authenticationService;
-    private final ModelMapper modelMapper;
 
 
     @PostMapping(value = "/register", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-    public RegisterResponse registerUser(@Valid @ModelAttribute RegisterRequest request) {
-        User user = authenticationService.signUp(request);
-        return convertToDto(user);
+    public RegisterResponse registerUser(@ModelAttribute RegisterRequest request) {
+        return authenticationService.signUp(request);
     }
+
 
     @PostMapping(value = "/login", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-    public LoginResponse loginUser(@Valid @ModelAttribute LoginRequest loginRequest) {
-        return authenticationService.signIn(loginRequest);
+    public ResponseEntity<LoginResponse> loginUser(@ModelAttribute LoginRequest loginRequest) {
+        LoginResponse response = authenticationService.signIn(loginRequest);
+        return ResponseEntity.ok(response);
     }
 
-    private User convertToEntity(RegisterResponse registerResponse) {
-        return modelMapper.map(registerResponse, User.class);
+
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ErrorResponse> handleAuthenticationException(AuthenticationException ex) {
+        return new ResponseEntity<>(new ErrorResponse(ex.getMessage()), HttpStatus.UNAUTHORIZED);
     }
 
-    private RegisterResponse convertToDto(User user) {
-        return modelMapper.map(user, RegisterResponse.class);
+    @ExceptionHandler(EmailAlreadyExistsException.class)
+    public ResponseEntity<ErrorResponse> handleEmailAlreadyExistsException(EmailAlreadyExistsException ex) {
+        return new ResponseEntity<>(new ErrorResponse(ex.getMessage()), HttpStatus.BAD_REQUEST);
     }
+
 }
