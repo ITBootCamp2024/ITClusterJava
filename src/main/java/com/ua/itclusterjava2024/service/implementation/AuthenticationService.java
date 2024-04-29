@@ -5,6 +5,7 @@ import com.ua.itclusterjava2024.dto.request.LoginRequest;
 import com.ua.itclusterjava2024.dto.request.RegisterRequest;
 import com.ua.itclusterjava2024.dto.response.RegisterResponse;
 import com.ua.itclusterjava2024.entity.User;
+import com.ua.itclusterjava2024.exceptions.JwtTokenException;
 import com.ua.itclusterjava2024.exceptions.NotFoundException;
 import com.ua.itclusterjava2024.repository.RoleRepository;
 import lombok.RequiredArgsConstructor;
@@ -36,13 +37,28 @@ public class AuthenticationService {
         User user = (User) userService.userDetailsService()
                 .loadUserByUsername(request.getEmail());
 
-        String jwtToken = jwtService.generateToken(user);
+        String jwtToken = jwtService.generateAccessToken(user);
 
-        // TODO: Implement refresh token
+        String refreshToken = jwtService.generateRefreshToken(user);
 
-        return new LoginResponse(jwtToken, "refresh_token", user.getRole().getName());
+        return new LoginResponse(jwtToken, refreshToken, user.getRole().getName());
     }
 
+    public LoginResponse refreshToken(String refreshToken) {
+        String tokenType = jwtService.extractClaim(refreshToken, claims -> claims.get("tokenType", String.class));
+        if (!tokenType.equals("refresh"))
+            throw new JwtTokenException("Only refresh tokens are allowed");
+
+        String email = jwtService.extractEmail(refreshToken);
+        User user = (User) userService.userDetailsService().loadUserByUsername(email);
+
+        if (!jwtService.isTokenValid(refreshToken, user))
+            throw new JwtTokenException("Invalid refresh token");
+
+        String jwtToken = jwtService.generateAccessToken(user);
+        String newRefreshToken = jwtService.generateRefreshToken(user);
+        return new LoginResponse(jwtToken, newRefreshToken, user.getRole().getName());
+    }
 
     public RegisterResponse signUp(RegisterRequest request) {
         User user = User.builder()
