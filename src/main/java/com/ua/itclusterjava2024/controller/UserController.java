@@ -6,6 +6,8 @@ import com.ua.itclusterjava2024.dto.response.RegisterResponse;
 import com.ua.itclusterjava2024.dto.request.LoginRequest;
 import com.ua.itclusterjava2024.dto.request.RegisterRequest;
 import com.ua.itclusterjava2024.exceptions.EmailAlreadyExistsException;
+import com.ua.itclusterjava2024.exceptions.JwtTokenException;
+import com.ua.itclusterjava2024.exceptions.MissingAuthorizationHeaderException;
 import com.ua.itclusterjava2024.service.implementation.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -35,6 +37,18 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
+    @PostMapping(value = "/refresh")
+    public ResponseEntity<LoginResponse> refreshToken(@RequestHeader(value = "Authorization", required = false) String authorizationHeader) {
+        if (authorizationHeader == null || authorizationHeader.isEmpty())
+            throw new MissingAuthorizationHeaderException("Missing Authorization Header");
+
+        if (!authorizationHeader.startsWith("Bearer "))
+            throw new JwtTokenException("Missing 'Bearer' type in 'Authorization' header. Expected 'Authorization: Bearer <JWT>'");
+
+        String refreshToken = authorizationHeader.substring("Bearer ".length());
+        LoginResponse response = authenticationService.refreshToken(refreshToken);
+        return ResponseEntity.ok(response);
+    }
 
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<ErrorResponse> handleAuthenticationException(AuthenticationException ex) {
