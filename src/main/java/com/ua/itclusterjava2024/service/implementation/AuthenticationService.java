@@ -10,10 +10,14 @@ import com.ua.itclusterjava2024.entity.User;
 import com.ua.itclusterjava2024.exceptions.JwtTokenException;
 import com.ua.itclusterjava2024.exceptions.NotFoundException;
 import com.ua.itclusterjava2024.repository.RoleRepository;
+import com.ua.itclusterjava2024.service.interfaces.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +32,7 @@ public class AuthenticationService {
     private final UserServiceImpl userService;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
+    private final EmailService emailService;
 
 
     public LoginResponse signIn(LoginRequest request) {
@@ -76,8 +81,11 @@ public class AuthenticationService {
                 .createdAt(Instant.now())
                 .emailConfirmed(false)
                 .build();
-
-        return new RegisterResponse(userService.create(user));
+        //TODO send email
+//        String token = jwtService.generateAccessToken(user);
+//        emailService.sendConfirmationEmail(token, user.getEmail());
+        User saved = userService.create(user);
+        return new RegisterResponse(saved);
     }
 
     public MessageResponse changePassword(ChangePasswordRequest request, String accessToken) {
@@ -98,5 +106,6 @@ public class AuthenticationService {
         userService.update(user.getId(), user);
         return new MessageResponse("Password changed");
     }
+
 }
 
