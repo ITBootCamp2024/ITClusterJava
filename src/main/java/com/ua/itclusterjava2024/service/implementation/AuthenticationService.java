@@ -81,8 +81,16 @@ public class AuthenticationService {
     }
 
     public MessageResponse changePassword(ChangePasswordRequest request, String accessToken) {
+        String tokenType = jwtService.extractClaim(accessToken, claims -> claims.get("tokenType", String.class));
+        if (!tokenType.equals("access"))
+            throw new JwtTokenException("Only access tokens are allowed");
+
         String userEmail = jwtService.extractEmail(accessToken);
         User user = (User) userService.userDetailsService().loadUserByUsername(userEmail);
+
+        if (!jwtService.isTokenValid(accessToken, user))
+            throw new JwtTokenException("Invalid access token");
+
         if (!passwordEncoder.matches(request.getOld_password(), user.getPassword())) {
             throw new BadCredentialsException("The old password is incorrect");
         }
