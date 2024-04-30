@@ -23,7 +23,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(JwtTokenException.class)
     public ResponseEntity<JwtErrorResponse> handleJwtTokenException(JwtTokenException ex) {
-        return new ResponseEntity<>(new JwtErrorResponse(ex.getMessage()), HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(new JwtErrorResponse(ex.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(MissingAuthorizationHeaderException.class)
