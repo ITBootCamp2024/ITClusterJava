@@ -1,6 +1,7 @@
 package com.ua.itclusterjava2024.controller;
 
-import com.ua.itclusterjava2024.dto.response.ErrorResponse;
+import com.ua.itclusterjava2024.dto.request.ChangePasswordRequest;
+import com.ua.itclusterjava2024.dto.response.MessageResponse;
 import com.ua.itclusterjava2024.dto.response.LoginResponse;
 import com.ua.itclusterjava2024.dto.response.RegisterResponse;
 import com.ua.itclusterjava2024.dto.request.LoginRequest;
@@ -50,14 +51,28 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
+    @PostMapping(value = "/change-password")
+    public ResponseEntity<MessageResponse> changePassword(@RequestHeader(value = "Authorization", required = false) String authorizationHeader,
+                                                 @ModelAttribute ChangePasswordRequest changePasswordRequest) {
+        if (authorizationHeader == null || authorizationHeader.isEmpty())
+            throw new MissingAuthorizationHeaderException("Missing Authorization Header");
+
+        if (!authorizationHeader.startsWith("Bearer "))
+            throw new JwtTokenException("Missing 'Bearer' type in 'Authorization' header. Expected 'Authorization: Bearer <JWT>'");
+
+        String accessToken = authorizationHeader.substring("Bearer ".length());
+        MessageResponse response = authenticationService.changePassword(changePasswordRequest, accessToken);
+        return ResponseEntity.ok(response);
+    }
+
     @ExceptionHandler(AuthenticationException.class)
-    public ResponseEntity<ErrorResponse> handleAuthenticationException(AuthenticationException ex) {
-        return new ResponseEntity<>(new ErrorResponse(ex.getMessage()), HttpStatus.UNAUTHORIZED);
+    public ResponseEntity<MessageResponse> handleAuthenticationException(AuthenticationException ex) {
+        return new ResponseEntity<>(new MessageResponse(ex.getMessage()), HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(EmailAlreadyExistsException.class)
-    public ResponseEntity<ErrorResponse> handleEmailAlreadyExistsException(EmailAlreadyExistsException ex) {
-        return new ResponseEntity<>(new ErrorResponse(ex.getMessage()), HttpStatus.BAD_REQUEST);
+    public ResponseEntity<MessageResponse> handleEmailAlreadyExistsException(EmailAlreadyExistsException ex) {
+        return new ResponseEntity<>(new MessageResponse(ex.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
 }

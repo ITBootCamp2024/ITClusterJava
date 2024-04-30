@@ -1,8 +1,10 @@
 package com.ua.itclusterjava2024.service.implementation;
 
+import com.ua.itclusterjava2024.dto.request.ChangePasswordRequest;
 import com.ua.itclusterjava2024.dto.response.LoginResponse;
 import com.ua.itclusterjava2024.dto.request.LoginRequest;
 import com.ua.itclusterjava2024.dto.request.RegisterRequest;
+import com.ua.itclusterjava2024.dto.response.MessageResponse;
 import com.ua.itclusterjava2024.dto.response.RegisterResponse;
 import com.ua.itclusterjava2024.entity.User;
 import com.ua.itclusterjava2024.exceptions.JwtTokenException;
@@ -10,6 +12,7 @@ import com.ua.itclusterjava2024.exceptions.NotFoundException;
 import com.ua.itclusterjava2024.repository.RoleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -75,6 +78,17 @@ public class AuthenticationService {
                 .build();
 
         return new RegisterResponse(userService.create(user));
+    }
+
+    public MessageResponse changePassword(ChangePasswordRequest request, String accessToken) {
+        String userEmail = jwtService.extractEmail(accessToken);
+        User user = (User) userService.userDetailsService().loadUserByUsername(userEmail);
+        if (!passwordEncoder.matches(request.getOld_password(), user.getPassword())) {
+            throw new BadCredentialsException("The old password is incorrect");
+        }
+        user.setPasswordHash(passwordEncoder.encode(request.getNew_password()));
+        userService.update(user.getId(), user);
+        return new MessageResponse("Password changed");
     }
 }
 
