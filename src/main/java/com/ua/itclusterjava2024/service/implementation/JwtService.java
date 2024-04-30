@@ -1,7 +1,6 @@
 package com.ua.itclusterjava2024.service.implementation;
 
 import com.ua.itclusterjava2024.entity.User;
-import com.ua.itclusterjava2024.exceptions.JwtTokenException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -64,28 +63,37 @@ public class JwtService {
     }
 
 
-    // Cheks if token is valid
-    public boolean isTokenValid(String token, UserDetails userDetails) {
+    public boolean isTokenValidAndNotExpired(String token, UserDetails userDetails) {
         final String email = extractEmail(token);
         return (email.equals(userDetails.getUsername())) && !isTokenExpired(token);
+    }
+
+    public boolean isTokenValid(String token, UserDetails userDetails) {
+        final String email = extractEmail(token);
+        return (email.equals(userDetails.getUsername()));
     }
 
     public String extractEmail(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
-    // Checks if token is expired
-    private boolean isTokenExpired(String token) {
+    public boolean isRefreshToken(String token) {
+        return extractClaim(token, claims -> claims.get("tokenType", String.class)).equals("refresh");
+    }
+
+    public boolean isAccessToken(String token) {
+        return extractClaim(token, claims -> claims.get("tokenType", String.class)).equals("access");
+    }
+
+    public boolean isTokenExpired(String token) {
         return extractExpiration(token).before(Date.from(Instant.now()));
 
     }
 
-    // Extracts expiration date from token
     private Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
     }
 
-    // Extracts data from token
     <T> T extractClaim(String token, Function<Claims, T> claimsResolvers) {
         final Claims claims = extractAllClaims(token);
         return claimsResolvers.apply(claims);
@@ -94,19 +102,11 @@ public class JwtService {
 
     // Extracts all data from token
     private Claims extractAllClaims(String token) {
-        try {
-            return Jwts.parser()
-                    .verifyWith(getSigningKey())
-                    .build()
-                    .parseSignedClaims(token)
-                    .getPayload();
-        }
-        catch (ExpiredJwtException e) {
-            throw new JwtTokenException("Token has expired");
-        }
-        catch (JwtException e) {
-            throw new JwtTokenException("Invalid token");
-        }
+        return Jwts.parser()
+                .verifyWith(getSigningKey())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
     }
 
     // Gets signing key for generating token

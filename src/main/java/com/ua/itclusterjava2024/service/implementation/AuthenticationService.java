@@ -10,14 +10,10 @@ import com.ua.itclusterjava2024.entity.User;
 import com.ua.itclusterjava2024.exceptions.JwtTokenException;
 import com.ua.itclusterjava2024.exceptions.NotFoundException;
 import com.ua.itclusterjava2024.repository.RoleRepository;
-import com.ua.itclusterjava2024.service.interfaces.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -36,36 +32,16 @@ public class AuthenticationService {
 
 
     public LoginResponse signIn(LoginRequest request) {
-
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                 request.getEmail(),
                 request.getPassword()
         ));
+        User user = (User) userService.userDetailsService().loadUserByUsername(request.getEmail());
 
-        User user = (User) userService.userDetailsService()
-                .loadUserByUsername(request.getEmail());
-
-        String jwtToken = jwtService.generateAccessToken(user);
-
+        String accessToken = jwtService.generateAccessToken(user);
         String refreshToken = jwtService.generateRefreshToken(user);
 
-        return new LoginResponse(jwtToken, refreshToken, user.getRole().getName());
-    }
-
-    public LoginResponse refreshToken(String refreshToken) {
-        String tokenType = jwtService.extractClaim(refreshToken, claims -> claims.get("tokenType", String.class));
-        if (!tokenType.equals("refresh"))
-            throw new JwtTokenException("Only refresh tokens are allowed");
-
-        String email = jwtService.extractEmail(refreshToken);
-        User user = (User) userService.userDetailsService().loadUserByUsername(email);
-
-        if (!jwtService.isTokenValid(refreshToken, user))
-            throw new JwtTokenException("Invalid refresh token");
-
-        String jwtToken = jwtService.generateAccessToken(user);
-        String newRefreshToken = jwtService.generateRefreshToken(user);
-        return new LoginResponse(jwtToken, newRefreshToken, user.getRole().getName());
+        return new LoginResponse(accessToken, refreshToken, user.getRole().getName());
     }
 
     public RegisterResponse signUp(RegisterRequest request) {
@@ -88,16 +64,26 @@ public class AuthenticationService {
         return new RegisterResponse(saved);
     }
 
+
+    public LoginResponse refreshToken(String refreshToken) {
+        if (!jwtService.isRefreshToken(refreshToken))
+            throw new JwtTokenException("Only refresh tokens are allowed");
+
+        String email = jwtService.extractEmail(refreshToken);
+        User user = (User) userService.userDetailsService().loadUserByUsername(email);
+
+        String newAccessToken = jwtService.generateAccessToken(user);
+        String newRefreshToken = jwtService.generateRefreshToken(user);
+        return new LoginResponse(newAccessToken, newRefreshToken, user.getRole().getName());
+    }
+
+
     public MessageResponse changePassword(ChangePasswordRequest request, String accessToken) {
-        String tokenType = jwtService.extractClaim(accessToken, claims -> claims.get("tokenType", String.class));
-        if (!tokenType.equals("access"))
+        if (!jwtService.isAccessToken(accessToken))
             throw new JwtTokenException("Only access tokens are allowed");
 
         String userEmail = jwtService.extractEmail(accessToken);
         User user = (User) userService.userDetailsService().loadUserByUsername(userEmail);
-
-        if (!jwtService.isTokenValid(accessToken, user))
-            throw new JwtTokenException("Invalid access token");
 
         if (!passwordEncoder.matches(request.getOld_password(), user.getPassword())) {
             throw new BadCredentialsException("The old password is incorrect");
@@ -106,6 +92,5 @@ public class AuthenticationService {
         userService.update(user.getId(), user);
         return new MessageResponse("Password changed");
     }
-
 }
 
