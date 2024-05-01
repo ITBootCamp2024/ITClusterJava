@@ -39,7 +39,7 @@ public class UserController {
 
     @PostMapping(value = "/refresh")
     public ResponseEntity<LoginResponse> refreshToken(@RequestHeader(value = "Authorization") String authorizationHeader) {
-        String refreshToken = authorizationHeader.substring("Bearer ".length());
+        String refreshToken = getToken(authorizationHeader);
         LoginResponse response = authenticationService.refreshToken(refreshToken);
         return ResponseEntity.ok(response);
     }
@@ -47,12 +47,15 @@ public class UserController {
     @PostMapping(value = "/change-password")
     public ResponseEntity<MessageResponse> changePassword(@RequestHeader(value = "Authorization") String authorizationHeader,
                                                  @ModelAttribute ChangePasswordRequest changePasswordRequest) {
-        String accessToken = authorizationHeader.substring("Bearer ".length());
+        String accessToken = getToken(authorizationHeader);
         MessageResponse response = authenticationService.changePassword(changePasswordRequest, accessToken);
         return ResponseEntity.ok(response);
     }
 
 
+    private static String getToken(String authorizationHeader) {
+        return authorizationHeader.substring("Bearer ".length());
+    }
 
     @ExceptionHandler(MissingRequestHeaderException.class)
     public ResponseEntity<MessageResponse> handleMissingRequestAuthorizationHeaderException(MissingRequestHeaderException ex) {

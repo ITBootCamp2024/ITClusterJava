@@ -17,7 +17,7 @@ public class GraduateTask {
     private Long id;
 
     @NotNull
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "syllabus_id", nullable = false)
     private Syllabuses syllabus;
 
@@ -25,10 +25,6 @@ public class GraduateTask {
     @NotNull
     @Column(name = "name", nullable = false)
     private String name;
-
-    @Lob
-    @Column(name = "description")
-    private String description;
 
     @Lob
     @Column(name = "controls")
