@@ -17,7 +17,7 @@ public class Assessment {
     private Long id;
 
     @NotNull
-    @ManyToOne(optional = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "syllabus_id", nullable = false)
     private Syllabuses syllabus;
 
