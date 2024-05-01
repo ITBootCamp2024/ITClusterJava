@@ -6,10 +6,7 @@ import com.ua.itclusterjava2024.service.interfaces.GraduateTaskService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -37,6 +34,11 @@ public class SyllabusesGraduateTasksController {
         return ResponseEntity.ok(response);
     }
 
+    @PostMapping("/{syllabus_id}")
+    public ResponseEntity<Map<String, Object>> createGraduateTasks(@PathVariable("syllabus_id") Long syllabusId,
+                                                                   @RequestBody List<GraduateTaskDTO> graduateTasksDTO) {
+        return null;
+    }
 
 
     private GraduateTaskDTO convertToDTO(GraduateTask graduateTask) {
