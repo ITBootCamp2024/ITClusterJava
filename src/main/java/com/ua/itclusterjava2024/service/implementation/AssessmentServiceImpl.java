@@ -1,7 +1,9 @@
 package com.ua.itclusterjava2024.service.implementation;
 
 import com.ua.itclusterjava2024.entity.Assessment;
+import com.ua.itclusterjava2024.entity.Syllabuses;
 import com.ua.itclusterjava2024.repository.AssessmentRepository;
+import com.ua.itclusterjava2024.repository.SyllabusesRepository;
 import com.ua.itclusterjava2024.repository.UserRepository;
 import com.ua.itclusterjava2024.service.interfaces.AssessmentService;
 import com.ua.itclusterjava2024.service.interfaces.SyllabusesService;
@@ -57,7 +59,10 @@ public class AssessmentServiceImpl implements AssessmentService {
         return assessmentRepository.findAllBySyllabusId(syllabusId);
     }
 
-//    public List<Assessment> createAllAssessmentsWithSyllabus(List<Assessment> assessments, long syllabusId) {
-//
-//    }
+    public List<Assessment> createAllAssessmentsWithSyllabus(List<Assessment> assessments, long syllabusId) {
+        Syllabuses syllabus = syllabusesService.readById(syllabusId)
+                .orElseThrow(() -> new IllegalArgumentException("Syllabuses not found"));
+        assessments.forEach(assessment -> assessment.setSyllabus(syllabus));
+        return assessmentRepository.saveAll(assessments);
+    }
 }

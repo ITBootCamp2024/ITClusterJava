@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface AssessmentService extends Service<Assessment>{
     public List<Assessment> getAllAssessmentsBySyllabus(long syllabusId);
+    public List<Assessment> createAllAssessmentsWithSyllabus(List<Assessment> assessments, long syllabusId);
 }

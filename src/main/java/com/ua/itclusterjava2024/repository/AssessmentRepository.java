@@ -10,4 +10,5 @@ import java.util.List;
 @Repository
 public interface AssessmentRepository extends JpaRepository<Assessment, Long> {
     List<Assessment> findAllBySyllabusId(Long syllabusId);
+
 }
