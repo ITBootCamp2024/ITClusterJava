@@ -3,11 +3,12 @@ package com.ua.itclusterjava2024.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "specialist")
 public class Specialist {
@@ -16,53 +17,56 @@ public class Specialist {
     @Column(name = "id", nullable = false)
     private Long id;
 
+    @Size(max = 255)
+    @NotNull
+    @Column(name = "company", nullable = false)
+    private String company;
+
     @Size(max = 100)
     @NotNull
     @Column(name = "name", nullable = false, length = 100)
     private String name;
+
+    @Size(max = 100)
+    @NotNull
+    @Column(name = "position", nullable = false, length = 100)
+    private String position;
 
     @Size(max = 255)
     @NotNull
     @Column(name = "email", nullable = false)
     private String email;
 
-    @NotNull
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "discipline_id", nullable = false)
-    private Disciplines discipline;
-
-    @NotNull
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "position_id", nullable = false)
-    private Position position;
-
-    @NotNull
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "company_id", nullable = false)
-    private Company company;
-
-    @Size(max = 255)
-    @NotNull
-    @Column(name = "url_cv", nullable = false)
-    private String urlCv;
-
     @Size(max = 100)
-    @NotNull
-    @Column(name = "contact", nullable = false, length = 100)
-    private String contact;
+    @Column(name = "phone", length = 100)
+    private String phone;
 
     @Size(max = 100)
     @NotNull
     @Column(name = "professional_field", nullable = false, length = 100)
     private String professionalField;
 
+    @Size(max = 100)
+    @NotNull
+    @Column(name = "discipline_type", nullable = false, length = 100)
+    private String disciplineType;
+
     @NotNull
     @Column(name = "experience", nullable = false)
     private Integer experience;
 
+    @Size(max = 255)
+    @Column(name = "url_cv")
+    private String urlCv;
+
     @NotNull
-    @ManyToOne(optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
+
+    @NotNull
+    @ColumnDefault("0")
+    @Column(name = "verified", nullable = false)
+    private Boolean verified = false;
 
 }
