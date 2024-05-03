@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface SyllabusesService extends Service<Syllabuses>{
     List<Syllabuses> findByDisciplineId(Long disciplineId);
-    List<Syllabuses> findNotAcceptedSyllabusesBySpecialistId(Long specialistId);
+    List<Syllabuses> findSyllabusesBySpecialistId(Long specialistId, boolean accepted);
 }
