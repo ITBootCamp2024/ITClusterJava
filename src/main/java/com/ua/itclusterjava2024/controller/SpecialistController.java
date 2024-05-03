@@ -1,6 +1,5 @@
 package com.ua.itclusterjava2024.controller;
 
-import com.ua.itclusterjava2024.dto.DisciplineBlocksDTO;
 import com.ua.itclusterjava2024.dto.DisciplineGroupsDTO;
 import com.ua.itclusterjava2024.dto.SpecialistDTO;
 import com.ua.itclusterjava2024.entity.DisciplineBlocks;
@@ -40,24 +39,19 @@ public class SpecialistController {
 
     @GetMapping("/specialists-verified")
     public ResponseEntity<?> getVerifiedSpecialists() {
-        List<SpecialistDTO> allSpecialistsSTO = specialistService.getAll().stream()
+        List<SpecialistDTO> allSpecialistsDTO = specialistService.getAll().stream()
                 .map(this::convertToDTO)
                 .toList();
-        List<Specialist> allSpecialists = specialistService.getAll();
 
-        // Створення об'єкта респонсу
-        Map<String, Object> specialistData = new HashMap<>();
+        long verifiedCount = allSpecialistsDTO.stream().filter(SpecialistDTO::getVerified).count();
+        long notVerifiedCount = allSpecialistsDTO.size() - verifiedCount;
 
-        // Для кожного спеціаліста отримуємо кількість запропонованих та взятих на валідацію силабусів
-        for (SpecialistDTO specialist : allSpecialistsSTO) {
-            long proposedSyllabusesCount = reviewsService.getAllReviewsCount(specialist.getId());
-            long syllabusesForValidationCount = reviewsService.getAllReviewsCountAcceptedTrue(specialist.getId());
+        SpecialistPageWrapper response = new SpecialistPageWrapper(
+                allSpecialistsDTO,
+                verifiedCount,
+                notVerifiedCount
+        );
 
-            specialistData.put("proposed_syllabuses_count", proposedSyllabusesCount);
-            specialistData.put("syllabuses_for_validation_count", syllabusesForValidationCount);
-            specialistData.put("specialist", specialist);
-        }
-        SpecialistPageWrapper response = new SpecialistPageWrapper(specialistData);
         return ResponseEntity.ok(response);
     }
 
@@ -77,6 +71,8 @@ public class SpecialistController {
                 .company(specialist.getCompany())
                 .email(specialist.getEmail())
                 .verified(specialist.getVerified())
+                .proposed_syllabuses_count(reviewsService.getAllReviewsCountAcceptedFalse(specialist.getId()))
+                .syllabuses_for_validation_count(reviewsService.getAllReviewsCountAcceptedTrue(specialist.getId()))
                 .build();
     }
 }
