@@ -1,7 +1,9 @@
 package com.ua.itclusterjava2024.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import jakarta.validation.constraints.Email;
+import com.ua.itclusterjava2024.entity.Specialty;
+import com.ua.itclusterjava2024.entity.Syllabuses;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -9,44 +11,32 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Data
 @Builder
-public class TeachersDTO {
+public class BaseInformationSyllabusDTO {
+
     private Long id;
-    private String name;
-
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    private PositionDTO position;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @NotEmpty
-    @Size(max = 50, message = "Degree level have to contain up to 50 symbols")
-    private String degree_level;
-
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    private UniversityDTO university;
-
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    private DepartmentDTO department;
-
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    private RoleDTO role;
+    private SyllabusesDTO syllabus;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @NotEmpty
-    @Size(max = 100, message = "Email of teachers have to contain up to 100 symbols")
-    @Email
-    private String email;
+    private SpecialtyDTO specialty;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @NotEmpty
-    private String comments;
+    private Integer studentCount;
 
-    @NotNull
-    Boolean verified;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @NotEmpty
+    private Integer course;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @NotEmpty
+    private Integer semester;
+
 }
-
