@@ -30,6 +30,11 @@ public class GraduateTaskServiceImpl implements GraduateTaskService {
     }
 
     @Override
+    public List<GraduateTask> createAll(List<GraduateTask> graduateTasks) {
+        return graduateTaskRepository.saveAll(graduateTasks);
+    }
+
+    @Override
     public Optional<GraduateTask> readById(long id) {
         return graduateTaskRepository.findById(id);
     }

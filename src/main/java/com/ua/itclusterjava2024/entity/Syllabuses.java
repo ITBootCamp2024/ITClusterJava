@@ -21,7 +21,7 @@ public class Syllabuses {
     @Column(name = "status", nullable = false)
     private String status;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "discipline_id")
     private Disciplines disciplines;
 }

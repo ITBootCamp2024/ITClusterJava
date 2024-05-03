@@ -1,6 +1,8 @@
 package com.ua.itclusterjava2024.service.implementation;
 
+import com.ua.itclusterjava2024.entity.Reviews;
 import com.ua.itclusterjava2024.entity.Syllabuses;
+import com.ua.itclusterjava2024.repository.ReviewsRepository;
 import com.ua.itclusterjava2024.repository.SyllabusesRepository;
 import com.ua.itclusterjava2024.service.interfaces.SyllabusesService;
 import org.springframework.data.domain.Page;
@@ -14,10 +16,13 @@ import java.util.Optional;
 public class SyllabusesServiceImpl implements SyllabusesService {
 
     private final SyllabusesRepository syllabusesRepository;
+    private final ReviewsRepository reviewsRepository;
 
-    public SyllabusesServiceImpl(SyllabusesRepository syllabusesRepository) {
+    public SyllabusesServiceImpl(SyllabusesRepository syllabusesRepository, ReviewsRepository reviewsRepository) {
         this.syllabusesRepository = syllabusesRepository;
+        this.reviewsRepository = reviewsRepository;
     }
+
 
     @Override
     public Syllabuses create(Syllabuses syllabuses) {
@@ -53,5 +58,13 @@ public class SyllabusesServiceImpl implements SyllabusesService {
     @Override
     public List<Syllabuses> findByDisciplineId(Long disciplineId) {
         return syllabusesRepository.findByDisciplineId(disciplineId);
+    }
+
+    @Override
+    public List<Syllabuses> findNotAcceptedSyllabusesBySpecialistId(Long specialistId) {
+        return reviewsRepository.findBySpecialistIdAndAcceptedFalse(specialistId)
+                .stream()
+                .map(Reviews::getSyllabus)
+                .toList();
     }
 }
