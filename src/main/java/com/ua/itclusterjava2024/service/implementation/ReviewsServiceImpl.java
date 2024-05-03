@@ -50,19 +50,4 @@ public class ReviewsServiceImpl implements ReviewsService {
         return reviewsRepository.findAll(pageable);
     }
 
-
-    @Override
-    public long getAllReviewsCount(long specialistId) {
-        return reviewsRepository.countBySpecialistId(specialistId);
-    }
-
-    @Override
-    public long getAllReviewsCountAcceptedTrue(long specialistId) {
-        return reviewsRepository.countBySpecialistIdAndAcceptedTrue(specialistId);
-    }
-
-    @Override
-    public long getAllReviewsCountAcceptedFalse(long specialistId) {
-        return reviewsRepository.countBySpecialistIdAndAcceptedFalse(specialistId);
-    }
 }

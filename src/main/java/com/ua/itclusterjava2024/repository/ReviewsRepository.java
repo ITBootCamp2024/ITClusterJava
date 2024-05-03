@@ -8,9 +8,6 @@ import java.util.List;
 
 @Repository
 public interface ReviewsRepository extends JpaRepository<Reviews, Long> {
-    long countBySpecialistId(long specialistId);
-    long countBySpecialistIdAndAcceptedFalse(long specialistId);
-    long countBySpecialistIdAndAcceptedTrue(long specialistId);
     List<Reviews> findBySpecialistIdAndAcceptedFalse(long specialistId);
     List<Reviews> findBySpecialistIdAndAcceptedTrue(long specialistId);
 }

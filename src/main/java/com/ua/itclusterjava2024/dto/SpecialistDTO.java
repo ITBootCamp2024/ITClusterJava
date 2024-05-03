@@ -8,71 +8,70 @@ import lombok.*;
 
 import java.io.Serializable;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
 @Builder
-@AllArgsConstructor
-@Getter
-@Value
 public class SpecialistDTO implements Serializable {
-    Long id;
+    private Long id;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @NotEmpty
     @Size(max = 255)
-    String company;
+    private String company;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @NotEmpty
     @Size(max = 100)
-    String name;
+    private String name;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @NotEmpty
     @Size(max = 100)
-    String position;
+    private String position;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @NotEmpty
     @Size(max = 255)
-    String email;
+    private String email;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @NotEmpty
     @Size(max = 100)
-    String phone;
+    private String phone;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @NotEmpty
     @Size(max = 100)
-    String professionalField;
+    private String professionalField;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @NotEmpty
     @Size(max = 100)
-    String disciplineType;
+    private String disciplineType;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @NotEmpty
-    Integer experience;
+    private Integer experience;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @NotEmpty
     @Size(max = 255)
-    String urlCv;
+    private String urlCv;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @NotEmpty
-    RoleDTO role;
+    private RoleDTO role;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @NotEmpty
-    Boolean verified;
+    private Boolean verified;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @NotEmpty
-    Long proposed_syllabuses_count;
+    private Long all_syllabuses;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @NotEmpty
-    Long syllabuses_for_validation_count;
+    private Long syllabuses_for_review;
 }
