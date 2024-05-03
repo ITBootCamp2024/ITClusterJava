@@ -2,7 +2,6 @@ package com.ua.itclusterjava2024.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,15 +23,15 @@ public class Disciplines {
     @Size(max = 100, message = "Name of discipline have to contain up to 100 symbols")
     private String name;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "teacher_id")
     private Teachers teachers;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "discipline_group_id")
     private DisciplineGroups discipline_group;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "education_program_id")
     private EducationPrograms education_program;
 

@@ -34,16 +34,8 @@ public class SyllabusesGraduateTasksController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/{syllabus_id}")
-    public ResponseEntity<Map<String, Object>> createGraduateTasks(@PathVariable("syllabus_id") Long syllabusId,
-                                                                   @RequestBody List<GraduateTaskDTO> graduateTasksDTO) {
-        return null;
-    }
-
 
     private GraduateTaskDTO convertToDTO(GraduateTask graduateTask) {
-        modelMapper.typeMap(GraduateTask.class, GraduateTaskDTO.class)
-                .addMappings(mapper -> mapper.skip(GraduateTaskDTO::setSyllabusId));
         return modelMapper.map(graduateTask, GraduateTaskDTO.class);
     }
 
