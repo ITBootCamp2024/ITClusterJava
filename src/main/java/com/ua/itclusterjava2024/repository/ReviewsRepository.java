@@ -12,4 +12,5 @@ public interface ReviewsRepository extends JpaRepository<Reviews, Long> {
     long countBySpecialistIdAndAcceptedFalse(long specialistId);
     long countBySpecialistIdAndAcceptedTrue(long specialistId);
     List<Reviews> findBySpecialistIdAndAcceptedFalse(long specialistId);
+    List<Reviews> findBySpecialistIdAndAcceptedTrue(long specialistId);
 }
