@@ -1,5 +1,7 @@
 package com.ua.itclusterjava2024.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
@@ -9,46 +11,60 @@ import java.io.Serializable;
 @Data
 @Builder
 @AllArgsConstructor
+@Getter
 @Value
 public class SpecialistDTO implements Serializable {
-    Integer id;
+    Long id;
 
-    @NotNull
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @NotEmpty
     @Size(max = 255)
     String company;
 
-    @NotNull
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @NotEmpty
     @Size(max = 100)
     String name;
 
-    @NotNull
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @NotEmpty
     @Size(max = 100)
     String position;
 
-    @NotNull
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @NotEmpty
     @Size(max = 255)
     String email;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @NotEmpty
     @Size(max = 100)
     String phone;
 
-    @NotNull
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @NotEmpty
     @Size(max = 100)
     String professionalField;
 
-    @NotNull
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @NotEmpty
     @Size(max = 100)
     String disciplineType;
 
-    @NotNull
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @NotEmpty
     Integer experience;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @NotEmpty
     @Size(max = 255)
     String urlCv;
 
-    @NotNull
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @NotEmpty
     RoleDTO role;
 
-    @NotNull
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @NotEmpty
     Boolean verified;
 }
