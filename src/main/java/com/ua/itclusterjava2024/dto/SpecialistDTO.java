@@ -67,4 +67,12 @@ public class SpecialistDTO implements Serializable {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @NotEmpty
     Boolean verified;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @NotEmpty
+    Long proposed_syllabuses_count;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @NotEmpty
+    Long syllabuses_for_validation_count;
 }

@@ -60,4 +60,9 @@ public class ReviewsServiceImpl implements ReviewsService {
     public long getAllReviewsCountAcceptedTrue(long specialistId) {
         return reviewsRepository.countBySpecialistIdAndAcceptedTrue(specialistId);
     }
+
+    @Override
+    public long getAllReviewsCountAcceptedFalse(long specialistId) {
+        return reviewsRepository.countBySpecialistIdAndAcceptedFalse(specialistId);
+    }
 }
