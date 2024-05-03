@@ -18,5 +18,10 @@ public class PageWrapper<T> {
     private ServiceInfoDTO service_info;
 
     private long totalElements;
+
+    public PageWrapper(List<T> content, long totalElements) {
+        this.content = content;
+        this.totalElements = totalElements;
+    }
 }
 

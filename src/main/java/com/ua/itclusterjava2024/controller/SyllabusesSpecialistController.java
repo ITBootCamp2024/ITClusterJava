@@ -3,6 +3,7 @@ package com.ua.itclusterjava2024.controller;
 import com.ua.itclusterjava2024.dto.ProposedSyllabusDTO;
 import com.ua.itclusterjava2024.entity.Syllabuses;
 import com.ua.itclusterjava2024.service.interfaces.SyllabusesService;
+import com.ua.itclusterjava2024.wrappers.PageWrapper;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,12 +22,14 @@ public class SyllabusesSpecialistController {
     private final ModelMapper modelMapper;
 
     @GetMapping("/proposed/{specialist_id}")
-    public List<ProposedSyllabusDTO> getProposedSyllabuses(@PathVariable("specialist_id") Long specialistId) {
+    public PageWrapper<ProposedSyllabusDTO> getProposedSyllabuses(@PathVariable("specialist_id") Long specialistId) {
         List<Syllabuses> proposedSyllabuses = syllabusesService.findNotAcceptedSyllabusesBySpecialistId(specialistId);
 
-        return proposedSyllabuses.stream()
-                .map(this::mapToProposedSyllabusDTO)
-                .toList();
+        List<ProposedSyllabusDTO> proposedSyllabusDTOS = proposedSyllabuses.stream()
+                        .map(this::mapToProposedSyllabusDTO)
+                        .toList();
+
+        return new PageWrapper<>(proposedSyllabusDTOS, proposedSyllabuses.size());
     }
 
     private ProposedSyllabusDTO mapToProposedSyllabusDTO(Syllabuses syllabus) {
