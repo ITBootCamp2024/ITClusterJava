@@ -9,6 +9,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
@@ -33,4 +35,9 @@ public class DisciplineGroupsDTO {
     @Size(max = 255, message = "Discipline_url of discipline_groups have to contain up to 255 symbols")
     @JsonProperty("discipline_url")
     private String disciplineUrl;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @NotEmpty
+    @JsonProperty("discipline")
+    private List<DisciplinesDTO> disciplines;
 }

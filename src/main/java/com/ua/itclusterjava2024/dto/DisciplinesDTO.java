@@ -47,4 +47,10 @@ public class DisciplinesDTO {
     @Size(max = 255, message = "Syllabus Link have to contain up to 255 symbols")
     @JsonProperty("education_plan_url")
     private String educationPlanUrl;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @NotEmpty
+    @Size(max = 255, message = "Syllabus Link have to contain up to 255 symbols")
+    @JsonProperty("syllabus")
+    private SyllabusesDTO syllabuses;
 }
