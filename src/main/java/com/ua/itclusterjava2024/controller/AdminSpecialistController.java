@@ -33,7 +33,7 @@ public class AdminSpecialistController {
 
 
     @GetMapping("/{admin_id}")
-    public ResponseEntity<?> getVerifiedSpecialists(@PathVariable("admin_id") Long adminId) {
+    public ResponseEntity<SpecialistPageWrapper> getVerifiedSpecialists(@PathVariable("admin_id") Long adminId) {
         List<SpecialistDTO> allSpecialistsDTO = specialistService.getAll().stream()
                 .map(this::convertToDTO)
                 .toList();
@@ -52,7 +52,7 @@ public class AdminSpecialistController {
     private DisciplineGroups convertToEntity(DisciplineGroupsDTO disciplineGroupsDTO) {
         DisciplineGroups disciplineGroups = modelMapper.map(disciplineGroupsDTO, DisciplineGroups.class);
         if (disciplineGroupsDTO.getBlock() != null) {
-            disciplineGroups.setBlock_id(modelMapper.map(disciplineGroupsDTO.getBlock(), DisciplineBlocks.class));
+            disciplineGroups.setDisciplineBlocks(modelMapper.map(disciplineGroupsDTO.getBlock(), DisciplineBlocks.class));
         }
         return disciplineGroups;
     }
@@ -65,8 +65,8 @@ public class AdminSpecialistController {
                 .company(specialist.getCompany())
                 .email(specialist.getEmail())
                 .verified(specialist.getVerified())
-                .all_syllabuses(syllabusesService.findSyllabusesBySpecialistId(specialist.getId(), false).stream().count())
-                .syllabuses_for_review(syllabusesService.findSyllabusesBySpecialistId(specialist.getId(), true).stream().count())
+                .allSyllabuses(syllabusesService.findSyllabusesBySpecialistId(specialist.getId(), false).stream().count())
+                .syllabusesForReview(syllabusesService.findSyllabusesBySpecialistId(specialist.getId(), true).stream().count())
                 .build();
     }
 }

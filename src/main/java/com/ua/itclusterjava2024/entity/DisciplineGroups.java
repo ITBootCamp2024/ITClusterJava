@@ -29,11 +29,11 @@ public class DisciplineGroups {
 
     @ManyToOne
     @JoinColumn(name = "block_id")
-    DisciplineBlocks block_id;
+    DisciplineBlocks disciplineBlocks;
 
     @Column(name = "discipline_url")
     @NotEmpty
     @Size(max = 255, message = "Discipline_url of discipline_groups have to contain up to 255 symbols")
-    String discipline_url;
+    String disciplineUrl;
 
 }

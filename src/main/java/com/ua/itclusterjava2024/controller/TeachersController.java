@@ -41,7 +41,7 @@ public class TeachersController {
 
         PageWrapper<TeachersDTO> pageWrapper = new PageWrapper<>();
         pageWrapper.setContent(teachers);
-        pageWrapper.setService_info(prepareServiceInfo());
+        pageWrapper.setServiceInfo(prepareServiceInfo());
         pageWrapper.setTotalElements(teachers.size());
         return pageWrapper;
     }

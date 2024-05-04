@@ -1,6 +1,7 @@
 package com.ua.itclusterjava2024.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,7 +18,8 @@ public class ServiceInfoDTO {
     private List<PositionDTO> position;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private List<EducationLevelDTO> education_levels;
+    @JsonProperty("education_levels")
+    private List<EducationLevelDTO> educationLevels;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private List<TeachersDTO> teachers;
@@ -29,11 +31,13 @@ public class ServiceInfoDTO {
     private List<SpecialtyDTO> specialty;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private List<EducationProgramsDTO> education_program;
+    @JsonProperty("education_program")
+    private List<EducationProgramsDTO> educationProgram;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private List<DisciplinesDTO> discipline;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
+    @JsonProperty("discipline_blocks")
     private List<DisciplineBlocksDTO> disciplineBlocks;
 }

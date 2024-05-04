@@ -45,7 +45,7 @@ public class DisciplineGroupController {
         List<DisciplineBlocksDTO> disciplineBlocks = disciplineBlocksService.getAll().stream().map(i -> DisciplineBlocksDTO.builder().id(i.getId()).name(i.getName()).build()).toList();
         PageWrapper<DisciplineGroupsDTO> pageWrapper = new PageWrapper<>();
         pageWrapper.setContent(disciplineGroupsPage);
-        pageWrapper.setService_info(ServiceInfoDTO.builder().disciplineBlocks(disciplineBlocks).build());
+        pageWrapper.setServiceInfo(ServiceInfoDTO.builder().disciplineBlocks(disciplineBlocks).build());
         pageWrapper.setTotalElements(disciplineGroupsPage.size());
         return pageWrapper;
     }
@@ -82,7 +82,7 @@ public class DisciplineGroupController {
 
     @GetMapping("/{id}")
     public DisciplineGroupsDTO findById(@PathVariable Long id) {
-        return convertToDTO(disciplineGroupService.readById(id).orElse(null));
+        return convertToDTO(disciplineGroupService.readById(id).orElseThrow(() -> new NotFoundException("DisciplineGroups not found with id: " + id)));
     }
 
     @DeleteMapping("/{id}")
@@ -94,7 +94,7 @@ public class DisciplineGroupController {
     private DisciplineGroups convertToEntity(DisciplineGroupsDTO disciplineGroupsDTO) {
         DisciplineGroups disciplineGroups = modelMapper.map(disciplineGroupsDTO, DisciplineGroups.class);
         if (disciplineGroupsDTO.getBlock() != null) {
-            disciplineGroups.setBlock_id(modelMapper.map(disciplineGroupsDTO.getBlock(), DisciplineBlocks.class));
+            disciplineGroups.setDisciplineBlocks(modelMapper.map(disciplineGroupsDTO.getBlock(), DisciplineBlocks.class));
         }
         return disciplineGroups;
     }
@@ -102,8 +102,8 @@ public class DisciplineGroupController {
     private DisciplineGroupsDTO convertToDTO(DisciplineGroups disciplineGroups) {
         DisciplineGroupsDTO dto = modelMapper.map(disciplineGroups, DisciplineGroupsDTO.class);
         dto.setBlock(DisciplineBlocksDTO.builder()
-                .id(disciplineGroups.getBlock_id().getId())
-                .name(disciplineGroups.getBlock_id().getName()).build());
+                .id(disciplineGroups.getDisciplineBlocks().getId())
+                .name(disciplineGroups.getDisciplineBlocks().getName()).build());
         return dto;
     }
 }

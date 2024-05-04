@@ -26,15 +26,19 @@ public class Stakeholder {
     private String specialty;
 
     @Lob
+    @Column(name = "vacancies")
+    private String vacancies;
+
+    @Lob
     @Column(name = "skills")
     private String skills;
 
     @Lob
-    @Column(name = "educational_materials")
-    private String educationalMaterials;
+    @Column(name = "relevant_materials")
+    private String relevantMaterials;
 
     @Lob
-    @Column(name = "list_of_elements")
-    private String listOfElements;
+    @Column(name = "borrowed_materials")
+    private String borrowedMaterials;
 
 }

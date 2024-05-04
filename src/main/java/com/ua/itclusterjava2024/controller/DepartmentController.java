@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
+
 @CrossOrigin
 @RestController
 @RequestMapping("/department")
@@ -45,7 +45,7 @@ public class DepartmentController {
 
         PageWrapper<DepartmentDTO> pageWrapper = new PageWrapper<>();
         pageWrapper.setContent(departmentsPage);
-        pageWrapper.setService_info(prepareServiceInfo());
+        pageWrapper.setServiceInfo(prepareServiceInfo());
         pageWrapper.setTotalElements(departmentsPage.size());
         return pageWrapper;
     }
@@ -75,7 +75,7 @@ public class DepartmentController {
 
     @GetMapping("/{id}")
     public DepartmentDTO findById(@PathVariable Long id) {
-        return convertToDTO(departmentService.readById(id).orElse(null));
+        return convertToDTO(departmentService.readById(id).orElseThrow(() -> new NotFoundException("Department not found with id: " + id)));
     }
 
     @DeleteMapping("/{id}")
@@ -118,7 +118,7 @@ public class DepartmentController {
                         .name(u.getName())
                         .abbr(u.getAbbr())
                         .build())
-                .collect(Collectors.toList());
+                .toList();
     }
 
     private ServiceInfoDTO prepareServiceInfo() {

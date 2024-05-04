@@ -29,23 +29,23 @@ public class Disciplines {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "discipline_group_id")
-    private DisciplineGroups discipline_group;
+    private DisciplineGroups disciplineGroups;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "education_program_id")
-    private EducationPrograms education_program;
+    private EducationPrograms educationPrograms;
 
     @Column(name = "syllabus_url", nullable = false)
     @NotEmpty
     @Size(max = 255, message = "Syllabus Link have to contain up to 255 symbols")
 //    @Pattern(regexp = "https?://.", message = "Incorrect format URL")
-    private String syllabus_url;
+    private String syllabusUrl;
 
     @Column(name = "education_plan_url", nullable = false)
     @NotEmpty
     @Size(max = 255, message = "Syllabus Link have to contain up to 255 symbols")
  //   @Pattern(regexp = "https?://.", message = "Incorrect format URL")
-    private String education_plan_url;
+    private String educationPlanUrl;
 
 
 }

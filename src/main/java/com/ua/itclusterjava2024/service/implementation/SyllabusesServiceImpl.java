@@ -62,14 +62,11 @@ public class SyllabusesServiceImpl implements SyllabusesService {
 
     @Override
     public List<Syllabuses> findSyllabusesBySpecialistId(Long specialistId, boolean accepted) {
-        if (accepted) {
-            return reviewsRepository.findBySpecialistIdAndAcceptedTrue(specialistId)
-                    .stream()
-                    .map(Reviews::getSyllabus)
-                    .toList();
-        }
-        return reviewsRepository.findBySpecialistIdAndAcceptedFalse(specialistId)
-                .stream()
+        List<Reviews> reviews = accepted ?
+                reviewsRepository.findBySpecialistIdAndAcceptedTrue(specialistId) :
+                reviewsRepository.findBySpecialistIdAndAcceptedFalse(specialistId);
+
+        return reviews.stream()
                 .map(Reviews::getSyllabus)
                 .toList();
     }

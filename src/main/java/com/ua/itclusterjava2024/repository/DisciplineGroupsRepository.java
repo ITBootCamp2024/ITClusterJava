@@ -11,7 +11,7 @@ import java.util.List;
 
 @Repository
 public interface DisciplineGroupsRepository extends JpaRepository<DisciplineGroups, Long>{
-    @Query("SELECT dg FROM DisciplineGroups dg WHERE dg.block_id = :blockId")
-    List<DisciplineGroups> findByBlockId(@Param("blockId") DisciplineBlocks block);
+    @Query("SELECT dg FROM DisciplineGroups dg WHERE dg.disciplineBlocks = :block")
+    List<DisciplineGroups> findByBlockId(@Param("block") DisciplineBlocks block);
 
 }
