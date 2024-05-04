@@ -55,4 +55,9 @@ public class DisciplinesServiceImpl implements DisciplinesService {
     public List<Disciplines> findByTeacherId(Long teacherId) {
         return disciplinesRepository.findByTeacherId(teacherId);
     }
+
+    @Override
+    public List<Disciplines> findByDisciplineGroupId(Long id) {
+        return disciplinesRepository.findByDisciplineGroupId(id);
+    }
 }
