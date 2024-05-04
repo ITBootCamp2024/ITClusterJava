@@ -2,13 +2,16 @@ package com.ua.itclusterjava2024.controller;
 
 import com.ua.itclusterjava2024.dto.DisciplineGroupsDTO;
 import com.ua.itclusterjava2024.dto.SpecialistDTO;
+import com.ua.itclusterjava2024.dto.request.UpdateVerifiedRequest;
 import com.ua.itclusterjava2024.entity.DisciplineBlocks;
 import com.ua.itclusterjava2024.entity.DisciplineGroups;
 import com.ua.itclusterjava2024.entity.Specialist;
+import com.ua.itclusterjava2024.entity.Syllabuses;
 import com.ua.itclusterjava2024.service.interfaces.ReviewsService;
 import com.ua.itclusterjava2024.service.interfaces.SpecialistService;
 import com.ua.itclusterjava2024.service.interfaces.SyllabusesService;
 import com.ua.itclusterjava2024.wrappers.SpecialistPageWrapper;
+import jakarta.validation.constraints.NotNull;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,7 +36,7 @@ public class AdminSpecialistController {
 
 
     @GetMapping("/{admin_id}")
-    public ResponseEntity<SpecialistPageWrapper> getVerifiedSpecialists(@PathVariable("admin_id") Long adminId) {
+    public ResponseEntity<SpecialistPageWrapper> find(@PathVariable("admin_id") Long adminId) {
         List<SpecialistDTO> allSpecialistsDTO = specialistService.getAll().stream()
                 .map(this::convertToDTO)
                 .toList();
@@ -47,6 +50,13 @@ public class AdminSpecialistController {
         );
 
         return ResponseEntity.ok(response);
+    }
+
+    @PatchMapping("/{admin_id}")
+    public ResponseEntity<SpecialistPageWrapper> update(@PathVariable("admin_id") Long adminId,
+                                                        @RequestBody UpdateVerifiedRequest request) {
+        specialistService.setVerified(request.getSpecialist_id(), request.getVerified());
+        return find(adminId);
     }
 
     private DisciplineGroups convertToEntity(DisciplineGroupsDTO disciplineGroupsDTO) {
