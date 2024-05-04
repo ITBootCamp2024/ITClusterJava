@@ -29,6 +29,7 @@ public class JwtService {
     @Value("${jwt.refresh.expiration.minutes}")
     private Long refreshTokenExpirationMinutes;
 
+    private static final String BEARER_PREFIX = "Bearer ";
 
     // Generates access token
     public String generateAccessToken(UserDetails userDetails) {
@@ -46,7 +47,7 @@ public class JwtService {
             claims.put("role", customUserDetails.getRole().getName());
             claims.put("type", tokenType);
         }
-        return buildToken(claims, userDetails, expirationMinutes);
+        return BEARER_PREFIX + buildToken(claims, userDetails, expirationMinutes);
     }
 
     private String buildToken(Map<String, Object> extraClaims, UserDetails userDetails, Long expirationMinutes) {
