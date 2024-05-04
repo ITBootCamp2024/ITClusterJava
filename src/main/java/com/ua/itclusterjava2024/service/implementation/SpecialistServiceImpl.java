@@ -3,6 +3,7 @@ package com.ua.itclusterjava2024.service.implementation;
 import com.ua.itclusterjava2024.entity.Specialist;
 import com.ua.itclusterjava2024.repository.SpecialistRepository;
 import com.ua.itclusterjava2024.service.interfaces.SpecialistService;
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -47,5 +48,17 @@ public class SpecialistServiceImpl implements SpecialistService {
     @Override
     public Page<Specialist> getAll(Pageable pageable) {
         return specialistRepository.findAll(pageable);
+    }
+
+
+    @Override
+    public void setVerified(Long specialistId, Boolean verified) {
+        if (specialistRepository.findById(specialistId).isPresent()) {
+            Specialist specialist = specialistRepository.findById(specialistId).get();
+            if (!specialist.getVerified().equals(verified)) {
+                specialist.setVerified(verified);
+                update(specialist.getId(), specialist);
+            }
+        }
     }
 }
