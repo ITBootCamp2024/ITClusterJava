@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 public class Syllabuses {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
+    @Column(name = "id")
     private Long id;
 
     @Column(name = "name", nullable = false)

@@ -70,4 +70,9 @@ public class SyllabusesServiceImpl implements SyllabusesService {
                 .map(Reviews::getSyllabus)
                 .toList();
     }
+
+    @Override
+    public Boolean existsById(Long id) {
+        return syllabusesRepository.existsById(id);
+    }
 }
