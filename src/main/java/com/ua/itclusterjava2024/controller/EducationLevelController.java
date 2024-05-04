@@ -2,10 +2,10 @@ package com.ua.itclusterjava2024.controller;
 
 import com.ua.itclusterjava2024.dto.EducationLevelDTO;
 import com.ua.itclusterjava2024.entity.EducationLevel;
-import com.ua.itclusterjava2024.exceptions.NotFoundException;
 import com.ua.itclusterjava2024.service.interfaces.EducationLevelsService;
 import com.ua.itclusterjava2024.wrappers.PageWrapper;
 import com.ua.itclusterjava2024.wrappers.Patcher;
+import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -53,7 +53,7 @@ public class EducationLevelController {
     public PageWrapper<EducationLevelDTO> update(@PathVariable("id") Long id,
                                                  @RequestBody EducationLevel levels) {
         EducationLevel level = educationLevelsService.readById(id)
-                .orElseThrow(() -> new NotFoundException("Education level not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Education level not found"));
         try {
             patcher.patch(level, levels);
             educationLevelsService.update(id, level);

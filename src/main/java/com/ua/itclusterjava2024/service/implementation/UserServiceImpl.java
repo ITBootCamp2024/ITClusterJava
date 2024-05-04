@@ -2,10 +2,10 @@ package com.ua.itclusterjava2024.service.implementation;
 
 import com.ua.itclusterjava2024.entity.User;
 import com.ua.itclusterjava2024.exceptions.EmailAlreadyExistsException;
-import com.ua.itclusterjava2024.exceptions.NotFoundException;
 import com.ua.itclusterjava2024.repository.RoleRepository;
 import com.ua.itclusterjava2024.repository.UserRepository;
 import com.ua.itclusterjava2024.service.interfaces.UserService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -89,7 +89,7 @@ public class UserServiceImpl implements UserService {
     public void getAdmin() {
         var user = getCurrentUser();
         user.setRole(roleRepository.findByName("admin")
-                .orElseThrow(() -> new NotFoundException("Роль не знайдена")));
+                .orElseThrow(() -> new EntityNotFoundException("Role not found")));
         userRepository.save(user);
     }
 }

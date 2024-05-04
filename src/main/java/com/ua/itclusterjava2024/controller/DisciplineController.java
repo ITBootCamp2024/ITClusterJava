@@ -2,12 +2,12 @@ package com.ua.itclusterjava2024.controller;
 
 import com.ua.itclusterjava2024.dto.*;
 import com.ua.itclusterjava2024.entity.*;
-import com.ua.itclusterjava2024.exceptions.NotFoundException;
 import com.ua.itclusterjava2024.service.implementation.ServiceInfoService;
 import com.ua.itclusterjava2024.service.interfaces.DisciplinesService;
 import com.ua.itclusterjava2024.wrappers.PageWrapper;
 import com.ua.itclusterjava2024.wrappers.Patcher;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +52,7 @@ public class DisciplineController {
 
     @GetMapping("/{id}")
     public DisciplinesDTO findById(@PathVariable long id) {
-        return convertToDTO(disciplinesService.readById(id).orElseThrow(() -> new NotFoundException("Discipline with id " + id + " not found")));
+        return convertToDTO(disciplinesService.readById(id).orElseThrow(() -> new EntityNotFoundException("Discipline with id " + id + " not found")));
     }
 
     @PostMapping
@@ -66,7 +66,7 @@ public class DisciplineController {
     public PageWrapper<DisciplinesDTO> update(@PathVariable("id") Long id,
                                               @RequestBody DisciplinesDTO disciplinesDTO) {
         Disciplines existingDiscipline = disciplinesService.readById(id)
-                .orElseThrow(() -> new NotFoundException("Discipline with id " + id + " not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Discipline with id " + id + " not found"));
 
         Disciplines updatedDiscipline = convertToEntity(disciplinesDTO);
         try {

@@ -2,9 +2,9 @@ package com.ua.itclusterjava2024.controller;
 
 import com.ua.itclusterjava2024.dto.*;
 import com.ua.itclusterjava2024.entity.Teachers;
-import com.ua.itclusterjava2024.exceptions.NotFoundException;
 import com.ua.itclusterjava2024.service.interfaces.TeachersService;
-import com.ua.itclusterjava2024.wrappers.Patcher;
+import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,36 +14,32 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/teachers-verified")
 public class TeachersListController {
+
     private final TeachersService teachersService;
-    private final Patcher<Teachers> patcher;
     private final ModelMapper modelMapper;
 
-    public TeachersListController(TeachersService teachersService, Patcher<Teachers> patcher, ModelMapper modelMapper) {
-        this.teachersService = teachersService;
-        this.patcher = patcher;
-        this.modelMapper = modelMapper;
-    }
 
     @GetMapping()
-    public ResponseEntity<?> getVerifiedTeachersList(){
+    public ResponseEntity<Map<String, Object>> getVerifiedTeachersList(){
         return getTeachersList();
     }
 
     //TODO
     @PatchMapping("/{id}")
-    public ResponseEntity<?> updateVerifiedTeachersList(@PathVariable Long id){
+    public ResponseEntity<Map<String, Object>> updateVerifiedTeachersList(@PathVariable Long id){
         Teachers teacher = teachersService.readById(id)
-                .orElseThrow(() -> new NotFoundException("Teacher's not found with id: " + id));
+                .orElseThrow(() -> new EntityNotFoundException("Teacher with id: " + id + " not found"));
 
         teacher.setVerified(!teacher.getVerified());
         teachersService.update(id, teacher);
         return getTeachersList();
     }
 
-    private ResponseEntity<?> getTeachersList() {
-        List<TeachersDTO> teachersList = teachersService.getAll().stream().map(this::convertToDTO).toList();;
+    private ResponseEntity<Map<String, Object>> getTeachersList() {
+        List<TeachersDTO> teachersList = teachersService.getAll().stream().map(this::convertToDTO).toList();
         long verifiedCount = teachersList.stream().filter(TeachersDTO::getVerified).count();
         long notVerifiedCount = teachersList.size() - verifiedCount;
 

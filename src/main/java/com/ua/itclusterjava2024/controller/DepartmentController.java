@@ -5,12 +5,12 @@ import com.ua.itclusterjava2024.dto.ServiceInfoDTO;
 import com.ua.itclusterjava2024.dto.UniversityDTO;
 import com.ua.itclusterjava2024.entity.Department;
 import com.ua.itclusterjava2024.entity.University;
-import com.ua.itclusterjava2024.exceptions.NotFoundException;
 import com.ua.itclusterjava2024.service.implementation.ServiceInfoService;
 import com.ua.itclusterjava2024.service.interfaces.DepartmentService;
 import com.ua.itclusterjava2024.wrappers.PageWrapper;
 import com.ua.itclusterjava2024.wrappers.Patcher;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -61,7 +61,7 @@ public class DepartmentController {
     public PageWrapper<DepartmentDTO> update(@PathVariable("id") Long id,
                                              @RequestBody DepartmentDTO departmentsDTO) {
         Department existingDepartment = departmentService.readById(id).
-                orElseThrow(() -> new NotFoundException("Department not found with id: " + id));
+                orElseThrow(() -> new EntityNotFoundException("Department not found with id: " + id));
         Department updatedDepartment = convertToEntity(departmentsDTO);
         try {
             patcher.patch(existingDepartment, updatedDepartment);
@@ -75,7 +75,7 @@ public class DepartmentController {
 
     @GetMapping("/{id}")
     public DepartmentDTO findById(@PathVariable Long id) {
-        return convertToDTO(departmentService.readById(id).orElseThrow(() -> new NotFoundException("Department not found with id: " + id)));
+        return convertToDTO(departmentService.readById(id).orElseThrow(() -> new EntityNotFoundException("Department not found with id: " + id)));
     }
 
     @DeleteMapping("/{id}")
