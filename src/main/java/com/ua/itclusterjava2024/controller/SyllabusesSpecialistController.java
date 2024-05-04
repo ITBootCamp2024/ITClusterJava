@@ -46,14 +46,13 @@ public class SyllabusesSpecialistController {
     @PatchMapping("/proposed/{specialist_id}")
     public PageWrapper<SyllabusReviewDTO> updateSyllabusAcceptance(
             @PathVariable("specialist_id") Long specialistId,
-            @RequestBody @Valid SyllabusReviewDTO syllabusReviewDTO) {
-        Long syllabusId = syllabusReviewDTO.getSyllabusId();
+            @RequestParam("syllabus_id") Long syllabusId) {
 
-        if (Boolean.FALSE.equals(syllabusesService.existsById(syllabusId)))
+        if (Boolean.FALSE.equals(syllabusesService.existsById(syllabusId))) {
             throw new EntityNotFoundException("Syllabus with id " + syllabusId + " not found");
+        }
 
-        reviewsService.updateAcceptedBySpecialistIdAndSyllabusId(specialistId, syllabusId,
-                syllabusReviewDTO.getAccepted());
+        reviewsService.updateAcceptedBySpecialistIdAndSyllabusId(specialistId, syllabusId, true);
 
         return getProposedSyllabuses(specialistId);
     }
