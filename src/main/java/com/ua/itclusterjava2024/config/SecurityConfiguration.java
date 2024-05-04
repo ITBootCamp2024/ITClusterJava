@@ -41,7 +41,7 @@ public class SecurityConfiguration {
                 }))
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/user/**").permitAll()
-                        .requestMatchers("/swagger-ui/**", "/swagger-resources/*", "/v3/api-docs/**").permitAll()
+                        .requestMatchers("/swagger-ui/**", "/swagger-resources/*").permitAll()
                         .requestMatchers("/example/admin/**").hasAuthority("admin")
                         .anyRequest().permitAll()) // Поки доступно всім
                 .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
