@@ -2,13 +2,13 @@ package com.ua.itclusterjava2024.controller;
 
 import com.ua.itclusterjava2024.dto.UniversityDTO;
 import com.ua.itclusterjava2024.entity.University;
-import com.ua.itclusterjava2024.exceptions.NotFoundException;
 import com.ua.itclusterjava2024.exceptions.ValidationException;
 import com.ua.itclusterjava2024.service.interfaces.UniversityService;
 import com.ua.itclusterjava2024.validators.UniversityValidator;
 import com.ua.itclusterjava2024.wrappers.PageWrapper;
 import com.ua.itclusterjava2024.wrappers.Patcher;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,7 +68,7 @@ public class UniversityController {
     @PatchMapping("/{id}")
     public PageWrapper<UniversityDTO> update(@PathVariable Long id, @RequestBody University updatedUniversity) {
         University existingUniversity = universityService.readById(id)
-                .orElseThrow(() -> new NotFoundException("University not found with id: " + id));
+                .orElseThrow(() -> new EntityNotFoundException("University not found with id: " + id));
         try {
             patcher.patch(existingUniversity, updatedUniversity);
             universityService.update(id, existingUniversity);

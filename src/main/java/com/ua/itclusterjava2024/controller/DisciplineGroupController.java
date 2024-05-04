@@ -2,7 +2,6 @@ package com.ua.itclusterjava2024.controller;
 
 import com.ua.itclusterjava2024.dto.*;
 import com.ua.itclusterjava2024.entity.*;
-import com.ua.itclusterjava2024.exceptions.NotFoundException;
 import com.ua.itclusterjava2024.exceptions.ValidationException;
 import com.ua.itclusterjava2024.service.interfaces.DisciplineBlocksService;
 import com.ua.itclusterjava2024.service.interfaces.DisciplineGroupService;
@@ -10,6 +9,7 @@ import com.ua.itclusterjava2024.validators.CourseGroupValidator;
 import com.ua.itclusterjava2024.wrappers.PageWrapper;
 import com.ua.itclusterjava2024.wrappers.Patcher;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +45,7 @@ public class DisciplineGroupController {
         List<DisciplineBlocksDTO> disciplineBlocks = disciplineBlocksService.getAll().stream().map(i -> DisciplineBlocksDTO.builder().id(i.getId()).name(i.getName()).build()).toList();
         PageWrapper<DisciplineGroupsDTO> pageWrapper = new PageWrapper<>();
         pageWrapper.setContent(disciplineGroupsPage);
-        pageWrapper.setService_info(ServiceInfoDTO.builder().disciplineBlocks(disciplineBlocks).build());
+        pageWrapper.setServiceInfo(ServiceInfoDTO.builder().disciplineBlocks(disciplineBlocks).build());
         pageWrapper.setTotalElements(disciplineGroupsPage.size());
         return pageWrapper;
     }
@@ -68,7 +68,7 @@ public class DisciplineGroupController {
     public PageWrapper<DisciplineGroupsDTO> update(@PathVariable("id") Long id,
                                                    @RequestBody DisciplineGroupsDTO disciplineGroupsDTO) {
         DisciplineGroups existingDisciplineGroups = disciplineGroupService.readById(id)
-                .orElseThrow(() -> new NotFoundException("DisciplineGroups not found with id: " + id));
+                .orElseThrow(() -> new EntityNotFoundException("DisciplineGroups not found with id: " + id));
         DisciplineGroups updatedDisciplineGroupsDTO = convertToEntity(disciplineGroupsDTO);
         try {
             patcher.patch(existingDisciplineGroups, updatedDisciplineGroupsDTO);
@@ -82,7 +82,7 @@ public class DisciplineGroupController {
 
     @GetMapping("/{id}")
     public DisciplineGroupsDTO findById(@PathVariable Long id) {
-        return convertToDTO(disciplineGroupService.readById(id).orElse(null));
+        return convertToDTO(disciplineGroupService.readById(id).orElseThrow(() -> new EntityNotFoundException("DisciplineGroups not found with id: " + id)));
     }
 
     @DeleteMapping("/{id}")
@@ -94,7 +94,7 @@ public class DisciplineGroupController {
     private DisciplineGroups convertToEntity(DisciplineGroupsDTO disciplineGroupsDTO) {
         DisciplineGroups disciplineGroups = modelMapper.map(disciplineGroupsDTO, DisciplineGroups.class);
         if (disciplineGroupsDTO.getBlock() != null) {
-            disciplineGroups.setBlock_id(modelMapper.map(disciplineGroupsDTO.getBlock(), DisciplineBlocks.class));
+            disciplineGroups.setDisciplineBlocks(modelMapper.map(disciplineGroupsDTO.getBlock(), DisciplineBlocks.class));
         }
         return disciplineGroups;
     }
@@ -102,8 +102,8 @@ public class DisciplineGroupController {
     private DisciplineGroupsDTO convertToDTO(DisciplineGroups disciplineGroups) {
         DisciplineGroupsDTO dto = modelMapper.map(disciplineGroups, DisciplineGroupsDTO.class);
         dto.setBlock(DisciplineBlocksDTO.builder()
-                .id(disciplineGroups.getBlock_id().getId())
-                .name(disciplineGroups.getBlock_id().getName()).build());
+                .id(disciplineGroups.getDisciplineBlocks().getId())
+                .name(disciplineGroups.getDisciplineBlocks().getName()).build());
         return dto;
     }
 }

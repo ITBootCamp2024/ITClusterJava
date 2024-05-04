@@ -70,7 +70,7 @@ public class ServiceInfoService {
         return educationProgramsRepository.findAll();
     }
 
-    public List<DisciplineGroups> getAllDisciplineGroupsByDisciplineBlocksId(DisciplineBlocks disciplineBlocksId) {
-        return disciplineGroupsRepository.findByBlockId(disciplineBlocksId);
+    public List<DisciplineGroups> getAllDisciplineGroupsByDisciplineBlocksId(DisciplineBlocks disciplineBlocks) {
+        return disciplineGroupsRepository.findByBlockId(disciplineBlocks);
     }
 }

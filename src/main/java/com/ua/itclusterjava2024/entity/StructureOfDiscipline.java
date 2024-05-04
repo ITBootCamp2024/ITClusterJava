@@ -25,14 +25,14 @@ public class StructureOfDiscipline {
     @Column(name = "theoretical_topic", nullable = false)
     private String theoreticalTopic;
 
-    @Column(name = "hours_of_theoretical_topics")
-    private Integer hoursOfTheoreticalTopics;
+    @Column(name = "theoretical_hours")
+    private Integer theoreticalHours;
 
     @Lob
     @Column(name = "practice_topics")
     private String practiceTopics;
 
-    @Column(name = "hours_of_practice_topics")
-    private Integer hoursOfPracticeTopics;
+    @Column(name = "practice_hours")
+    private Integer practiceHours;
 
 }

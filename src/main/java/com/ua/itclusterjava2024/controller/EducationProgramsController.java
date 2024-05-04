@@ -2,12 +2,12 @@ package com.ua.itclusterjava2024.controller;
 
 import com.ua.itclusterjava2024.dto.*;
 import com.ua.itclusterjava2024.entity.*;
-import com.ua.itclusterjava2024.exceptions.NotFoundException;
 import com.ua.itclusterjava2024.service.implementation.ServiceInfoService;
 import com.ua.itclusterjava2024.service.interfaces.EducationProgramsService;
 import com.ua.itclusterjava2024.wrappers.PageWrapper;
 import com.ua.itclusterjava2024.wrappers.Patcher;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -41,7 +41,7 @@ public class EducationProgramsController {
 
         PageWrapper<EducationProgramsDTO> pageWrapper = new PageWrapper<>();
         pageWrapper.setContent(programsDTOS);
-        pageWrapper.setService_info(serviceInfo);
+        pageWrapper.setServiceInfo(serviceInfo);
         pageWrapper.setTotalElements(programsDTOS.size());
         return pageWrapper;
     }
@@ -62,7 +62,7 @@ public class EducationProgramsController {
     public PageWrapper<EducationProgramsDTO> update(@PathVariable("id") Long id,
                                                     @RequestBody EducationPrograms educationPrograms) {
         EducationPrograms existingTeacher = educationProgramsService.readById(id)
-                .orElseThrow(() -> new NotFoundException("Education program not found with id: " + id));
+                .orElseThrow(() -> new EntityNotFoundException("Education program not found with id: " + id));
         try {
             patcher.patch(existingTeacher, educationPrograms);
             educationProgramsService.update(id, existingTeacher);
@@ -91,8 +91,8 @@ public class EducationProgramsController {
                 educationPrograms.getDepartment().setUniversity(modelMapper.map(dto.getUniversity(), University.class));
         }
 
-        if (dto.getEducation_level() != null)
-            educationPrograms.setEducation_level(modelMapper.map(dto.getEducation_level(), EducationLevel.class));
+        if (dto.getEducationLevel() != null)
+            educationPrograms.setEducationLevel(modelMapper.map(dto.getEducationLevel(), EducationLevel.class));
 
         return educationPrograms;
     }
@@ -101,10 +101,10 @@ public class EducationProgramsController {
         EducationProgramsDTO dto = modelMapper.map(educationPrograms, EducationProgramsDTO.class);
         dto.setSpecialty(SpecialtyDTO.builder().id(educationPrograms.getSpecialty().getId())
                 .code(educationPrograms.getSpecialty().getCode()).build());
-        dto.setEducation_level(EducationLevelDTO.builder()
-                .id(educationPrograms.getEducation_level().getId())
-                .education_level(educationPrograms.getEducation_level().getEducation_level())
-                .name(educationPrograms.getEducation_level().getName())
+        dto.setEducationLevel(EducationLevelDTO.builder()
+                .id(educationPrograms.getEducationLevel().getId())
+                .educationLevel(educationPrograms.getEducationLevel().getEducationLevel())
+                .name(educationPrograms.getEducationLevel().getName())
                 .build());
         dto.setUniversity(UniversityDTO.builder().id(educationPrograms.getDepartment().getUniversity().getId())
                 .name(educationPrograms.getDepartment().getUniversity().getName()).build());
@@ -120,14 +120,14 @@ public class EducationProgramsController {
         ServiceInfoDTO serviceInfo = new ServiceInfoDTO();
         serviceInfo.setSpecialty(prepareSpecialties());
         serviceInfo.setUniversity(prepareUniversities());
-        serviceInfo.setEducation_levels(prepareEducationLevels());
+        serviceInfo.setEducationLevels(prepareEducationLevels());
         return serviceInfo;
     }
 
     private List<EducationLevelDTO> prepareEducationLevels() {
         return serviceInfoService.getAllEducationLevels().stream().map(educationLevel -> EducationLevelDTO.builder()
                 .id(educationLevel.getId())
-                .education_level(educationLevel.getEducation_level())
+                .educationLevel(educationLevel.getEducationLevel())
                 .name(educationLevel.getName())
                 .build()).toList();
     }

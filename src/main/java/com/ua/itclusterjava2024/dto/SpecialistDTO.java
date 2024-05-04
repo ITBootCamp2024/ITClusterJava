@@ -1,8 +1,8 @@
 package com.ua.itclusterjava2024.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
@@ -43,11 +43,13 @@ public class SpecialistDTO implements Serializable {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @NotEmpty
     @Size(max = 100)
+    @JsonProperty("professional_field")
     private String professionalField;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @NotEmpty
     @Size(max = 100)
+    @JsonProperty("discipline_type")
     private String disciplineType;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -57,6 +59,7 @@ public class SpecialistDTO implements Serializable {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @NotEmpty
     @Size(max = 255)
+    @JsonProperty("url_cv")
     private String urlCv;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -69,9 +72,11 @@ public class SpecialistDTO implements Serializable {
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @NotEmpty
-    private Long all_syllabuses;
+    @JsonProperty("all_syllabuses")
+    private Long allSyllabuses;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @NotEmpty
-    private Long syllabuses_for_review;
+    @JsonProperty("syllabuses_for_review")
+    private Long syllabusesForReview;
 }

@@ -2,12 +2,12 @@ package com.ua.itclusterjava2024.controller;
 
 import com.ua.itclusterjava2024.dto.DisciplineBlocksDTO;
 import com.ua.itclusterjava2024.entity.DisciplineBlocks;
-import com.ua.itclusterjava2024.exceptions.NotFoundException;
 import com.ua.itclusterjava2024.exceptions.ValidationException;
 import com.ua.itclusterjava2024.service.interfaces.DisciplineBlocksService;
 import com.ua.itclusterjava2024.validators.CourseBlockValidator;
 import com.ua.itclusterjava2024.wrappers.PageWrapper;
 import com.ua.itclusterjava2024.wrappers.Patcher;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,7 +57,7 @@ public class DisciplineBlocksController {
     @PatchMapping("/{id}")
     public PageWrapper<DisciplineBlocksDTO> update(@PathVariable Long id, @RequestBody DisciplineBlocks updatedDisciplineBlocks) {
         DisciplineBlocks existingDisciplineBlocks = disciplineBlocksService.readById(id)
-                .orElseThrow(() -> new NotFoundException("DisciplineBlocks not found with id: " + id));
+                .orElseThrow(() -> new EntityNotFoundException("DisciplineBlocks not found with id: " + id));
         try {
             patcher.patch(existingDisciplineBlocks, updatedDisciplineBlocks);
         } catch (IllegalAccessException e) {

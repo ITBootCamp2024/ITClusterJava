@@ -25,7 +25,7 @@ public class EducationPrograms {
 
     @ManyToOne
     @JoinColumn(name = "education_level_id")
-    private EducationLevel education_level;
+    private EducationLevel educationLevel;
 
     @Column(name = "guarantor", nullable = false)
     @NotEmpty
@@ -39,12 +39,12 @@ public class EducationPrograms {
     @Column(name = "program_url", nullable = false)
     @NotEmpty
     @Size(max = 255, message = "Program link have to contain up to 255 symbols")
-    private String program_url;
+    private String programUrl;
 
     @Column(name = "syllabus_url", nullable = false)
     @NotEmpty
     @Size(max = 255, message = "Syllabus link have to contain up to 255 symbols")
-    private String syllabus_url;
+    private String syllabusUrl;
 
     @ManyToOne
     @JoinColumn(name = "specialty_id")

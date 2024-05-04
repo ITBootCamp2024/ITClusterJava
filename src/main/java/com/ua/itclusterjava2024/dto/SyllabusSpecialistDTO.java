@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonPropertyOrder({"syllabus_id", "discipline", "discipline_block","status", "accepted"})
-public class SyllabusDTO {
+public class SyllabusSpecialistDTO {
 
     @JsonProperty("syllabus_id")
     private Long syllabusId;

@@ -4,36 +4,27 @@ import com.ua.itclusterjava2024.dto.DisciplinesDTO;
 import com.ua.itclusterjava2024.dto.SyllabusesDTO;
 import com.ua.itclusterjava2024.entity.Disciplines;
 import com.ua.itclusterjava2024.entity.Syllabuses;
-import com.ua.itclusterjava2024.exceptions.NotFoundException;
-import com.ua.itclusterjava2024.service.interfaces.DisciplinesService;
 import com.ua.itclusterjava2024.service.interfaces.SyllabusesService;
 import com.ua.itclusterjava2024.wrappers.PageWrapper;
 import com.ua.itclusterjava2024.wrappers.Patcher;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/syllabuses")
 public class SyllabusesController {
 
     private final SyllabusesService syllabusesService;
-    private final DisciplinesService disciplinesService;
     private final ModelMapper modelMapper;
     private final EntityManager entityManager;
     private final Patcher<Syllabuses> patcher;
 
-    @Autowired
-    public SyllabusesController(SyllabusesService syllabusesService, DisciplinesService disciplinesService, ModelMapper modelMapper, EntityManager entityManager, Patcher<Syllabuses> patcher) {
-        this.syllabusesService = syllabusesService;
-        this.disciplinesService = disciplinesService;
-        this.modelMapper = modelMapper;
-        this.entityManager = entityManager;
-        this.patcher = patcher;
-    }
 
     @GetMapping()
     public PageWrapper<SyllabusesDTO> findAll() {
@@ -58,7 +49,7 @@ public class SyllabusesController {
     public PageWrapper<SyllabusesDTO> update(@PathVariable("id") Long id,
                                              @RequestBody SyllabusesDTO syllabusesDTO) {
         Syllabuses existingSyllabus = syllabusesService.readById(id).
-                orElseThrow(() -> new NotFoundException("Syllabuses not found with id: " + id));
+                orElseThrow(() -> new EntityNotFoundException("Syllabuses not found with id: " + id));
         Syllabuses updatedSyllabus = convertToEntity(syllabusesDTO);
         try {
             patcher.patch(existingSyllabus, updatedSyllabus);

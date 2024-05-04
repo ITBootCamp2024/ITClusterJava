@@ -8,11 +8,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class RoleDTO {
+public class RoleDTO implements Serializable {
     private Long id;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)

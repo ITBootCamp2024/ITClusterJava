@@ -30,12 +30,12 @@ public class DisciplineInformation {
     private String goal;
 
     @Lob
-    @Column(name = "skills")
-    private String skills;
+    @Column(name = "competencies_list")
+    private String competenciesList;
 
     @Lob
-    @Column(name = "list_of_technology")
-    private String listOfTechnology;
+    @Column(name = "technologies_list")
+    private String technologiesList;
 
     @Lob
     @Column(name = "graduate_task")
@@ -43,6 +43,9 @@ public class DisciplineInformation {
 
     @Column(name = "lecture")
     private Integer lecture;
+
+    @Column(name = "laboratory")
+    private Integer laboratory;
 
     @Column(name = "practice")
     private Integer practice;

@@ -1,6 +1,7 @@
 package com.ua.itclusterjava2024.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -29,7 +30,8 @@ public class EducationProgramsDTO {
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @NotEmpty
-    private EducationLevelDTO education_level;
+    @JsonProperty("education_level")
+    private EducationLevelDTO educationLevel;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @NotEmpty
@@ -43,10 +45,12 @@ public class EducationProgramsDTO {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @NotEmpty
     @Size(max = 255, message = "Program link have to contain up to 255 symbols")
-    private String program_url;
+    @JsonProperty("program_url")
+    private String programUrl;
 
     @NotEmpty
     @Size(max = 255, message = "Syllabus link have to contain up to 255 symbols")
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private String syllabus_url;
+    @JsonProperty("syllabus_url")
+    private String syllabusUrl;
 }

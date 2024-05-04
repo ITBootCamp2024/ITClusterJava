@@ -2,10 +2,10 @@ package com.ua.itclusterjava2024.controller;
 
 import com.ua.itclusterjava2024.dto.SpecialtyDTO;
 import com.ua.itclusterjava2024.entity.Specialty;
-import com.ua.itclusterjava2024.exceptions.NotFoundException;
 import com.ua.itclusterjava2024.service.interfaces.SpecialtyService;
 import com.ua.itclusterjava2024.wrappers.PageWrapper;
 import com.ua.itclusterjava2024.wrappers.Patcher;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +53,7 @@ public class SpecialtyController {
     public PageWrapper<SpecialtyDTO> update(@PathVariable("id") Long id,
             @RequestBody SpecialtyDTO updatedSpecialtyDTO) {
         Specialty existingSpecialty = specialtyService.readById(id)
-                .orElseThrow(() -> new NotFoundException("Speciality not found with id: " + id));
+                .orElseThrow(() -> new EntityNotFoundException("Speciality not found with id: " + id));
         Specialty updatedSpecialty = convertToEntity(updatedSpecialtyDTO);
         try{
             patcher.patch(existingSpecialty, updatedSpecialty);

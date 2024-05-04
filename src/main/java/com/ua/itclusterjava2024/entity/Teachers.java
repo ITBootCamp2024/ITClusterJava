@@ -1,7 +1,6 @@
 package com.ua.itclusterjava2024.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -29,7 +28,7 @@ public class Teachers {
     @Column(name = "degree_level")
     @NotEmpty
     @Size(max = 50, message = "Degree level have to contain up to 50 symbols")
-    private String degree_level;
+    private String degreeLevel;
 
     @ManyToOne
     @JoinColumn(name = "department_id")

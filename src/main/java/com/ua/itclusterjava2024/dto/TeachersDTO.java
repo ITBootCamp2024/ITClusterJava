@@ -1,6 +1,7 @@
 package com.ua.itclusterjava2024.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -25,7 +26,8 @@ public class TeachersDTO {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @NotEmpty
     @Size(max = 50, message = "Degree level have to contain up to 50 symbols")
-    private String degree_level;
+    @JsonProperty("degree_level")
+    private String degreeLevel;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private UniversityDTO university;
