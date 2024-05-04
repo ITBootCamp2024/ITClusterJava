@@ -8,6 +8,7 @@ import com.ua.itclusterjava2024.service.interfaces.SyllabusesService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,7 +23,6 @@ public class SyllabusesServiceImpl implements SyllabusesService {
         this.syllabusesRepository = syllabusesRepository;
         this.reviewsRepository = reviewsRepository;
     }
-
 
     @Override
     public Syllabuses create(Syllabuses syllabuses) {
@@ -74,5 +74,11 @@ public class SyllabusesServiceImpl implements SyllabusesService {
     @Override
     public Boolean existsById(Long id) {
         return syllabusesRepository.existsById(id);
+    }
+
+    @Transactional
+    @Override
+    public void updateStatus(Long id, String status) {
+        syllabusesRepository.updateStatusBySyllabusId(id, status);
     }
 }

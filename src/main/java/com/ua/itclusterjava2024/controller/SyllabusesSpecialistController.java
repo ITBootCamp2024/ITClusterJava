@@ -51,9 +51,8 @@ public class SyllabusesSpecialistController {
         if (Boolean.FALSE.equals(syllabusesService.existsById(syllabusId))) {
             throw new EntityNotFoundException("Syllabus with id " + syllabusId + " not found");
         }
-
+        syllabusesService.updateStatus(syllabusId, "На рецензії");
         reviewsService.updateAcceptedBySpecialistIdAndSyllabusId(specialistId, syllabusId, true);
-
         return getProposedSyllabuses(specialistId);
     }
 
