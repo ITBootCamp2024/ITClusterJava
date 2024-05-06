@@ -1,7 +1,10 @@
 package com.ua.itclusterjava2024.controller;
 
 import com.ua.itclusterjava2024.dto.*;
+import com.ua.itclusterjava2024.dto.request.TeacherVerifiedRequest;
+import com.ua.itclusterjava2024.dto.request.UpdateVerifiedRequest;
 import com.ua.itclusterjava2024.entity.Teachers;
+import com.ua.itclusterjava2024.exceptions.NotFoundException;
 import com.ua.itclusterjava2024.service.interfaces.TeachersService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -26,13 +29,12 @@ public class TeachersListController {
         return getTeachersList();
     }
 
-    //TODO
     @PatchMapping("/{admin_id}")
-    public ResponseEntity<?> updateVerifiedTeachersList(@PathVariable Long admin_id){
+    public ResponseEntity<?> updateVerifiedTeachersList(@PathVariable Long admin_id, @RequestBody TeacherVerifiedRequest request){
         Teachers teacher = teachersService.readById(admin_id)
                 .orElseThrow(() -> new NotFoundException("Teacher's not found with id: " + admin_id));
   
-        teacher.setVerified(!teacher.getVerified());
+        teacher.setVerified(request.getVerified());
         teachersService.update(admin_id, teacher);
         return getTeachersList();
     }
