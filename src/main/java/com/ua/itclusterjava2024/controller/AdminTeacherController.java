@@ -27,21 +27,21 @@ public class AdminTeacherController {
     }
 
 
-    @GetMapping("/{admin_id}")
-    public ResponseEntity<TeacherPageWrapper> getVerifiedTeachersList(@PathVariable Long admin_id){
+    @GetMapping()
+    public ResponseEntity<TeacherPageWrapper> getVerifiedTeachersList(){
         List<TeachersDTO> teachersList = teachersService.getAll().stream().map(this::convertToDTO).toList();
         long verifiedCount = teachersList.size();
         long notVerifiedCount = teachersList.size() - verifiedCount;
 
-        TeacherPageWrapper response = new TeacherPageWrapper(new TeacherPageWrapper.Content(admin_id, teachersList), verifiedCount, notVerifiedCount);
+        TeacherPageWrapper response = new TeacherPageWrapper(new TeacherPageWrapper.Content(teachersList), verifiedCount, notVerifiedCount);
 
         return ResponseEntity.ok(response);
     }
 
-    @PatchMapping("/{admin_id}")
-    public ResponseEntity<?> updateVerifiedTeachersList(@PathVariable Long admin_id, @RequestBody TeacherVerifiedRequest request){
+    @PatchMapping()
+    public ResponseEntity<?> updateVerifiedTeachersList(@RequestBody TeacherVerifiedRequest request){
         teachersService.setVerified(request.getTeacher_id(), request.getVerified());
-        return getVerifiedTeachersList(admin_id);
+        return getVerifiedTeachersList();
     }
 
     public TeachersDTO convertToDTO(Teachers teacher) {

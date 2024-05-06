@@ -12,15 +12,14 @@ import java.util.List;
 @Data
 public class TeacherPageWrapper {
     private Content content;
-    private long total_teachers;
-    private long verified_teachers;
+    private long total_teacher;
+    private long verified_teacher;
 
 
     @AllArgsConstructor
     @NoArgsConstructor
     @Data
     public static class Content {
-        private Long admin_id;
-        private List<TeachersDTO> teachers;
+        private List<TeachersDTO> teacher;
     }
 }
