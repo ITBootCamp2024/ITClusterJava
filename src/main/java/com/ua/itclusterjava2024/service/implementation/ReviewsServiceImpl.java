@@ -64,4 +64,9 @@ public class ReviewsServiceImpl implements ReviewsService {
     public List<Reviews> findAcceptedBySpecialistId(Long specialistId) {
         return reviewsRepository.findBySpecialistIdAndAcceptedTrue(specialistId);
     }
+
+    @Override
+    public Reviews findAcceptedBySpecialistIdAndSyllabusId(Long specialistId, Long syllabusId) {
+        return reviewsRepository.findBySpecialistIdAndSyllabusIdAndAcceptedTrue(specialistId, syllabusId);
+    }
 }

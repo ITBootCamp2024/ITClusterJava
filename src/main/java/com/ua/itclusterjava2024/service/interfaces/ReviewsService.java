@@ -7,4 +7,5 @@ import java.util.List;
 public interface ReviewsService extends Service<Reviews> {
     void updateAcceptedBySpecialistIdAndSyllabusId(Long specialistId, Long syllabusId, Boolean accepted);
     List<Reviews> findAcceptedBySpecialistId(Long specialistId);
+    Reviews findAcceptedBySpecialistIdAndSyllabusId(Long specialistId, Long syllabusId);
 }
