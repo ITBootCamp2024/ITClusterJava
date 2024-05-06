@@ -14,8 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequiredArgsConstructor
-@RequestMapping("/teachers-verified")
+@RequestMapping("/teacher/verified")
 public class TeachersListController {
 
     private final TeachersService teachersService;
@@ -28,13 +27,13 @@ public class TeachersListController {
     }
 
     //TODO
-    @PatchMapping("/{id}")
-    public ResponseEntity<Map<String, Object>> updateVerifiedTeachersList(@PathVariable Long id){
-        Teachers teacher = teachersService.readById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Teacher with id: " + id + " not found"));
-
+    @PatchMapping("/{admin_id}")
+    public ResponseEntity<?> updateVerifiedTeachersList(@PathVariable Long admin_id){
+        Teachers teacher = teachersService.readById(admin_id)
+                .orElseThrow(() -> new NotFoundException("Teacher's not found with id: " + admin_id));
+  
         teacher.setVerified(!teacher.getVerified());
-        teachersService.update(id, teacher);
+        teachersService.update(admin_id, teacher);
         return getTeachersList();
     }
 
