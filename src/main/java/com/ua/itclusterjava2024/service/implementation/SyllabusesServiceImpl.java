@@ -72,6 +72,17 @@ public class SyllabusesServiceImpl implements SyllabusesService {
     }
 
     @Override
+    public List<Syllabuses> findSyllabusesByTeacherId(Long teacherId, boolean accepted) {
+        List<Reviews> reviews = accepted ?
+                reviewsRepository.findBySpecialistIdAndAcceptedTrue(teacherId) :
+                reviewsRepository.findBySpecialistIdAndAcceptedFalse(teacherId);
+
+        return reviews.stream()
+                .map(Reviews::getSyllabus)
+                .toList();
+    }
+
+    @Override
     public Boolean existsById(Long id) {
         return syllabusesRepository.existsById(id);
     }

@@ -48,7 +48,18 @@ public class TeachersDTO {
     @NotEmpty
     private String comments;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     @NotNull
     Boolean verified;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @NotEmpty
+    @JsonProperty("all_syllabuses")
+    private Long allSyllabuses;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @NotEmpty
+    @JsonProperty("syllabuses_for_review")
+    private Long syllabusesForReview;
 }
 
