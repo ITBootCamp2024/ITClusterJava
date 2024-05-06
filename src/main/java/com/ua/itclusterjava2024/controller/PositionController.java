@@ -2,12 +2,12 @@ package com.ua.itclusterjava2024.controller;
 
 import com.ua.itclusterjava2024.dto.PositionDTO;
 import com.ua.itclusterjava2024.entity.Position;
-import com.ua.itclusterjava2024.exceptions.NotFoundException;
 import com.ua.itclusterjava2024.exceptions.ValidationException;
 import com.ua.itclusterjava2024.service.interfaces.PositionService;
 import com.ua.itclusterjava2024.validators.PositionValidator;
 import com.ua.itclusterjava2024.wrappers.PageWrapper;
 import com.ua.itclusterjava2024.wrappers.Patcher;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.validation.BindingResult;
@@ -55,7 +55,7 @@ public class PositionController {
     @PatchMapping("/{id}")
     public PageWrapper<PositionDTO> update(@PathVariable Long id, @RequestBody PositionDTO updatedPositionDTO) {
         Position existingPosition = positionService.readById(id)
-                .orElseThrow(() -> new NotFoundException("Position not found with id: " + id));
+                .orElseThrow(() -> new EntityNotFoundException("Position not found with id: " + id));
         Position updatedPosition = convertToEntity(updatedPositionDTO);
         try {
             patcher.patch(existingPosition, updatedPosition);

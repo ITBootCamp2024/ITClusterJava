@@ -32,7 +32,7 @@ public class University {
     @Column(name = "programs_list_url")
     @NotEmpty
     @Size(max = 255, message = "Programs_list_url of university have to contain up to 255 symbols")
-    private String programs_list_url;
+    private String programsListUrl;
 
     @Column(name = "url")
     @NotEmpty

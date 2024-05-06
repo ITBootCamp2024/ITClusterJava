@@ -14,4 +14,7 @@ import java.util.List;
 public interface DisciplinesRepository extends JpaRepository<Disciplines, Long> {
     @Query("SELECT discipline FROM Disciplines discipline WHERE discipline.teachers.id = :teacher_id")
     List<Disciplines> findByTeacherId(@Param("teacher_id") Long id);
+
+    @Query("SELECT discipline FROM Disciplines discipline WHERE discipline.disciplineGroups.id = :discipline_group_id")
+    List<Disciplines> findByDisciplineGroupId(@Param("discipline_group_id") Long id);
 }

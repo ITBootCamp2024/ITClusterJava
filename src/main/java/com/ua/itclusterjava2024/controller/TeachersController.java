@@ -2,12 +2,12 @@ package com.ua.itclusterjava2024.controller;
 
 import com.ua.itclusterjava2024.dto.*;
 import com.ua.itclusterjava2024.entity.*;
-import com.ua.itclusterjava2024.exceptions.NotFoundException;
 import com.ua.itclusterjava2024.service.implementation.ServiceInfoService;
 import com.ua.itclusterjava2024.service.interfaces.TeachersService;
 import com.ua.itclusterjava2024.wrappers.PageWrapper;
 import com.ua.itclusterjava2024.wrappers.Patcher;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -41,7 +41,7 @@ public class TeachersController {
 
         PageWrapper<TeachersDTO> pageWrapper = new PageWrapper<>();
         pageWrapper.setContent(teachers);
-        pageWrapper.setService_info(prepareServiceInfo());
+        pageWrapper.setServiceInfo(prepareServiceInfo());
         pageWrapper.setTotalElements(teachers.size());
         return pageWrapper;
     }
@@ -49,7 +49,7 @@ public class TeachersController {
 
     @PatchMapping("/{id}")
     public PageWrapper<TeachersDTO> updateEntity(@PathVariable("id") Long id, @RequestBody TeachersDTO teachersDTO) {
-        Teachers existingTeacher = teachersService.readById(id).orElseThrow(() -> new NotFoundException("Teacher with id " + id + " not found"));
+        Teachers existingTeacher = teachersService.readById(id).orElseThrow(() -> new EntityNotFoundException("Teacher with id " + id + " not found"));
         Teachers teachers = convertToEntity(teachersDTO);
         try {
             patcher.patch(existingTeacher, teachers);

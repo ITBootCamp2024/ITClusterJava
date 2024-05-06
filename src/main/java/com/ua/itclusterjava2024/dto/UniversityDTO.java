@@ -1,8 +1,7 @@
 package com.ua.itclusterjava2024.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import jakarta.persistence.Column;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.*;
@@ -33,7 +32,8 @@ public class UniversityDTO {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @NotEmpty
     @Size(max = 255, message = "Programs_list_url of university have to contain up to 255 symbols")
-    private String programs_list_url;
+    @JsonProperty("programs_list_url")
+    private String programsListUrl;
 
     @NotEmpty
     @Size(max = 255, message = "Url of university have to contain up to 255 symbols")

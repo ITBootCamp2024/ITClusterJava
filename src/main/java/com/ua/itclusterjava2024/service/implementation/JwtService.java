@@ -14,52 +14,53 @@ import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.Function;
 
 @Service
 public class JwtService {
 
-    @Value("${token.access.secret}")
+    @Value("${jwt.access.secret}")
     private String accessTokenSecret;
 
-    @Value("${token.access.expiration}")
-    private Long accessTokenExpirationTime;
+    @Value("${jwt.access.expiration.minutes}")
+    private Long accessTokenExpirationMinutes;
 
-    @Value("${token.refresh.expiration}")
-    private Long refreshTokenExpirationTime;
+    @Value("${jwt.refresh.expiration.minutes}")
+    private Long refreshTokenExpirationMinutes;
 
+    private static final String BEARER_PREFIX = "Bearer ";
 
-    // Generates token
+    // Generates access token
     public String generateAccessToken(UserDetails userDetails) {
-        Map<String, Object> claims = new HashMap<>();
-        if (userDetails instanceof User customUserDetails) {
-            claims.put("role", customUserDetails.getRole().getName());
-            claims.put("tokenType", "access");
-        }
-        return buildToken(claims, userDetails, accessTokenExpirationTime);
+        return generateToken(userDetails, "access", accessTokenExpirationMinutes);
     }
 
     // Generates refresh token
     public String generateRefreshToken(UserDetails userDetails) {
+        return generateToken(userDetails, "refresh", refreshTokenExpirationMinutes);
+    }
+
+    private String generateToken(UserDetails userDetails, String tokenType, Long expirationMinutes) {
         Map<String, Object> claims = new HashMap<>();
         if (userDetails instanceof User customUserDetails) {
             claims.put("role", customUserDetails.getRole().getName());
-            claims.put("tokenType", "refresh");
+            claims.put("type", tokenType);
         }
-        return buildToken(claims, userDetails, refreshTokenExpirationTime);
+        return BEARER_PREFIX + buildToken(claims, userDetails, expirationMinutes);
     }
 
-
-    // Generates token with additional claims
     private String buildToken(Map<String, Object> extraClaims, UserDetails userDetails, Long expirationMinutes) {
         return Jwts.builder()
                 .claims(extraClaims)
                 .subject(userDetails.getUsername())
                 .issuedAt(Date.from(Instant.now()))
-//                .issuer(issuer)
+                .notBefore(Date.from(Instant.now()))
                 .expiration(Date.from(Instant.now().plus(expirationMinutes, ChronoUnit.MINUTES)))
-                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
-                .compact();
+                .id(UUID.randomUUID().toString())
+                .signWith(getSigningKey(), Jwts.SIG.HS256)
+                .header().type("JWT")
+                .and().compact();
     }
 
 
@@ -78,11 +79,11 @@ public class JwtService {
     }
 
     public boolean isRefreshToken(String token) {
-        return extractClaim(token, claims -> claims.get("tokenType", String.class)).equals("refresh");
+        return extractClaim(token, claims -> claims.get("type", String.class)).equals("refresh");
     }
 
     public boolean isAccessToken(String token) {
-        return extractClaim(token, claims -> claims.get("tokenType", String.class)).equals("access");
+        return extractClaim(token, claims -> claims.get("type", String.class)).equals("access");
     }
 
     public boolean isTokenExpired(String token) {

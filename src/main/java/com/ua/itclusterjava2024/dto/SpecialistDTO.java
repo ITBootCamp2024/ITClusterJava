@@ -1,54 +1,82 @@
 package com.ua.itclusterjava2024.dto;
 
-import jakarta.validation.constraints.NotNull;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.io.Serializable;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
 @Builder
-@AllArgsConstructor
-@Value
 public class SpecialistDTO implements Serializable {
-    Integer id;
+    private Long id;
 
-    @NotNull
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @NotEmpty
     @Size(max = 255)
-    String company;
+    private String company;
 
-    @NotNull
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @NotEmpty
     @Size(max = 100)
-    String name;
+    private String name;
 
-    @NotNull
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @NotEmpty
     @Size(max = 100)
-    String position;
+    private String position;
 
-    @NotNull
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @NotEmpty
     @Size(max = 255)
-    String email;
+    private String email;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @NotEmpty
     @Size(max = 100)
-    String phone;
+    private String phone;
 
-    @NotNull
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @NotEmpty
     @Size(max = 100)
-    String professionalField;
+    @JsonProperty("professional_field")
+    private String professionalField;
 
-    @NotNull
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @NotEmpty
     @Size(max = 100)
-    String disciplineType;
+    @JsonProperty("discipline_type")
+    private String disciplineType;
 
-    @NotNull
-    Integer experience;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @NotEmpty
+    private Integer experience;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @NotEmpty
     @Size(max = 255)
-    String urlCv;
+    @JsonProperty("url_cv")
+    private String urlCv;
 
-    @NotNull
-    RoleDTO role;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @NotEmpty
+    private RoleDTO role;
 
-    @NotNull
-    Boolean verified;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @NotEmpty
+    private Boolean verified;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @NotEmpty
+    @JsonProperty("all_syllabuses")
+    private Long allSyllabuses;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @NotEmpty
+    @JsonProperty("syllabuses_for_review")
+    private Long syllabusesForReview;
 }

@@ -21,7 +21,7 @@ public class EducationLevel {
     @Column(name = "education_level", nullable = false)
     @NotEmpty
     @Size(max = 45, message = "Name of education level have to contain up to 45 symbols")
-    private String education_level;
+    private String educationLevel;
 
     @Column(name = "name", nullable = false)
     @NotEmpty

@@ -21,6 +21,7 @@ public class ItClusterJava2024Application {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+//        return SCryptPasswordEncoder.defaultsForSpringSecurity_v5_8();
+        return new BCryptPasswordEncoder(10);
     }
 }

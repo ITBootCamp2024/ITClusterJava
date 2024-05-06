@@ -3,6 +3,7 @@ package com.ua.itclusterjava2024.exceptions.handler;
 import com.ua.itclusterjava2024.dto.response.MessageResponse;
 import com.ua.itclusterjava2024.dto.response.JwtErrorResponse;
 import com.ua.itclusterjava2024.exceptions.JwtTokenException;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -23,5 +24,10 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(JwtTokenException.class)
     public ResponseEntity<JwtErrorResponse> handleJwtTokenException(JwtTokenException ex) {
         return new ResponseEntity<>(new JwtErrorResponse(ex.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<MessageResponse> handleEntityNotFoundException(EntityNotFoundException ex) {
+        return new ResponseEntity<>(new MessageResponse(ex.getMessage()), HttpStatus.NOT_FOUND);
     }
 }

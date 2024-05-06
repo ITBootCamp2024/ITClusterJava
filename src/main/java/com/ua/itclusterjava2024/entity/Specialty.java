@@ -31,6 +31,6 @@ public class Specialty {
     @Column(name = "standard_url", nullable = false)
     @NotEmpty
     @Size(max = 255, message = "Standard_url of specialty have to contain up to 255 symbols")
-    private String standard_url;
+    private String standardUrl;
 
 }

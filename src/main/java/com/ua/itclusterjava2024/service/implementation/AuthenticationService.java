@@ -8,8 +8,8 @@ import com.ua.itclusterjava2024.dto.response.MessageResponse;
 import com.ua.itclusterjava2024.dto.response.RegisterResponse;
 import com.ua.itclusterjava2024.entity.User;
 import com.ua.itclusterjava2024.exceptions.JwtTokenException;
-import com.ua.itclusterjava2024.exceptions.NotFoundException;
 import com.ua.itclusterjava2024.repository.RoleRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -52,7 +52,7 @@ public class AuthenticationService {
                 .lastName(request.getLast_name())
                 .parentName(request.getParent_name())
                 .phone(request.getPhone())
-                .role(roleRepository.findByName("user").orElseThrow(() -> new NotFoundException("Role not found")))
+                .role(roleRepository.findByName("user").orElseThrow(() -> new EntityNotFoundException("Role 'user' not found")))
                 .activeStatus(true)
                 .createdAt(Instant.now())
                 .emailConfirmed(false)

@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
+
 @CrossOrigin
 @RestController
 @RequestMapping("/service_info")
@@ -50,7 +50,7 @@ public class ServiceInfoController {
             List<Department> departments = serviceInfoService.getAllDepartmentsByUniversityId(university.getId());
             List<DepartmentDTO> departmentsDTO = departments.stream()
                     .map(department -> DepartmentDTO.builder().id(department.getId()).name(department.getName()).build())
-                    .collect(Collectors.toList());
+                    .toList();
 
             universitiesDTO.add(UniversityDTO.builder().id(university.getId()).name(university.getName()).abbr(university.getAbbr()).department(departmentsDTO).build());
         });
@@ -61,18 +61,18 @@ public class ServiceInfoController {
             List<DisciplineGroups> disciplineGroup = serviceInfoService.getAllDisciplineGroupsByDisciplineBlocksId(disciplineBlock);
             List<DisciplineGroupsDTO> disciplineGroupsDTO = disciplineGroup.stream()
                     .map(disciplineGroups -> DisciplineGroupsDTO.builder().id(disciplineGroups.getId()).name(disciplineGroups.getName()).build())
-                    .collect(Collectors.toList());
+                    .toList();
 
             disciplineBlocksDTO.add(DisciplineBlocksDTO.builder().id(disciplineBlock.getId()).name(disciplineBlock.getName()).disciplineGroups(disciplineGroupsDTO).build());
         });
 
         ServiceInfoDTO serviceInfoDTO = ServiceInfoDTO.builder()
                 .position(serviceInfoService.getAllPositions().stream().map(this::convertPositionToDTO).toList())
-                .education_levels(serviceInfoService.getAllEducationLevels().stream().map(this::convertEducationLevelToDTO).toList())
+                .educationLevels(serviceInfoService.getAllEducationLevels().stream().map(this::convertEducationLevelToDTO).toList())
                 .teachers(serviceInfoService.getAllTeachers().stream().map(teachers -> TeachersDTO.builder().id(teachers.getId()).name(teachers.getName()).build()).toList())
                 .university(universitiesDTO)
                 .specialty(serviceInfoService.getAllSpecialties().stream().map(specialty -> SpecialtyDTO.builder().id(specialty.getId()).code(specialty.getCode()).name(specialty.getName()).build()).toList())
-                .education_program(serviceInfoService.getAllEducationPrograms().stream().map(educationPrograms -> EducationProgramsDTO.builder().id(educationPrograms.getId()).name(educationPrograms.getName()).program_url(educationPrograms.getProgram_url()).build()).toList())
+                .educationProgram(serviceInfoService.getAllEducationPrograms().stream().map(educationPrograms -> EducationProgramsDTO.builder().id(educationPrograms.getId()).name(educationPrograms.getName()).programUrl(educationPrograms.getProgramUrl()).build()).toList())
                 .discipline(serviceInfoService.getAllDisciplines().stream().map(disciplines -> DisciplinesDTO.builder().id(disciplines.getId()).name(disciplines.getName()).build()).toList())
                 .disciplineBlocks(disciplineBlocksDTO)
                 .build();
@@ -81,32 +81,12 @@ public class ServiceInfoController {
         return new PageImpl<>(content, pageable, content.size());
     }
 
-    private DepartmentDTO convertDepartmentToDTO(Department department){
-        return modelMapper.map(department, DepartmentDTO.class);
-    }
     private PositionDTO convertPositionToDTO(Position position){
         return modelMapper.map(position, PositionDTO.class);
     }
+
     private EducationLevelDTO convertEducationLevelToDTO(EducationLevel position){
         return modelMapper.map(position, EducationLevelDTO.class);
-    }
-    private TeachersDTO convertTeachersToDTO(Teachers position){
-        return modelMapper.map(position, TeachersDTO.class);
-    }
-    private UniversityDTO convertUniversitiesToDTO(University position){
-        return modelMapper.map(position, UniversityDTO.class);
-    }
-    private SpecialtyDTO convertSpecialtyToDTO(Specialty position){
-        return modelMapper.map(position, SpecialtyDTO.class);
-    }
-    private DisciplinesDTO convertDisciplinesToDTO(Disciplines position){
-        return modelMapper.map(position, DisciplinesDTO.class);
-    }
-    private DisciplineBlocksDTO convertDisciplineBlocksToDTO(DisciplineBlocks position){
-        return modelMapper.map(position, DisciplineBlocksDTO.class);
-    }
-    private DisciplineGroupsDTO convertDisciplineGroupsToDTO(DisciplineGroups position){
-        return modelMapper.map(position, DisciplineGroupsDTO.class);
     }
 
 }

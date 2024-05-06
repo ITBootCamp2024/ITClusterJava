@@ -2,10 +2,10 @@ package com.ua.itclusterjava2024.service.implementation;
 
 import com.ua.itclusterjava2024.entity.Role;
 import com.ua.itclusterjava2024.entity.Teachers;
-import com.ua.itclusterjava2024.exceptions.NotFoundException;
 import com.ua.itclusterjava2024.repository.RoleRepository;
 import com.ua.itclusterjava2024.repository.TeachersRepository;
 import com.ua.itclusterjava2024.service.interfaces.TeachersService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -27,7 +27,7 @@ public class TeachersServiceImpl implements TeachersService {
     @Override
     public Teachers create(Teachers teacher) {
         Role teacherRole = roleRepository.findByName("teacher")
-                .orElseThrow(() -> new NotFoundException("Role 'teacher' not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Role 'teacher' not found"));
         teacher.setRole(teacherRole);
         return teachersRepository.save(teacher);
     }

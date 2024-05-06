@@ -2,10 +2,8 @@ package com.ua.itclusterjava2024.controller;
 
 import com.ua.itclusterjava2024.dto.*;
 import com.ua.itclusterjava2024.entity.BaseInformationSyllabus;
-import com.ua.itclusterjava2024.entity.EducationPrograms;
-import com.ua.itclusterjava2024.service.interfaces.EducationProgramsService;
 import com.ua.itclusterjava2024.service.interfaces.SyllabusesBaseInfoService;
-import jakarta.persistence.EntityManager;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,22 +13,15 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/syllabuses/base-info")
+@RequiredArgsConstructor
 public class SyllabusesBaseInfoController {
 
     private final SyllabusesBaseInfoService baseInfoService;
-    private final EducationProgramsService educationProgramsService;
     private final ModelMapper modelMapper;
-    private final EntityManager entityManager;
 
-    public SyllabusesBaseInfoController(SyllabusesBaseInfoService baseInfoService, EducationProgramsService educationProgramsService, ModelMapper modelMapper, EntityManager entityManager) {
-        this.baseInfoService = baseInfoService;
-        this.educationProgramsService = educationProgramsService;
-        this.modelMapper = modelMapper;
-        this.entityManager = entityManager;
-    }
 
     @GetMapping("/{syllabus_id}")
-    public ResponseEntity<?> getBaseInfoBySyllabusId(@PathVariable("syllabus_id") Long syllabusId) {
+    public ResponseEntity<Map<String, Object>> getBaseInfoBySyllabusId(@PathVariable("syllabus_id") Long syllabusId) {
 
         BaseInformationSyllabusDTO baseInfoSyllabusDTO = convertToDTO(baseInfoService.getBaseInfoBySyllabus(syllabusId).orElse(null));
 
@@ -40,12 +31,12 @@ public class SyllabusesBaseInfoController {
         specialty.put("name", baseInfoSyllabusDTO.getSpecialty().getName());
 
         Map<String, Object> educationProgram = new HashMap<>();
-        educationProgram.put("id", baseInfoSyllabusDTO.getSyllabus().getDisciplines().getEducation_program().getId());
-        educationProgram.put("name", baseInfoSyllabusDTO.getSyllabus().getDisciplines().getEducation_program().getName());
+        educationProgram.put("id", baseInfoSyllabusDTO.getSyllabus().getDisciplines().getEducationPrograms().getId());
+        educationProgram.put("name", baseInfoSyllabusDTO.getSyllabus().getDisciplines().getEducationPrograms().getName());
 
         Map<String, Object> disciplineBlock = new HashMap<>();
-        disciplineBlock.put("id", baseInfoSyllabusDTO.getSyllabus().getDisciplines().getDiscipline_group().getBlock().getId());
-        disciplineBlock.put("name", baseInfoSyllabusDTO.getSyllabus().getDisciplines().getDiscipline_group().getBlock().getName());
+        disciplineBlock.put("id", baseInfoSyllabusDTO.getSyllabus().getDisciplines().getDisciplineGroups().getBlock().getId());
+        disciplineBlock.put("name", baseInfoSyllabusDTO.getSyllabus().getDisciplines().getDisciplineGroups().getBlock().getName());
 
         Map<String, Object> discipline = new HashMap<>();
         discipline.put("id", baseInfoSyllabusDTO.getSyllabus().getDisciplines().getId());
@@ -72,7 +63,7 @@ public class SyllabusesBaseInfoController {
 
     // TODO
     @PatchMapping("/{syllabus_id}")
-    public ResponseEntity<?> updateBaseInfoBySyllabusId(@PathVariable("syllabus_id") Long syllabusId){
+    public ResponseEntity<Map<String, Object>> updateBaseInfoBySyllabusId(@PathVariable("syllabus_id") Long syllabusId){
 
         BaseInformationSyllabusDTO baseInfoSyllabusDTO = convertToDTO(baseInfoService.getBaseInfoBySyllabus(syllabusId).orElse(null));
         Map<String, Object> response = new HashMap<>();

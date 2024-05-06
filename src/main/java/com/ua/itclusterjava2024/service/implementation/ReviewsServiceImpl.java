@@ -3,9 +3,11 @@ package com.ua.itclusterjava2024.service.implementation;
 import com.ua.itclusterjava2024.entity.Reviews;
 import com.ua.itclusterjava2024.repository.ReviewsRepository;
 import com.ua.itclusterjava2024.service.interfaces.ReviewsService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -50,14 +52,11 @@ public class ReviewsServiceImpl implements ReviewsService {
         return reviewsRepository.findAll(pageable);
     }
 
-
     @Override
-    public long getAllReviewsCount(long specialistId) {
-        return reviewsRepository.countBySpecialistId(specialistId);
-    }
-
-    @Override
-    public long getAllReviewsCountAcceptedTrue(long specialistId) {
-        return reviewsRepository.countBySpecialistIdAndAcceptedTrue(specialistId);
+    @Transactional
+    public void updateAcceptedBySpecialistIdAndSyllabusId(Long specialistId, Long syllabusId, Boolean accepted) {
+        if (Boolean.FALSE.equals(reviewsRepository.existsBySpecialistIdAndSyllabusId(specialistId, syllabusId)))
+            throw new EntityNotFoundException("Review with specialist_id " + specialistId + " and syllabus_id " + syllabusId + " not found");
+        reviewsRepository.updateAcceptedBySpecialistIdAndSyllabusId(specialistId, syllabusId, accepted);
     }
 }
