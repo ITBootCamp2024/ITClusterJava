@@ -1,13 +1,17 @@
 package com.ua.itclusterjava2024.controller;
 
+import com.ua.itclusterjava2024.dto.AnswerDTO;
+import com.ua.itclusterjava2024.dto.SyllabusAnswersDTO;
 import com.ua.itclusterjava2024.dto.SyllabusReviewDTO;
+import com.ua.itclusterjava2024.entity.Reviews;
 import com.ua.itclusterjava2024.entity.Syllabuses;
+import com.ua.itclusterjava2024.service.interfaces.AnswerService;
 import com.ua.itclusterjava2024.service.interfaces.ReviewsService;
 import com.ua.itclusterjava2024.service.interfaces.SyllabusesService;
 import com.ua.itclusterjava2024.wrappers.PageWrapper;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,6 +24,8 @@ public class SyllabusesSpecialistController {
 
     private final SyllabusesService syllabusesService;
     private final ReviewsService reviewsService;
+    private final AnswerService answerService;
+    private final ModelMapper modelMapper;
 
     @GetMapping("/proposed/{specialist_id}")
     public PageWrapper<SyllabusReviewDTO> getProposedSyllabuses(@PathVariable("specialist_id") Long specialistId) {
@@ -34,13 +40,13 @@ public class SyllabusesSpecialistController {
 
     @GetMapping("/refereed/{specialist_id}")
     public PageWrapper<SyllabusReviewDTO> getRefereedSyllabuses(@PathVariable("specialist_id") Long specialistId) {
-        List<Syllabuses> proposedSyllabuses = syllabusesService.findSyllabusesBySpecialistId(specialistId, true);
+        List<Syllabuses> acceptedSyllabuses = syllabusesService.findSyllabusesBySpecialistId(specialistId, true);
 
-        List<SyllabusReviewDTO> syllabusDTOS = proposedSyllabuses.stream()
+        List<SyllabusReviewDTO> syllabusDTOS = acceptedSyllabuses.stream()
                 .map(syllabuses -> mapToSyllabusReviewDTO(syllabuses, true))
                 .toList();
 
-        return new PageWrapper<>(syllabusDTOS, proposedSyllabuses.size());
+        return new PageWrapper<>(syllabusDTOS, acceptedSyllabuses.size());
     }
 
     @PatchMapping("/proposed/{specialist_id}")
@@ -54,6 +60,25 @@ public class SyllabusesSpecialistController {
         syllabusesService.updateStatus(syllabusId, "На рецензії");
         reviewsService.updateAcceptedBySpecialistIdAndSyllabusId(specialistId, syllabusId, true);
         return getProposedSyllabuses(specialistId);
+    }
+
+
+    @GetMapping("/answers/{specialist_id}")
+    public PageWrapper<SyllabusAnswersDTO> getSyllabusAnswers(@PathVariable("specialist_id") Long specialistId) {
+        List<Reviews> acceptedReviews = reviewsService.findAcceptedBySpecialistId(specialistId);
+
+        List<SyllabusAnswersDTO> syllabusAnswersDTOS = acceptedReviews.stream()
+                .map(review -> {
+                    List<AnswerDTO> answerDTOS = answerService.findAllByReviewId(review.getId())
+                            .stream()
+                            .map(answer -> modelMapper.map(answer, AnswerDTO.class))
+                            .toList();
+
+                    return new SyllabusAnswersDTO(review.getSyllabus().getId(), answerDTOS);
+                })
+                .toList();
+
+        return new PageWrapper<>(syllabusAnswersDTOS, acceptedReviews.size());
     }
 
 
