@@ -23,20 +23,16 @@ import java.util.List;
 @RequestMapping("/specialist/verified")
 public class AdminSpecialistController {
     final SpecialistService specialistService;
-    final SyllabusesService syllabusesService;
-    final ReviewsService reviewsService;
     final ModelMapper modelMapper;
 
-    public AdminSpecialistController(SpecialistService specialistService, SyllabusesService syllabusesService, ReviewsService reviewsService, ModelMapper modelMapper) {
+    public AdminSpecialistController(SpecialistService specialistService, ModelMapper modelMapper) {
         this.specialistService = specialistService;
-        this.syllabusesService = syllabusesService;
-        this.reviewsService = reviewsService;
         this.modelMapper = modelMapper;
     }
 
 
-    @GetMapping("/{admin_id}")
-    public ResponseEntity<SpecialistPageWrapper> find(@PathVariable("admin_id") Long adminId) {
+    @GetMapping
+    public ResponseEntity<SpecialistPageWrapper> find() {
         List<SpecialistDTO> allSpecialistsDTO = specialistService.getAll().stream()
                 .map(this::convertToDTO)
                 .toList();
@@ -44,7 +40,7 @@ public class AdminSpecialistController {
         long verifiedCount = allSpecialistsDTO.size();
         long notVerifiedCount = allSpecialistsDTO.size() - verifiedCount;
         SpecialistPageWrapper response = new SpecialistPageWrapper(
-                new SpecialistPageWrapper.Content(adminId, allSpecialistsDTO),
+                new SpecialistPageWrapper.Content(allSpecialistsDTO),
                 verifiedCount,
                 notVerifiedCount
         );
@@ -52,11 +48,10 @@ public class AdminSpecialistController {
         return ResponseEntity.ok(response);
     }
 
-    @PatchMapping("/{admin_id}")
-    public ResponseEntity<SpecialistPageWrapper> update(@PathVariable("admin_id") Long adminId,
-                                                        @RequestBody UpdateVerifiedRequest request) {
+    @PatchMapping
+    public ResponseEntity<SpecialistPageWrapper> update(@RequestBody UpdateVerifiedRequest request) {
         specialistService.setVerified(request.getSpecialist_id(), request.getVerified());
-        return find(adminId);
+        return find();
     }
 
     private DisciplineGroups convertToEntity(DisciplineGroupsDTO disciplineGroupsDTO) {
@@ -75,8 +70,8 @@ public class AdminSpecialistController {
                 .company(specialist.getCompany())
                 .email(specialist.getEmail())
                 .verified(specialist.getVerified())
-                .allSyllabuses(syllabusesService.findSyllabusesBySpecialistId(specialist.getId(), false).stream().count())
-                .syllabusesForReview(syllabusesService.findSyllabusesBySpecialistId(specialist.getId(), true).stream().count())
+                .allSyllabuses(specialist.getAllSyllabuses())
+                .syllabusesForReview(specialist.getSyllabusesForReview())
                 .build();
     }
 }

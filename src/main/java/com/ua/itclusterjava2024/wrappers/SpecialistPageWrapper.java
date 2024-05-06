@@ -20,7 +20,6 @@ public class SpecialistPageWrapper {
     @NoArgsConstructor
     @Data
     public static class Content {
-        private Long admin_id;
         private List<SpecialistDTO> specialist;
     }
 }
