@@ -1,11 +1,15 @@
 package com.ua.itclusterjava2024.entity;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.Formula;
 
 @Getter
 @Setter
@@ -69,4 +73,12 @@ public class Specialist {
     @Column(name = "verified", nullable = false)
     private Boolean verified = false;
 
+
+    @NotNull
+    @Formula("(select count(*) from reviews r where r.specialist_id = id)")
+    private Long allSyllabuses;
+
+    @NotNull
+    @Formula("(select count(*) from reviews r where r.specialist_id = id and r.accepted = true)")
+    private Long syllabusesForReview;
 }

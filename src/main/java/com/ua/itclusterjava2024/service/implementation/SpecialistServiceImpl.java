@@ -1,5 +1,6 @@
 package com.ua.itclusterjava2024.service.implementation;
 
+import com.ua.itclusterjava2024.dto.SpecialistDTO;
 import com.ua.itclusterjava2024.entity.Specialist;
 import com.ua.itclusterjava2024.repository.SpecialistRepository;
 import com.ua.itclusterjava2024.service.interfaces.SpecialistService;
@@ -61,4 +62,6 @@ public class SpecialistServiceImpl implements SpecialistService {
             }
         }
     }
+
+
 }
