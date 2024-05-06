@@ -3,7 +3,9 @@ package com.ua.itclusterjava2024.controller;
 import com.ua.itclusterjava2024.dto.AnswerDTO;
 import com.ua.itclusterjava2024.dto.SyllabusAnswersDTO;
 import com.ua.itclusterjava2024.dto.SyllabusReviewDTO;
+import com.ua.itclusterjava2024.entity.Answer;
 import com.ua.itclusterjava2024.entity.Reviews;
+import com.ua.itclusterjava2024.entity.Specialty;
 import com.ua.itclusterjava2024.entity.Syllabuses;
 import com.ua.itclusterjava2024.service.interfaces.AnswerService;
 import com.ua.itclusterjava2024.service.interfaces.ReviewsService;
@@ -12,6 +14,8 @@ import com.ua.itclusterjava2024.wrappers.PageWrapper;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.PropertyMap;
+import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -81,6 +85,21 @@ public class SyllabusesSpecialistController {
         return new PageWrapper<>(syllabusAnswersDTOS, acceptedReviews.size());
     }
 
+    @PostMapping("/answers/{specialist_id}")
+    public PageWrapper<SyllabusAnswersDTO> setSyllabusAnswers(@PathVariable("specialist_id") Long specialistId, @RequestBody AnswerDTO answerDTO) {
+        Long reviewId = reviewsService.findAcceptedBySpecialistIdAndSyllabusId(specialistId, answerDTO.getSyllabusId()).getId();
+        if (reviewId == null) {
+            throw new EntityNotFoundException("Прийнятий відгук не знайдено для фахівця " + specialistId + " та сілабусу " + answerDTO.getSyllabusId());
+        }
+
+        answerDTO.setReviewId(reviewId);
+        answerService.create(convertToEntity(answerDTO));
+        if (answerService.findAllByReviewId(reviewId).size() == 12) {
+            syllabusesService.updateStatus(answerDTO.getSyllabusId(), "Рецензовано");
+        }
+        return getSyllabusAnswers(specialistId);
+    }
+
 
     private SyllabusReviewDTO mapToSyllabusReviewDTO(Syllabuses syllabus, Boolean accepted) {
         return SyllabusReviewDTO.builder()
@@ -89,6 +108,17 @@ public class SyllabusesSpecialistController {
                 .disciplineBlock(syllabus.getDisciplines().getDisciplineGroups().getDisciplineBlocks().getName())
                 .accepted(accepted)
                 .build();
+    }
+
+    private Answer convertToEntity(AnswerDTO answerDTO) {
+        Answer answer = new Answer();
+        BeanUtils.copyProperties(answerDTO, answer);
+        if (answerDTO.getReviewId() != null) {
+            Reviews review = new Reviews();
+            review.setId(answerDTO.getReviewId());
+            answer.setReview(review);
+        }
+        return answer;
     }
 
 }

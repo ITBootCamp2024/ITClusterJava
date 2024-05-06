@@ -14,6 +14,7 @@ public interface ReviewsRepository extends JpaRepository<Reviews, Long> {
     List<Reviews> findBySpecialistIdAndAcceptedFalse(Long specialistId);
 
     List<Reviews> findBySpecialistIdAndAcceptedTrue(Long specialistId);
+    Reviews findBySpecialistIdAndSyllabusIdAndAcceptedTrue(Long specialistId, Long syllabusId);
 
     Boolean existsBySpecialistIdAndSyllabusId(Long specialistId, Long syllabusId);
 
