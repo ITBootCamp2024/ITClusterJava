@@ -31,4 +31,9 @@ public class Answer {
     @Column(name = "comment")
     private String comment;
 
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "review_id", nullable = false)
+    private Reviews review;
+
 }

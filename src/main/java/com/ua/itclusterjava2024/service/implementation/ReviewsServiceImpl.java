@@ -59,4 +59,9 @@ public class ReviewsServiceImpl implements ReviewsService {
             throw new EntityNotFoundException("Review with specialist_id " + specialistId + " and syllabus_id " + syllabusId + " not found");
         reviewsRepository.updateAcceptedBySpecialistIdAndSyllabusId(specialistId, syllabusId, accepted);
     }
+
+    @Override
+    public List<Reviews> findAcceptedBySpecialistId(Long specialistId) {
+        return reviewsRepository.findBySpecialistIdAndAcceptedTrue(specialistId);
+    }
 }
