@@ -17,33 +17,26 @@ import java.util.List;
 @RestController
 @RequestMapping("/disciplines/verified")
 public class AdminDisciplineController {
-    private final DisciplinesService disciplinesService;
-    private final DisciplineGroupService disciplineGroupsService;
     private final SyllabusesService syllabusesService;
     private final SpecialistService specialistService;
 
     @Autowired
-    public AdminDisciplineController(DisciplinesService disciplinesService, DisciplineGroupService disciplineGroupsService, SyllabusesService syllabusesService, SpecialistService specialistService) {
-        this.disciplinesService = disciplinesService;
-        this.disciplineGroupsService = disciplineGroupsService;
+    public AdminDisciplineController(SyllabusesService syllabusesService, SpecialistService specialistService) {
         this.syllabusesService = syllabusesService;
         this.specialistService = specialistService;
     }
 
-    @GetMapping("/{admin_id}")
-    public ResponseEntity<DisciplinePageWrapper> getVerifiedDiscipline(@PathVariable("admin_id") Long adminId) {
-        List<SpecialistDTO> allSpecialistsDTO = specialistService.getAll().stream()
+    @GetMapping
+    public ResponseEntity<DisciplinePageWrapper> find() {
+        List<DisciplinesDTO> disciplinesDTO = syllabusesService.getAll().stream()
+                .map(this::convertSyllabusesToDisciplinesDTO)
+                .toList();
+
+        List<SpecialistDTO> specialistsDTO = specialistService.getAll().stream()
                 .map(this::convertSpecialistToDTO)
                 .toList();
 
-        List<DisciplineGroupsDTO> allDisciplineGroupsDTO = disciplineGroupsService.getAll().stream()
-                .map(this::convertDisciplineGroupsToDTO)
-                .toList();
-
-        DisciplinePageWrapper response = new DisciplinePageWrapper(
-                new DisciplinePageWrapper.Content(adminId, allDisciplineGroupsDTO),
-                allSpecialistsDTO
-        );
+        DisciplinePageWrapper response = new DisciplinePageWrapper(disciplinesDTO, specialistsDTO);
 
         return ResponseEntity.ok(response);
     }
@@ -53,32 +46,32 @@ public class AdminDisciplineController {
                 .id(specialist.getId())
                 .name(specialist.getName())
                 .professionalField(specialist.getProfessionalField())
+                .company(specialist.getCompany())
                 .build();
+    }
+
+    private DisciplinesDTO convertSyllabusesToDisciplinesDTO(Syllabuses syllabuses) {
+        return DisciplinesDTO.builder()
+                .id(syllabuses.getDisciplines().getId())
+                .name(syllabuses.getDisciplines().getName())
+                .disciplineGroups(convertDisciplineGroupsToDTO(syllabuses.getDisciplines().getDisciplineGroups()))
+                .syllabuses(convertSyllabusesToDTO(syllabuses))
+                .build();
+
     }
 
     private DisciplineGroupsDTO convertDisciplineGroupsToDTO(DisciplineGroups disciplineGroups) {
         return DisciplineGroupsDTO.builder()
                 .id(disciplineGroups.getId())
                 .name(disciplineGroups.getName())
-                .disciplines(disciplinesService.findByDisciplineGroupId(disciplineGroups.getId()).stream()
-                        .map(this::convertDisciplineToDTO)
-                        .toList())
                 .build();
     }
 
-    private DisciplinesDTO convertDisciplineToDTO(Disciplines discipline) {
-        return DisciplinesDTO.builder()
-                .id(discipline.getId())
-                .name(discipline.getName())
-                .syllabuses(convertSyllabusesToDTO(syllabusesService.findByDisciplineId(discipline.getId()).get(0)))
-                .build();
-    }
-
-    private SyllabusesDTO convertSyllabusesToDTO(Syllabuses syllabus) {
+    private SyllabusesDTO convertSyllabusesToDTO(Syllabuses syllabuses) {
         return SyllabusesDTO.builder()
-                .id(syllabus.getId())
-                .name(syllabus.getName())
-                .status(syllabus.getStatus())
+                .id(syllabuses.getId())
+                .name(syllabuses.getName())
+                .status(syllabuses.getStatus())
                 .build();
     }
 
