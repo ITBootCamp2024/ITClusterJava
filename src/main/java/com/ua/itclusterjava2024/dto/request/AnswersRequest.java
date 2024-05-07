@@ -1,7 +1,7 @@
-package com.ua.itclusterjava2024.dto;
+package com.ua.itclusterjava2024.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.ua.itclusterjava2024.dto.AnswersDTO;
 import lombok.*;
 
 import java.util.List;
@@ -11,12 +11,8 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonPropertyOrder({"syllabus_id", "answers"})
-public class SyllabusAnswersDTO {
-
+public class AnswersRequest {
     @JsonProperty("syllabus_id")
     private Long syllabusId;
-
     private List<AnswersDTO> answers;
-
 }

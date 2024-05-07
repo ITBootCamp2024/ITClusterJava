@@ -9,11 +9,11 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AnswerDTO {
+public class AnswersDTO {
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    @JsonProperty("syllabus_id")
-    private Long syllabusId;
+    @JsonProperty("review_id")
+    private Long reviewId;
 
     @JsonProperty("table_number")
     private Integer tableNumber;
