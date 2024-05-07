@@ -4,7 +4,6 @@ import com.ua.itclusterjava2024.dto.UniversityDTO;
 import com.ua.itclusterjava2024.entity.University;
 import com.ua.itclusterjava2024.exceptions.ValidationException;
 import com.ua.itclusterjava2024.service.interfaces.UniversityService;
-import com.ua.itclusterjava2024.validators.UniversityValidator;
 import com.ua.itclusterjava2024.wrappers.PageWrapper;
 import com.ua.itclusterjava2024.wrappers.Patcher;
 import jakarta.persistence.EntityManager;
@@ -24,15 +23,13 @@ public class UniversityController {
 
     private final UniversityService universityService;
     private final ModelMapper modelMapper;
-    private final UniversityValidator universityValidator;
     private final Patcher<University> patcher;
     private final EntityManager entityManager;
 
     @Autowired
-    public UniversityController(UniversityService universityService, ModelMapper modelMapper, UniversityValidator universityValidator, Patcher<University> patcher, EntityManager entityManager) {
+    public UniversityController(UniversityService universityService, ModelMapper modelMapper, Patcher<University> patcher, EntityManager entityManager) {
         this.universityService = universityService;
         this.modelMapper = modelMapper;
-        this.universityValidator = universityValidator;
         this.patcher = patcher;
         this.entityManager = entityManager;
     }
@@ -56,7 +53,6 @@ public class UniversityController {
 
     @PostMapping
     public PageWrapper<UniversityDTO> save(@RequestBody @Valid UniversityDTO universityDTO, BindingResult bindingResult) {
-        universityValidator.validate(universityDTO, bindingResult);
         if (bindingResult.hasErrors()) {
             throw new ValidationException(bindingResult);
         }

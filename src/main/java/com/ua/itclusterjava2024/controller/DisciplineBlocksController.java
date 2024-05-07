@@ -4,7 +4,6 @@ import com.ua.itclusterjava2024.dto.DisciplineBlocksDTO;
 import com.ua.itclusterjava2024.entity.DisciplineBlocks;
 import com.ua.itclusterjava2024.exceptions.ValidationException;
 import com.ua.itclusterjava2024.service.interfaces.DisciplineBlocksService;
-import com.ua.itclusterjava2024.validators.CourseBlockValidator;
 import com.ua.itclusterjava2024.wrappers.PageWrapper;
 import com.ua.itclusterjava2024.wrappers.Patcher;
 import jakarta.persistence.EntityNotFoundException;
@@ -21,14 +20,12 @@ import java.util.List;
 public class DisciplineBlocksController {
     private final DisciplineBlocksService disciplineBlocksService;
     private final ModelMapper modelMapper;
-    private final CourseBlockValidator courseBlockValidator;
     private final Patcher<DisciplineBlocks> patcher;
 
     @Autowired
-    public DisciplineBlocksController(DisciplineBlocksService disciplineBlocksService, ModelMapper modelMapper, CourseBlockValidator courseBlockValidator, Patcher<DisciplineBlocks> patcher) {
+    public DisciplineBlocksController(DisciplineBlocksService disciplineBlocksService, ModelMapper modelMapper, Patcher<DisciplineBlocks> patcher) {
         this.disciplineBlocksService = disciplineBlocksService;
         this.modelMapper = modelMapper;
-        this.courseBlockValidator = courseBlockValidator;
         this.patcher = patcher;
     }
 
@@ -45,7 +42,6 @@ public class DisciplineBlocksController {
     @CrossOrigin
     @PostMapping
     public PageWrapper<DisciplineBlocksDTO> save(@RequestBody @Valid DisciplineBlocksDTO disciplineBlocksDTO, BindingResult bindingResult) {
-        courseBlockValidator.validate(disciplineBlocksDTO, bindingResult);
         if (bindingResult.hasErrors()) {
             throw new ValidationException(bindingResult);
         }

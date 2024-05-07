@@ -4,7 +4,6 @@ import com.ua.itclusterjava2024.dto.PositionDTO;
 import com.ua.itclusterjava2024.entity.Position;
 import com.ua.itclusterjava2024.exceptions.ValidationException;
 import com.ua.itclusterjava2024.service.interfaces.PositionService;
-import com.ua.itclusterjava2024.validators.PositionValidator;
 import com.ua.itclusterjava2024.wrappers.PageWrapper;
 import com.ua.itclusterjava2024.wrappers.Patcher;
 import jakarta.persistence.EntityNotFoundException;
@@ -14,19 +13,18 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 @CrossOrigin
 @RestController
 @RequestMapping("/position")
 public class PositionController {
     private final PositionService positionService;
     private final ModelMapper modelMapper;
-    private final PositionValidator positionValidator;
     private final Patcher<Position> patcher;
 
-    public PositionController(PositionService positionService, ModelMapper modelMapper, PositionValidator positionValidator, Patcher<Position> patcher) {
+    public PositionController(PositionService positionService, ModelMapper modelMapper, Patcher<Position> patcher) {
         this.positionService = positionService;
         this.modelMapper = modelMapper;
-        this.positionValidator = positionValidator;
         this.patcher = patcher;
     }
 
@@ -44,7 +42,6 @@ public class PositionController {
 
     @PostMapping
     public PageWrapper<PositionDTO> save(@RequestBody @Valid PositionDTO positionDTO, BindingResult bindingResult) {
-        positionValidator.validate(positionDTO, bindingResult);
         if (bindingResult.hasErrors()) {
             throw new ValidationException(bindingResult);
         }
@@ -67,12 +64,12 @@ public class PositionController {
     }
 
     @GetMapping("/{id}")
-    public PositionDTO findById(@PathVariable Long id){
+    public PositionDTO findById(@PathVariable Long id) {
         return convertToDTO(positionService.readById(id).orElse(null));
     }
 
     @DeleteMapping("/{id}")
-    public PageWrapper<PositionDTO> delete(@PathVariable Long id){
+    public PageWrapper<PositionDTO> delete(@PathVariable Long id) {
         positionService.delete(id);
         return findAll();
     }
@@ -81,7 +78,7 @@ public class PositionController {
         return modelMapper.map(positionDTO, Position.class);
     }
 
-    private PositionDTO convertToDTO(Position position){
+    private PositionDTO convertToDTO(Position position) {
         return modelMapper.map(position, PositionDTO.class);
     }
 }
