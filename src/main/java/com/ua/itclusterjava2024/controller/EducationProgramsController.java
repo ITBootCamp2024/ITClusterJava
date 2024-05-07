@@ -8,6 +8,7 @@ import com.ua.itclusterjava2024.wrappers.PageWrapper;
 import com.ua.itclusterjava2024.wrappers.Patcher;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/education-programs")
+@Slf4j
 public class EducationProgramsController {
     private final EducationProgramsService educationProgramsService;
     private final ServiceInfoService serviceInfoService;
@@ -66,8 +68,8 @@ public class EducationProgramsController {
         try {
             patcher.patch(existingTeacher, educationPrograms);
             educationProgramsService.update(id, existingTeacher);
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            log.error("Failed to update Education program with id: {}", id, e);
         }
         entityManager.clear();
         return findAll();

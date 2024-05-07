@@ -6,6 +6,7 @@ import com.ua.itclusterjava2024.service.interfaces.EducationLevelsService;
 import com.ua.itclusterjava2024.wrappers.PageWrapper;
 import com.ua.itclusterjava2024.wrappers.Patcher;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/education-levels")
+@Slf4j
 public class EducationLevelController {
     private final EducationLevelsService educationLevelsService;
     private final ModelMapper modelMapper;
@@ -57,8 +59,8 @@ public class EducationLevelController {
         try {
             patcher.patch(level, levels);
             educationLevelsService.update(id, level);
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            log.error("Failed to update Education level with id: {}", id, e);
         }
         return findAll();
     }

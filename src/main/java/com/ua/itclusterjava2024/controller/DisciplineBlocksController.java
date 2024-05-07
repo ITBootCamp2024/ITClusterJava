@@ -8,6 +8,7 @@ import com.ua.itclusterjava2024.wrappers.PageWrapper;
 import com.ua.itclusterjava2024.wrappers.Patcher;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
@@ -15,8 +16,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/discipline-blocks")
+@Slf4j
 public class DisciplineBlocksController {
     private final DisciplineBlocksService disciplineBlocksService;
     private final ModelMapper modelMapper;
@@ -57,7 +60,7 @@ public class DisciplineBlocksController {
         try {
             patcher.patch(existingDisciplineBlocks, updatedDisciplineBlocks);
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            log.error("Failed to update DisciplineBlocks with id: {}", id, e);
         }
 
         disciplineBlocksService.update(id, existingDisciplineBlocks);
