@@ -10,11 +10,13 @@ import com.ua.itclusterjava2024.wrappers.Patcher;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/syllabuses")
@@ -54,8 +56,8 @@ public class SyllabusesController {
         try {
             patcher.patch(existingSyllabus, updatedSyllabus);
             syllabusesService.update(id, existingSyllabus);
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            log.error("Failed to update Syllabus with id {}", id, e);
         }
         entityManager.clear();
         return findAll();

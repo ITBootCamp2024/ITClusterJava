@@ -11,6 +11,7 @@ import com.ua.itclusterjava2024.wrappers.PageWrapper;
 import com.ua.itclusterjava2024.wrappers.Patcher;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +22,7 @@ import java.util.List;
 @CrossOrigin
 @RestController
 @RequestMapping("/department")
+@Slf4j
 public class DepartmentController {
     private final DepartmentService departmentService;
     private final ModelMapper modelMapper;
@@ -66,8 +68,8 @@ public class DepartmentController {
         try {
             patcher.patch(existingDepartment, updatedDepartment);
             departmentService.update(id, existingDepartment);
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            log.error("Failed to update department with id: {}", id, e);
         }
         entityManager.clear();
         return findAll();

@@ -8,12 +8,14 @@ import com.ua.itclusterjava2024.wrappers.PageWrapper;
 import com.ua.itclusterjava2024.wrappers.Patcher;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @CrossOrigin
 @RestController
 @RequestMapping("/position")
@@ -58,7 +60,7 @@ public class PositionController {
             patcher.patch(existingPosition, updatedPosition);
             positionService.update(id, existingPosition);
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            log.error("Failed to update Position with id: {}", id, e);
         }
         return findAll();
     }

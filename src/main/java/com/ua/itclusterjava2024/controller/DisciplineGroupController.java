@@ -10,6 +10,7 @@ import com.ua.itclusterjava2024.wrappers.Patcher;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
@@ -19,6 +20,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/discipline-groups")
+@Slf4j
 public class DisciplineGroupController {
     private final DisciplineGroupService disciplineGroupService;
     private final DisciplineBlocksService disciplineBlocksService;
@@ -70,7 +72,7 @@ public class DisciplineGroupController {
             patcher.patch(existingDisciplineGroups, updatedDisciplineGroupsDTO);
             disciplineGroupService.update(id, existingDisciplineGroups);
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            log.error("Failed to update DisciplineGroups with id: {}", id, e);
         }
         entityManager.clear();
         return findAll();

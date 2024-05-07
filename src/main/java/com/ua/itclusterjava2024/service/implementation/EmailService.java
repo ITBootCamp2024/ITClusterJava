@@ -14,8 +14,12 @@ import org.springframework.stereotype.Component;
 public class EmailService {
     private static final String EMAIL_CONFIRMATION_SUBJECT = "Confirm your it-cluster account";
 
-    @Autowired
     private JavaMailSender javaMailSender;
+
+    @Autowired
+    public EmailService(JavaMailSender javaMailSender) {
+        this.javaMailSender = javaMailSender;
+    }
 
     public void sendConfirmationEmail(String token, String email) {
         String message = "Welcome to ItCluster, test token" + token;
@@ -24,7 +28,7 @@ public class EmailService {
     }
 
     @Async
-    protected void send(String to, String from, String email) {
+    public void send(String to, String from, String email) {
         try {
             MimeMessage mimeMessage = javaMailSender.createMimeMessage();
             MimeMessageHelper helper =

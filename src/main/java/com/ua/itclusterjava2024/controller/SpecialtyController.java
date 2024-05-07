@@ -7,11 +7,13 @@ import com.ua.itclusterjava2024.wrappers.PageWrapper;
 import com.ua.itclusterjava2024.wrappers.Patcher;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+@Slf4j
 @CrossOrigin
 @RestController
 @RequestMapping("/specialties")
@@ -59,7 +61,7 @@ public class SpecialtyController {
             patcher.patch(existingSpecialty, updatedSpecialty);
             specialtyService.update(id, existingSpecialty);
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            log.error("Failed to update Specialty with id: {}", id, e);
         }
         return findAll();
     }
