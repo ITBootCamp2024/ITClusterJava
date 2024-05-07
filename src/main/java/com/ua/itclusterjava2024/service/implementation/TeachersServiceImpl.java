@@ -60,12 +60,12 @@ public class TeachersServiceImpl implements TeachersService {
 
     @Override
     public void setVerified(Long teacherId, Boolean verified) {
-        if (teachersRepository.findById(teacherId).isPresent()) {
-            Teachers teacher = teachersRepository.findById(teacherId).get();
-            if (!teacher.getVerified().equals(verified)) {
-                teacher.setVerified(verified);
-                update(teacher.getId(), teacher);
-            }
+        Teachers teacher = teachersRepository.findById(teacherId)
+                .orElseThrow(() -> new EntityNotFoundException("Teacher with id " + teacherId + " not found"));
+
+        if (!teacher.getVerified().equals(verified)) {
+            teacher.setVerified(verified);
+            update(teacher.getId(), teacher);
         }
     }
 }
