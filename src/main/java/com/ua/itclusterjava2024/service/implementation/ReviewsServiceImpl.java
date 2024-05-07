@@ -66,7 +66,7 @@ public class ReviewsServiceImpl implements ReviewsService {
     }
 
     @Override
-    public Reviews findAcceptedBySpecialistIdAndSyllabusId(Long specialistId, Long syllabusId) {
+    public Optional<Reviews> findAcceptedBySpecialistIdAndSyllabusId(Long specialistId, Long syllabusId) {
         return reviewsRepository.findBySpecialistIdAndSyllabusIdAndAcceptedTrue(specialistId, syllabusId);
     }
 }

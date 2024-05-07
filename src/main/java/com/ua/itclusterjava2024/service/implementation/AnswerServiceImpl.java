@@ -54,4 +54,9 @@ public class AnswerServiceImpl implements AnswerService {
     public List<Answer> findAllByReviewId(Long reviewId) {
         return answerRepository.findAllByReviewId(reviewId);
     }
+
+    @Override
+    public Long countAllByReviewId(Long reviewId) {
+        return answerRepository.countAllByReviewId(reviewId);
+    }
 }
