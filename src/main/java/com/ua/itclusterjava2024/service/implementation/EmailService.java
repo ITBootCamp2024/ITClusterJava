@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 @Component
 @NoArgsConstructor
 public class EmailService {
-    private final static String EMAIL_CONFIRMATION_SUBJECT = "Confirm your it-cluster account";
+    private static final String EMAIL_CONFIRMATION_SUBJECT = "Confirm your it-cluster account";
 
     @Autowired
     private JavaMailSender javaMailSender;

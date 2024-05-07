@@ -1,7 +1,6 @@
 package com.ua.itclusterjava2024.validators;
 
 import com.ua.itclusterjava2024.dto.UniversityDTO;
-import com.ua.itclusterjava2024.exceptions.ValidationException;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;

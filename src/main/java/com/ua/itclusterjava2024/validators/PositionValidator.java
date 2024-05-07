@@ -1,6 +1,5 @@
 package com.ua.itclusterjava2024.validators;
 
-import com.ua.itclusterjava2024.dto.DisciplineBlocksDTO;
 import com.ua.itclusterjava2024.dto.PositionDTO;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;

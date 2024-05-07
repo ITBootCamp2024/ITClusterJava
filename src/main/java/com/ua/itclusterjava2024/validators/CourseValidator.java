@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 
 @Component
-public class CourseValidator implements Validate{
+public class CourseValidator implements Validate {
     @Override
     public boolean supports(Class<?> clazz) {
         return false;

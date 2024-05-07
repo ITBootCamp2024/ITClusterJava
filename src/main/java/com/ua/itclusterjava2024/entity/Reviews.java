@@ -10,9 +10,9 @@ import org.hibernate.annotations.ColumnDefault;
 
 @Getter
 @Setter
-@Entity
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
+@Entity
 @Table(name = "reviews")
 public class Reviews {
     @Id

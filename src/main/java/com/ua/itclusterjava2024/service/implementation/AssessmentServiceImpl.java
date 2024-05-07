@@ -3,8 +3,6 @@ package com.ua.itclusterjava2024.service.implementation;
 import com.ua.itclusterjava2024.entity.Assessment;
 import com.ua.itclusterjava2024.entity.Syllabuses;
 import com.ua.itclusterjava2024.repository.AssessmentRepository;
-import com.ua.itclusterjava2024.repository.SyllabusesRepository;
-import com.ua.itclusterjava2024.repository.UserRepository;
 import com.ua.itclusterjava2024.service.interfaces.AssessmentService;
 import com.ua.itclusterjava2024.service.interfaces.SyllabusesService;
 import org.springframework.data.domain.Page;

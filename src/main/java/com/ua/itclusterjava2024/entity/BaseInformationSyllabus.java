@@ -4,9 +4,10 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
 @Entity
 @Table(name = "base_information_syllabus")
 public class BaseInformationSyllabus {

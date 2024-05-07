@@ -36,10 +36,4 @@ public class ExampleController {
     public String exampleAdmin() {
         return "Ви авторизовані як адміністратор!";
     }
-
-    @GetMapping("/get-admin")
-    @Operation(summary = "Отримати роль ADMIN (для демонстрації)")
-    public void getAdmin() {
-         service.getAdmin();
-    }
 }

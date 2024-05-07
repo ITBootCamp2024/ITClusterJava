@@ -3,13 +3,12 @@ package com.ua.itclusterjava2024.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
 @Entity
 @Table(name = "disciplines")
 public class Disciplines {
@@ -38,14 +37,11 @@ public class Disciplines {
     @Column(name = "syllabus_url", nullable = false)
     @NotEmpty
     @Size(max = 255, message = "Syllabus Link have to contain up to 255 symbols")
-//    @Pattern(regexp = "https?://.", message = "Incorrect format URL")
     private String syllabusUrl;
 
     @Column(name = "education_plan_url", nullable = false)
     @NotEmpty
     @Size(max = 255, message = "Syllabus Link have to contain up to 255 symbols")
- //   @Pattern(regexp = "https?://.", message = "Incorrect format URL")
     private String educationPlanUrl;
-
 
 }

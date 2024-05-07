@@ -1,7 +1,6 @@
 package com.ua.itclusterjava2024.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;

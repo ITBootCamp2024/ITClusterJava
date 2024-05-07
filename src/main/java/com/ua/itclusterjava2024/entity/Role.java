@@ -3,16 +3,15 @@ package com.ua.itclusterjava2024.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.io.Serializable;
 
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Data
 @Table(name = "role")
 public class Role implements Serializable {
 

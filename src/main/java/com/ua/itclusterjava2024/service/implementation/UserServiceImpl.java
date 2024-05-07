@@ -2,13 +2,10 @@ package com.ua.itclusterjava2024.service.implementation;
 
 import com.ua.itclusterjava2024.entity.User;
 import com.ua.itclusterjava2024.exceptions.EmailAlreadyExistsException;
-import com.ua.itclusterjava2024.repository.RoleRepository;
 import com.ua.itclusterjava2024.repository.UserRepository;
 import com.ua.itclusterjava2024.service.interfaces.UserService;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -19,11 +16,9 @@ import java.util.Optional;
 @Service
 public class UserServiceImpl implements UserService {
 
-    private final RoleRepository roleRepository;
     private final UserRepository userRepository;
 
-    public UserServiceImpl(RoleRepository roleRepository, UserRepository userRepository) {
-        this.roleRepository = roleRepository;
+    public UserServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
@@ -72,24 +67,5 @@ public class UserServiceImpl implements UserService {
     @Override
     public Page<User> getAll(Pageable pageable) {
         return userRepository.findAll(pageable);
-    }
-
-    // Для тестування
-
-    // Get current user
-    public User getCurrentUser() {
-        // Получение имени пользователя из контекста Spring Security
-        var email = SecurityContextHolder.getContext().getAuthentication().getName();
-        return getByEmail(email);
-    }
-
-
-    // Видача прав адміністратора для поточного користувача (для тестування)
-    @Deprecated
-    public void getAdmin() {
-        var user = getCurrentUser();
-        user.setRole(roleRepository.findByName("admin")
-                .orElseThrow(() -> new EntityNotFoundException("Role not found")));
-        userRepository.save(user);
     }
 }
