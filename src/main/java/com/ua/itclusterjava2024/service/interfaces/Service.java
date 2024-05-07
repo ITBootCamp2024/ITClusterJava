@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface Service<T> {
 
-    T create(T specialty);
+    T create(T entity);
 
     Optional<T> readById(long id);
 

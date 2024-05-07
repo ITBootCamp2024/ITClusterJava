@@ -2,12 +2,13 @@ package com.ua.itclusterjava2024.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "answers")
 public class Answer {
     @Id
@@ -32,7 +33,7 @@ public class Answer {
     private String comment;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "review_id", nullable = false)
     private Reviews review;
 
