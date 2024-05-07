@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface AnswerService extends Service<Answer>{
     List<Answer> findAllByReviewId(Long reviewId);
+    Long countAllByReviewId(Long reviewId);
 }
