@@ -6,9 +6,9 @@ import lombok.*;
 
 @Getter
 @Setter
-@Entity
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
+@Entity
 @Table(name = "answers")
 public class Answer {
     @Id
