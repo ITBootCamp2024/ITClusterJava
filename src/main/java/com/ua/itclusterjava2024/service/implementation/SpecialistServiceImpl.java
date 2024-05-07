@@ -50,17 +50,4 @@ public class SpecialistServiceImpl implements SpecialistService {
         return specialistRepository.findAll(pageable);
     }
 
-
-    @Override
-    public void setVerified(Long specialistId, Boolean verified) {
-        Specialist specialist = specialistRepository.findById(specialistId)
-                .orElseThrow(() -> new EntityNotFoundException("Specialist with id " + specialistId + " not found"));
-
-        if (!specialist.getVerified().equals(verified)) {
-            specialist.setVerified(verified);
-            update(specialist.getId(), specialist);
-        }
-    }
-
-
 }

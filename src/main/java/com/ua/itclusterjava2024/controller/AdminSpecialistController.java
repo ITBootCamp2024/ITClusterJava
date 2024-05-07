@@ -2,12 +2,12 @@ package com.ua.itclusterjava2024.controller;
 
 import com.ua.itclusterjava2024.dto.DisciplineGroupsDTO;
 import com.ua.itclusterjava2024.dto.SpecialistDTO;
-import com.ua.itclusterjava2024.dto.request.UpdateVerifiedRequest;
 import com.ua.itclusterjava2024.entity.DisciplineBlocks;
 import com.ua.itclusterjava2024.entity.DisciplineGroups;
 import com.ua.itclusterjava2024.entity.Specialist;
 import com.ua.itclusterjava2024.service.interfaces.SpecialistService;
 import com.ua.itclusterjava2024.wrappers.SpecialistPageWrapper;
+import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -44,9 +44,14 @@ public class AdminSpecialistController {
         return ResponseEntity.ok(response);
     }
 
-    @PatchMapping
-    public ResponseEntity<SpecialistPageWrapper> update(@RequestBody UpdateVerifiedRequest request) {
-        specialistService.setVerified(request.getSpecialistId(), request.getVerified());
+    @PatchMapping("/{specialist_id}")
+    public ResponseEntity<SpecialistPageWrapper> update(@PathVariable Long specialist_id) {
+        Specialist specialist = specialistService.readById(specialist_id)
+                .orElseThrow(() -> new EntityNotFoundException("Specialist not found with id: " + specialist_id));
+        if (!specialist.getVerified()) {
+            specialist.setVerified(true);
+            specialistService.update(specialist.getId(), specialist);
+        }
         return find();
     }
 
