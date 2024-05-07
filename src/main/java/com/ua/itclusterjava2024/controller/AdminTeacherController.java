@@ -34,7 +34,7 @@ public class AdminTeacherController {
 
     @PatchMapping()
     public ResponseEntity<TeacherPageWrapper> updateVerifiedTeachersList(@RequestBody TeacherVerifiedRequest request){
-        teachersService.setVerified(request.getTeacher_id(), request.getVerified());
+        teachersService.setVerified(request.getTeacherId(), request.getVerified());
         return getVerifiedTeachersList();
     }
 

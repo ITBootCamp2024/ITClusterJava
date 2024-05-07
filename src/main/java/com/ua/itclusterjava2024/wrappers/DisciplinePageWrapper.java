@@ -1,5 +1,6 @@
 package com.ua.itclusterjava2024.wrappers;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ua.itclusterjava2024.dto.DisciplineGroupsDTO;
 import com.ua.itclusterjava2024.dto.SpecialistDTO;
 import lombok.AllArgsConstructor;
@@ -19,7 +20,8 @@ public class DisciplinePageWrapper {
     @NoArgsConstructor
     @Data
     public static class Content {
-        private Long admin_id;
+        @JsonProperty("admin_id")
+        private Long adminId;
         private List<DisciplineGroupsDTO> disciplineGroups;
     }
 }
