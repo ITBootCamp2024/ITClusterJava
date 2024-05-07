@@ -5,7 +5,6 @@ import com.ua.itclusterjava2024.entity.*;
 import com.ua.itclusterjava2024.exceptions.ValidationException;
 import com.ua.itclusterjava2024.service.interfaces.DisciplineBlocksService;
 import com.ua.itclusterjava2024.service.interfaces.DisciplineGroupService;
-import com.ua.itclusterjava2024.validators.CourseGroupValidator;
 import com.ua.itclusterjava2024.wrappers.PageWrapper;
 import com.ua.itclusterjava2024.wrappers.Patcher;
 import jakarta.persistence.EntityManager;
@@ -24,16 +23,14 @@ public class DisciplineGroupController {
     private final DisciplineGroupService disciplineGroupService;
     private final DisciplineBlocksService disciplineBlocksService;
     private final ModelMapper modelMapper;
-    private final CourseGroupValidator courseGroupValidator;
     private final Patcher<DisciplineGroups> patcher;
     private final EntityManager entityManager;
 
     @Autowired
-    public DisciplineGroupController(DisciplineGroupService disciplineGroupService, DisciplineBlocksService disciplineBlocksService, ModelMapper modelMapper, CourseGroupValidator courseGroupValidator, Patcher<DisciplineGroups> patcher, EntityManager entityManager) {
+    public DisciplineGroupController(DisciplineGroupService disciplineGroupService, DisciplineBlocksService disciplineBlocksService, ModelMapper modelMapper, Patcher<DisciplineGroups> patcher, EntityManager entityManager) {
         this.disciplineGroupService = disciplineGroupService;
         this.disciplineBlocksService = disciplineBlocksService;
         this.modelMapper = modelMapper;
-        this.courseGroupValidator = courseGroupValidator;
         this.patcher = patcher;
         this.entityManager = entityManager;
     }
@@ -54,7 +51,6 @@ public class DisciplineGroupController {
     @PostMapping
     public PageWrapper<DisciplineGroupsDTO> save(@RequestBody @Valid DisciplineGroupsDTO disciplineGroupsDTO,
                                                  BindingResult bindingResult) {
-        courseGroupValidator.validate(disciplineGroupsDTO, bindingResult);
         if (bindingResult.hasErrors()) {
             throw new ValidationException(bindingResult);
         }

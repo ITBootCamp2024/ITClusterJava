@@ -1,5 +1,6 @@
 package com.ua.itclusterjava2024.wrappers;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ua.itclusterjava2024.dto.TeachersDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,9 +12,14 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 public class TeacherPageWrapper {
+
     private Content content;
-    private long total_teacher;
-    private long verified_teacher;
+
+    @JsonProperty("total_teacher")
+    private long totalTeacher;
+
+    @JsonProperty("verified_teacher")
+    private long verifiedTeacher;
 
 
     @AllArgsConstructor

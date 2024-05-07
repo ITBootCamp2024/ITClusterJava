@@ -1,4 +1,4 @@
-package com.ua.itclusterjava2024.service.implementation;
+package com.ua.itclusterjava2024.security;
 
 import com.ua.itclusterjava2024.entity.User;
 import io.jsonwebtoken.*;
@@ -100,8 +100,6 @@ public class JwtService {
         return claimsResolvers.apply(claims);
     }
 
-
-    // Extracts all data from token
     private Claims extractAllClaims(String token) {
         return Jwts.parser()
                 .verifyWith(getSigningKey())
@@ -110,7 +108,6 @@ public class JwtService {
                 .getPayload();
     }
 
-    // Gets signing key for generating token
     private SecretKey getSigningKey() {
         byte[] keyBytes = Decoders.BASE64.decode(accessTokenSecret);
         return Keys.hmacShaKeyFor(keyBytes);

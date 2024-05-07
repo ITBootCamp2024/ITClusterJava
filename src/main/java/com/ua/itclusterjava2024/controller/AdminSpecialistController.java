@@ -46,7 +46,7 @@ public class AdminSpecialistController {
 
     @PatchMapping
     public ResponseEntity<SpecialistPageWrapper> update(@RequestBody UpdateVerifiedRequest request) {
-        specialistService.setVerified(request.getSpecialist_id(), request.getVerified());
+        specialistService.setVerified(request.getSpecialistId(), request.getVerified());
         return find();
     }
 
