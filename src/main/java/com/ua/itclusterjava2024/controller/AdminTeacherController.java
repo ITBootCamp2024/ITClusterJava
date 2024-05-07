@@ -3,10 +3,8 @@ package com.ua.itclusterjava2024.controller;
 import com.ua.itclusterjava2024.dto.*;
 import com.ua.itclusterjava2024.dto.request.TeacherVerifiedRequest;
 import com.ua.itclusterjava2024.entity.Teachers;
-import com.ua.itclusterjava2024.service.interfaces.SyllabusesService;
 import com.ua.itclusterjava2024.service.interfaces.TeachersService;
 import com.ua.itclusterjava2024.wrappers.TeacherPageWrapper;
-import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,13 +15,9 @@ import java.util.List;
 public class AdminTeacherController {
 
     private final TeachersService teachersService;
-    private final SyllabusesService syllabusesService;
-    private final ModelMapper modelMapper;
 
-    public AdminTeacherController(TeachersService teachersService, SyllabusesService syllabusesService, ModelMapper modelMapper) {
+    public AdminTeacherController(TeachersService teachersService) {
         this.teachersService = teachersService;
-        this.syllabusesService = syllabusesService;
-        this.modelMapper = modelMapper;
     }
 
 
@@ -39,7 +33,7 @@ public class AdminTeacherController {
     }
 
     @PatchMapping()
-    public ResponseEntity<?> updateVerifiedTeachersList(@RequestBody TeacherVerifiedRequest request){
+    public ResponseEntity<TeacherPageWrapper> updateVerifiedTeachersList(@RequestBody TeacherVerifiedRequest request){
         teachersService.setVerified(request.getTeacher_id(), request.getVerified());
         return getVerifiedTeachersList();
     }

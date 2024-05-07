@@ -11,19 +11,19 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name="discipline_blocks")
+@Table(name = "discipline_blocks")
 public class DisciplineBlocks {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     @Id
     Long id;
 
-    @Column(name="name", nullable = false)
+    @Column(name = "name", nullable = false)
     @NotEmpty
     @Size(max = 255, message = "Name of discipline block have to contain up to 255 symbols")
     String name;
 
-    @Column(name="description")
+    @Column(name = "description")
     @NotEmpty
     String description;
 }

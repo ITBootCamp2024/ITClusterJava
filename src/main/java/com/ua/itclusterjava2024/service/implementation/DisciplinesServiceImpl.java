@@ -1,6 +1,5 @@
 package com.ua.itclusterjava2024.service.implementation;
 
-import com.ua.itclusterjava2024.dto.DisciplinesDTO;
 import com.ua.itclusterjava2024.entity.Disciplines;
 import com.ua.itclusterjava2024.repository.DisciplinesRepository;
 import com.ua.itclusterjava2024.service.interfaces.DisciplinesService;

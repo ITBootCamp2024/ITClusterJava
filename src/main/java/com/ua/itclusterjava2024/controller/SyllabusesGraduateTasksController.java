@@ -39,7 +39,4 @@ public class SyllabusesGraduateTasksController {
         return modelMapper.map(graduateTask, GraduateTaskDTO.class);
     }
 
-    private GraduateTask convertToEntity(GraduateTaskDTO graduateTaskDTO) {
-        return modelMapper.map(graduateTaskDTO, GraduateTask.class);
-    }
 }

@@ -25,8 +25,7 @@ public class PositionServiceImpl implements PositionService {
 
     @Override
     public Optional<Position> readById(long id) {
-        Optional<Position> position = positionRepository.findById(id);
-        return position;
+        return positionRepository.findById(id);
     }
 
     @Override

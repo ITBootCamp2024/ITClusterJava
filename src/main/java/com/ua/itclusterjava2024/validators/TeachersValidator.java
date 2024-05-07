@@ -13,7 +13,7 @@ public class TeachersValidator implements Validate{
 
     @Override
     public void validate(Object target, Errors errors) {
-        TeachersDTO teachersDTO = (TeachersDTO) target;
+//        TeachersDTO teachersDTO = (TeachersDTO) target;
 //
 //        if (Validate.checkNullAndEmpty(teachersDTO.getName())) {
 //            errors.rejectValue("name", "", "Name mustn't be empty");

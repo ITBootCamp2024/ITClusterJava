@@ -9,11 +9,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/courser")
+@RequestMapping("/courses")
 public class CoursesController {
     final TeachersService teachersService;
     final DisciplinesService disciplinesService;
@@ -31,7 +30,7 @@ public class CoursesController {
                 .map(teachers1 -> TeachersDTO.builder().id(teachers1.getId()).name(teachers1.getName()).build()).toList();
         List<DisciplinesDTO> disciplinesDTOS = disciplinesService.findByTeacherId(teacherId).stream()
                 .map(discipline -> DisciplinesDTO.builder().id(discipline.getId()).name(discipline.getName()).build())
-                .collect(Collectors.toList());
+                .toList();
         List<SyllabusesDTO> syllabusesDTOs = new ArrayList<>();
         for (DisciplinesDTO disciplineDTO : disciplinesDTOS) {
             List<SyllabusesDTO> syllabuses = syllabusesService.findByDisciplineId(disciplineDTO.getId()).stream()
@@ -40,7 +39,7 @@ public class CoursesController {
             syllabusesDTOs.addAll(syllabuses);
         }
         PageWrapper<CoursesDTO> pageWrapper = new PageWrapper<>();
-        List<CoursesDTO> coursesDTOS =  List.of(CoursesDTO.builder().teacherDTO(teachers).disciplinesDTO(disciplinesDTOS).syllabusesDTO(syllabusesDTOs).build());
+        List<CoursesDTO> coursesDTOS = List.of(CoursesDTO.builder().teacherDTO(teachers).disciplinesDTO(disciplinesDTOS).syllabusesDTO(syllabusesDTOs).build());
         pageWrapper.setContent(coursesDTOS);
         pageWrapper.setTotalElements(teachers.size());
         return pageWrapper;
