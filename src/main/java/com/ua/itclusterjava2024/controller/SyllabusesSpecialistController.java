@@ -1,8 +1,9 @@
 package com.ua.itclusterjava2024.controller;
 
-import com.ua.itclusterjava2024.dto.AnswerDTO;
+import com.ua.itclusterjava2024.dto.AnswersDTO;
 import com.ua.itclusterjava2024.dto.SyllabusAnswersDTO;
 import com.ua.itclusterjava2024.dto.SyllabusReviewDTO;
+import com.ua.itclusterjava2024.dto.request.AnswersRequest;
 import com.ua.itclusterjava2024.entity.Answer;
 import com.ua.itclusterjava2024.entity.Reviews;
 import com.ua.itclusterjava2024.entity.Syllabuses;
@@ -58,7 +59,7 @@ public class SyllabusesSpecialistController {
         if (Boolean.FALSE.equals(syllabusesService.existsById(syllabusId))) {
             throw new EntityNotFoundException("Syllabus with id " + syllabusId + " not found");
         }
-        syllabusesService.updateStatus(syllabusId, "На рецензії");
+        syllabusesService.updateStatus(syllabusId, "Відправлено на рецензію");
         reviewsService.updateAcceptedBySpecialistIdAndSyllabusId(specialistId, syllabusId, true);
         return getProposedSyllabuses(specialistId);
     }
@@ -70,12 +71,12 @@ public class SyllabusesSpecialistController {
 
         List<SyllabusAnswersDTO> syllabusAnswersDTOS = acceptedReviews.stream()
                 .map(review -> {
-                    List<AnswerDTO> answerDTOS = answerService.findAllByReviewId(review.getId())
+                    List<AnswersDTO> answersDTOS = answerService.findAllByReviewId(review.getId())
                             .stream()
-                            .map(answer -> modelMapper.map(answer, AnswerDTO.class))
+                            .map(answer -> modelMapper.map(answer, AnswersDTO.class))
                             .toList();
 
-                    return new SyllabusAnswersDTO(review.getSyllabus().getId(), answerDTOS);
+                    return new SyllabusAnswersDTO(review.getSyllabus().getId(), answersDTOS);
                 })
                 .toList();
 
@@ -83,16 +84,18 @@ public class SyllabusesSpecialistController {
     }
 
     @PostMapping("/answers/{specialist_id}")
-    public PageWrapper<SyllabusAnswersDTO> setSyllabusAnswers(@PathVariable("specialist_id") Long specialistId, @RequestBody AnswerDTO answerDTO) {
-        Reviews review = reviewsService.findAcceptedBySpecialistIdAndSyllabusId(specialistId, answerDTO.getSyllabusId())
-                .orElseThrow(() -> new EntityNotFoundException("Прийнятий відгук не знайдено для фахівця " + specialistId + " та сілабусу " + answerDTO.getSyllabusId()));
+    public PageWrapper<SyllabusAnswersDTO> setSyllabusAnswers(@PathVariable("specialist_id") Long specialistId, @RequestBody AnswersRequest answersRequest) {
+        Reviews review = reviewsService.findAcceptedBySpecialistIdAndSyllabusId(specialistId, answersRequest.getSyllabusId())
+                .orElseThrow(() -> new EntityNotFoundException("Прийнятий відгук не знайдено для фахівця " + specialistId + " та сілабусу " + answersRequest.getSyllabusId()));
 
-        Answer answer = modelMapper.map(answerDTO, Answer.class);
-        answer.setReview(review);
-        answerService.create(answer);
+        for (AnswersDTO answersDTO: answersRequest.getAnswers()){
+            Answer answer = modelMapper.map(answersDTO, Answer.class);
+            answer.setReview(review);
+            answerService.create(answer);
+        }
 
         if (answerService.countAllByReviewId(review.getId()) >= 10) {
-            syllabusesService.updateStatus(answerDTO.getSyllabusId(), "Рецензовано");
+            syllabusesService.updateStatus(answersRequest.getSyllabusId(), "Рецензовано");
         }
         return getSyllabusAnswers(specialistId);
     }
