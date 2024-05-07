@@ -2,10 +2,13 @@ package com.ua.itclusterjava2024.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ua.itclusterjava2024.entity.User;
-import lombok.Data;
+import lombok.*;
 
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class RegisterResponse {
 
     @JsonProperty(required = true)

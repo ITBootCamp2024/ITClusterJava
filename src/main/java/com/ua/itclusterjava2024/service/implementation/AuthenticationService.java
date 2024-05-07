@@ -9,6 +9,7 @@ import com.ua.itclusterjava2024.dto.response.RegisterResponse;
 import com.ua.itclusterjava2024.entity.User;
 import com.ua.itclusterjava2024.exceptions.JwtTokenException;
 import com.ua.itclusterjava2024.repository.RoleRepository;
+import com.ua.itclusterjava2024.security.JwtService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;

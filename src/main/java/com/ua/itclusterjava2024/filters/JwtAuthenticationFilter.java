@@ -2,7 +2,7 @@ package com.ua.itclusterjava2024.filters;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ua.itclusterjava2024.dto.response.JwtErrorResponse;
-import com.ua.itclusterjava2024.service.implementation.JwtService;
+import com.ua.itclusterjava2024.security.JwtService;
 import com.ua.itclusterjava2024.service.implementation.UserServiceImpl;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
