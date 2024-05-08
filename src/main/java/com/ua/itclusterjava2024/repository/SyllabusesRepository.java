@@ -17,5 +17,7 @@ public interface SyllabusesRepository extends JpaRepository<Syllabuses, Long> {
     @Modifying
     @Query("UPDATE Syllabuses s SET s.status = ?2 WHERE s.id = ?1")
     void updateStatusBySyllabusId(@Param("id") Long id, String status);
+
+    List<Syllabuses> findAllByStatus(String status);
 }
 

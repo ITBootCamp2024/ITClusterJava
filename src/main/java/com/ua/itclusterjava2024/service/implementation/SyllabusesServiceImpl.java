@@ -92,4 +92,9 @@ public class SyllabusesServiceImpl implements SyllabusesService {
     public void updateStatus(Long id, String status) {
         syllabusesRepository.updateStatusBySyllabusId(id, status);
     }
+
+    @Override
+    public List<Syllabuses> getAllByStatus(String status) {
+        return syllabusesRepository.findAllByStatus(status);
+    }
 }

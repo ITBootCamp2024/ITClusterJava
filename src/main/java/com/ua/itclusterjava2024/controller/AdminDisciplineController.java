@@ -27,8 +27,9 @@ public class AdminDisciplineController {
     }
 
     @GetMapping
-    public ResponseEntity<DisciplinePageWrapper> find() {
-        List<DisciplinesDTO> disciplinesDTO = syllabusesService.getAll().stream()
+    public ResponseEntity<DisciplinePageWrapper> findFilledDisciplines() {
+        List<DisciplinesDTO> disciplinesDTO = syllabusesService.getAllByStatus("Заповнено")
+                .stream()
                 .map(this::convertSyllabusesToDisciplinesDTO)
                 .toList();
 
@@ -42,11 +43,11 @@ public class AdminDisciplineController {
     }
 
     @PostMapping
-    public ResponseEntity<DisciplinePageWrapper> create(@RequestBody @Valid ReviewDTO reviewDTO) {
+    public ResponseEntity<DisciplinePageWrapper> createReviews(@RequestBody @Valid ReviewDTO reviewDTO) {
         Reviews review = convertReviewDTOToEntity(reviewDTO);
         reviewsService.create(review);
         syllabusesService.updateStatus(review.getSyllabus().getId(), "Відправлено на рецензію");
-        return find();
+        return findFilledDisciplines();
     }
 
     private Reviews convertReviewDTOToEntity(ReviewDTO reviewDTO) {
@@ -84,10 +85,15 @@ public class AdminDisciplineController {
     }
 
     private SyllabusesDTO convertSyllabusesToDTO(Syllabuses syllabuses) {
+        Specialist specialist = reviewsService.findSpecialistBySyllabusId(syllabuses.getId());
         return SyllabusesDTO.builder()
                 .id(syllabuses.getId())
                 .name(syllabuses.getName())
                 .status(syllabuses.getStatus())
+                .specialist(SpecialistDTO.builder()
+                        .id(specialist.getId())
+                        .name(specialist.getName())
+                        .build())
                 .build();
     }
 

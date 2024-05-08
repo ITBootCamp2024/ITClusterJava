@@ -1,6 +1,7 @@
 package com.ua.itclusterjava2024.repository;
 
 import com.ua.itclusterjava2024.entity.Reviews;
+import com.ua.itclusterjava2024.entity.Specialist;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -21,10 +22,15 @@ public interface ReviewsRepository extends JpaRepository<Reviews, Long> {
 
     Boolean existsBySpecialistIdAndSyllabusId(Long specialistId, Long syllabusId);
 
+    Optional<Reviews> findBySyllabusId(Long syllabusId);
+
     @Modifying
     @Query("UPDATE Reviews r SET r.accepted = :accepted " +
             "WHERE r.specialist.id = :specialistId AND r.syllabus.id = :syllabusId")
     void updateAcceptedBySpecialistIdAndSyllabusId(@Param("specialistId") Long specialistId,
                                                    @Param("syllabusId") Long syllabusId,
                                                    @Param("accepted") Boolean accepted);
+
+    @Query("SELECT r.specialist FROM Reviews r WHERE r.syllabus.id = :syllabusId")
+    Optional<Specialist> findSpecialistBySyllabusId(Long syllabusId);
 }
