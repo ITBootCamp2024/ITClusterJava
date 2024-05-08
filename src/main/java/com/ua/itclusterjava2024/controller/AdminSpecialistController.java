@@ -34,12 +34,13 @@ public class AdminSpecialistController {
                 .map(this::convertToDTO)
                 .toList();
 
-        long verifiedCount = allSpecialistsDTO.size();
-        long notVerifiedCount = allSpecialistsDTO.size() - verifiedCount;
+        long totalSpecialists = allSpecialistsDTO.size();
+        long verifiedCount = allSpecialistsDTO.stream().filter(SpecialistDTO::getVerified).count();
+
         SpecialistPageWrapper response = new SpecialistPageWrapper(
                 new SpecialistPageWrapper.Content(allSpecialistsDTO),
-                verifiedCount,
-                notVerifiedCount
+                totalSpecialists,
+                verifiedCount
         );
 
         return ResponseEntity.ok(response);
