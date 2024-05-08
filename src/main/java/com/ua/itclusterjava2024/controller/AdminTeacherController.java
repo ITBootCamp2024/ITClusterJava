@@ -5,6 +5,7 @@ import com.ua.itclusterjava2024.dto.request.TeacherVerifiedRequest;
 import com.ua.itclusterjava2024.entity.Teachers;
 import com.ua.itclusterjava2024.service.interfaces.TeachersService;
 import com.ua.itclusterjava2024.wrappers.TeacherPageWrapper;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,7 +36,11 @@ public class AdminTeacherController {
 
     @PatchMapping()
     public ResponseEntity<TeacherPageWrapper> updateVerifiedTeachersList(@RequestBody TeacherVerifiedRequest request){
-        teachersService.setVerified(request.getTeacherId(), request.getVerified());
+        Teachers teacher = teachersService.readById(request.getTeacherId())
+                .orElseThrow(() -> new EntityNotFoundException("Teacher with id: " + request.getVerified() + "wasn't found"));
+        teacher.setVerified(request.getVerified());
+        teachersService.update(teacher.getId(), teacher);
+
         return getVerifiedTeachersList();
     }
 
