@@ -33,6 +33,8 @@ public class ReviewsServiceImpl implements ReviewsService {
             throw new EntityNotFoundException("Syllabus with id " + review.getSyllabus().getId() + " not found");
         if (!specialistRepository.existsById(review.getSpecialist().getId()))
             throw new EntityNotFoundException("Specialist with id " + review.getSpecialist().getId() + " not found");
+        if (Boolean.TRUE.equals(reviewsRepository.existsBySpecialistIdAndSyllabusId(review.getSpecialist().getId(), review.getSyllabus().getId())))
+            throw new EntityNotFoundException("Review with specialist_id " + review.getSpecialist().getId() + " and syllabus_id " + review.getSyllabus().getId() + " already exists");
         return reviewsRepository.save(review);
     }
 
