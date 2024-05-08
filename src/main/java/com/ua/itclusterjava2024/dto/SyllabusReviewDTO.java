@@ -25,6 +25,9 @@ public class SyllabusReviewDTO {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String disciplineBlock;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private String status;
+
     @NotNull
     private Boolean accepted;
 }
