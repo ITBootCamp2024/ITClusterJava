@@ -2,6 +2,8 @@ package com.ua.itclusterjava2024.service.implementation;
 
 import com.ua.itclusterjava2024.entity.Reviews;
 import com.ua.itclusterjava2024.repository.ReviewsRepository;
+import com.ua.itclusterjava2024.repository.SpecialistRepository;
+import com.ua.itclusterjava2024.repository.SyllabusesRepository;
 import com.ua.itclusterjava2024.service.interfaces.ReviewsService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.data.domain.Page;
@@ -16,14 +18,22 @@ import java.util.Optional;
 public class ReviewsServiceImpl implements ReviewsService {
 
     private final ReviewsRepository reviewsRepository;
+    private final SyllabusesRepository syllabusesRepository;
+    private final SpecialistRepository specialistRepository;
 
-    public ReviewsServiceImpl(ReviewsRepository reviewsRepository) {
+    public ReviewsServiceImpl(ReviewsRepository reviewsRepository, SyllabusesRepository syllabusesRepository, SpecialistRepository specialistRepository) {
         this.reviewsRepository = reviewsRepository;
+        this.syllabusesRepository = syllabusesRepository;
+        this.specialistRepository = specialistRepository;
     }
 
     @Override
-    public Reviews create(Reviews specialty) {
-        return reviewsRepository.save(specialty);
+    public Reviews create(Reviews review) {
+        if (!syllabusesRepository.existsById(review.getSyllabus().getId()))
+            throw new EntityNotFoundException("Syllabus with id " + review.getSyllabus().getId() + " not found");
+        if (!specialistRepository.existsById(review.getSpecialist().getId()))
+            throw new EntityNotFoundException("Specialist with id " + review.getSpecialist().getId() + " not found");
+        return reviewsRepository.save(review);
     }
 
     @Override
