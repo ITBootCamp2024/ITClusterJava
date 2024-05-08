@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @CrossOrigin
 @RestController
@@ -85,16 +86,19 @@ public class AdminDisciplineController {
     }
 
     private SyllabusesDTO convertSyllabusesToDTO(Syllabuses syllabuses) {
-        Specialist specialist = reviewsService.findSpecialistBySyllabusId(syllabuses.getId());
+        Optional<Specialist> specialist = reviewsService.findSpecialistBySyllabusId(syllabuses.getId());
         return SyllabusesDTO.builder()
                 .id(syllabuses.getId())
                 .name(syllabuses.getName())
                 .status(syllabuses.getStatus())
-                .specialist(SpecialistDTO.builder()
-                        .id(specialist.getId())
-                        .name(specialist.getName())
-                        .build())
+                .specialist(specialist.map(this::mapSpecialistToDTO).orElse(null))
                 .build();
     }
 
+    private SpecialistDTO mapSpecialistToDTO(Specialist specialist) {
+        return SpecialistDTO.builder()
+                .id(specialist.getId())
+                .name(specialist.getName())
+                .build();
+    }
 }
