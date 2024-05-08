@@ -44,7 +44,7 @@ public class AdminSpecialistController {
 
         return ResponseEntity.ok(response);
     }
-
+    @CrossOrigin
     @PatchMapping()
     public ResponseEntity<SpecialistPageWrapper> update(@RequestBody SpecialistVerifiedRequest request) {
         Specialist specialist = specialistService.readById(request.getSpecialistId())

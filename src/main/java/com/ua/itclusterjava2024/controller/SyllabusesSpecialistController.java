@@ -106,6 +106,7 @@ public class SyllabusesSpecialistController {
                 .syllabusId(syllabus.getId())
                 .discipline(syllabus.getDisciplines().getName())
                 .disciplineBlock(syllabus.getDisciplines().getDisciplineGroups().getDisciplineBlocks().getName())
+                .status(syllabus.getStatus())
                 .accepted(accepted)
                 .build();
     }
