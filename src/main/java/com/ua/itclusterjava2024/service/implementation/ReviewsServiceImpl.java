@@ -95,8 +95,7 @@ public class ReviewsServiceImpl implements ReviewsService {
     }
 
     @Override
-    public Specialist findSpecialistBySyllabusId(Long syllabusId) {
-        return reviewsRepository.findSpecialistBySyllabusId(syllabusId)
-                .orElseThrow(() -> new EntityNotFoundException("Specialist with syllabus_id " + syllabusId + " not found"));
+    public Optional<Specialist> findSpecialistBySyllabusId(Long syllabusId) {
+        return reviewsRepository.findSpecialistBySyllabusId(syllabusId);
     }
 }
