@@ -57,15 +57,4 @@ public class TeachersServiceImpl implements TeachersService {
     public Page<Teachers> getAll(Pageable pageable) {
         return teachersRepository.findAll(pageable);
     }
-
-    @Override
-    public void setVerified(Long teacherId, Boolean verified) {
-        Teachers teacher = teachersRepository.findById(teacherId)
-                .orElseThrow(() -> new EntityNotFoundException("Teacher with id " + teacherId + " not found"));
-
-        if (!teacher.getVerified().equals(verified)) {
-            teacher.setVerified(verified);
-            update(teacher.getId(), teacher);
-        }
-    }
 }
