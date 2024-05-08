@@ -15,4 +15,6 @@ public interface SyllabusesService extends Service<Syllabuses> {
     Boolean existsById(Long id);
 
     void updateStatus(Long id, String status);
+
+    List<Syllabuses> getAllByStatus(String status);
 }

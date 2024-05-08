@@ -1,6 +1,7 @@
 package com.ua.itclusterjava2024.service.implementation;
 
 import com.ua.itclusterjava2024.entity.Reviews;
+import com.ua.itclusterjava2024.entity.Specialist;
 import com.ua.itclusterjava2024.repository.ReviewsRepository;
 import com.ua.itclusterjava2024.repository.SpecialistRepository;
 import com.ua.itclusterjava2024.repository.SyllabusesRepository;
@@ -29,12 +30,23 @@ public class ReviewsServiceImpl implements ReviewsService {
 
     @Override
     public Reviews create(Reviews review) {
-        if (!syllabusesRepository.existsById(review.getSyllabus().getId()))
-            throw new EntityNotFoundException("Syllabus with id " + review.getSyllabus().getId() + " not found");
-        if (!specialistRepository.existsById(review.getSpecialist().getId()))
-            throw new EntityNotFoundException("Specialist with id " + review.getSpecialist().getId() + " not found");
-        if (Boolean.TRUE.equals(reviewsRepository.existsBySpecialistIdAndSyllabusId(review.getSpecialist().getId(), review.getSyllabus().getId())))
-            throw new EntityNotFoundException("Review with specialist_id " + review.getSpecialist().getId() + " and syllabus_id " + review.getSyllabus().getId() + " already exists");
+        Long syllabusId = review.getSyllabus().getId();
+        Long specialistId = review.getSpecialist().getId();
+
+        if (!syllabusesRepository.existsById(syllabusId))
+            throw new EntityNotFoundException("Syllabus with id " + syllabusId + " not found");
+        if (!specialistRepository.existsById(specialistId))
+            throw new EntityNotFoundException("Specialist with id " + specialistId + " not found");
+
+        Optional<Reviews> existingReviewOptional = reviewsRepository.findBySyllabusId(syllabusId);
+        if (existingReviewOptional.isPresent()) {
+            Reviews existingReview = existingReviewOptional.get();
+            if (!existingReview.getSpecialist().getId().equals(specialistId)) {
+                existingReview.setSpecialist(review.getSpecialist());
+                return reviewsRepository.save(existingReview);
+            } else
+                throw new EntityNotFoundException("Review with specialist_id " + specialistId + " and syllabus_id " + syllabusId + " already exists");
+        }
         return reviewsRepository.save(review);
     }
 
@@ -80,5 +92,11 @@ public class ReviewsServiceImpl implements ReviewsService {
     @Override
     public Optional<Reviews> findAcceptedBySpecialistIdAndSyllabusId(Long specialistId, Long syllabusId) {
         return reviewsRepository.findBySpecialistIdAndSyllabusIdAndAcceptedTrue(specialistId, syllabusId);
+    }
+
+    @Override
+    public Specialist findSpecialistBySyllabusId(Long syllabusId) {
+        return reviewsRepository.findSpecialistBySyllabusId(syllabusId)
+                .orElseThrow(() -> new EntityNotFoundException("Specialist with syllabus_id " + syllabusId + " not found"));
     }
 }

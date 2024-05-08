@@ -1,6 +1,7 @@
 package com.ua.itclusterjava2024.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.*;
@@ -12,6 +13,10 @@ import lombok.*;
 @AllArgsConstructor
 public class SyllabusesDTO {
     private Long id;
+
+    @JsonProperty("specialist_id")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private SpecialistDTO specialist;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @NotEmpty

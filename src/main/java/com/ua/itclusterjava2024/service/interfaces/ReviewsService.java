@@ -1,6 +1,7 @@
 package com.ua.itclusterjava2024.service.interfaces;
 
 import com.ua.itclusterjava2024.entity.Reviews;
+import com.ua.itclusterjava2024.entity.Specialist;
 
 import java.util.List;
 import java.util.Optional;
@@ -12,4 +13,6 @@ public interface ReviewsService extends Service<Reviews> {
     List<Reviews> findAcceptedBySpecialistId(Long specialistId);
 
     Optional<Reviews> findAcceptedBySpecialistIdAndSyllabusId(Long specialistId, Long syllabusId);
+
+    Specialist findSpecialistBySyllabusId(Long syllabusId);
 }
