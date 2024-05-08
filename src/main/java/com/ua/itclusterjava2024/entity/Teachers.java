@@ -29,7 +29,6 @@ public class Teachers {
     private Position position;
 
     @Column(name = "degree_level")
-    @NotEmpty
     @Size(max = 50, message = "Degree level have to contain up to 50 symbols")
     private String degreeLevel;
 
@@ -43,7 +42,6 @@ public class Teachers {
     private String email;
 
     @Column(name = "comments")
-    @NotEmpty
     private String comments;
 
     @ManyToOne
