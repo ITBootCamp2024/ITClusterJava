@@ -24,7 +24,7 @@ public class AdminTeacherController {
 
 
     @GetMapping()
-    public ResponseEntity<TeacherPageWrapper> getVerifiedTeachersList(){
+    public ResponseEntity<TeacherPageWrapper> getVerifiedTeachersList() {
         List<TeachersDTO> teachersList = teachersService.getAll().stream().map(this::convertToDTO).toList();
         long verifiedCount = teachersList.size();
         long notVerifiedCount = teachersList.size() - verifiedCount;
@@ -35,7 +35,7 @@ public class AdminTeacherController {
     }
 
     @PatchMapping()
-    public ResponseEntity<TeacherPageWrapper> updateVerifiedTeachersList(@RequestBody TeacherVerifiedRequest request){
+    public ResponseEntity<TeacherPageWrapper> updateVerifiedTeacher(@RequestBody TeacherVerifiedRequest request) {
         Teachers teacher = teachersService.readById(request.getTeacherId())
                 .orElseThrow(() -> new EntityNotFoundException("Teacher with id: " + request.getVerified() + "wasn't found"));
         teacher.setVerified(request.getVerified());
