@@ -1,7 +1,6 @@
 package com.ua.itclusterjava2024.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.*;
@@ -12,11 +11,8 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SyllabusesDTO {
-    private Long id;
 
-    @JsonProperty("specialist_id")
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    private SpecialistDTO specialist;
+    private Long id;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @NotEmpty
@@ -29,7 +25,12 @@ public class SyllabusesDTO {
     private String status;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
+    private SpecialistDTO specialist;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     @NotEmpty
     @Size(max = 45, message = "Validation_event syllabus have to contain up to 45 symbols")
     private DisciplinesDTO disciplines;
+
+
 }
