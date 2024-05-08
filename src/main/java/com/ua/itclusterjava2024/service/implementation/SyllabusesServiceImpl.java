@@ -97,4 +97,9 @@ public class SyllabusesServiceImpl implements SyllabusesService {
     public List<Syllabuses> getAllByStatus(String status) {
         return syllabusesRepository.findAllByStatus(status);
     }
+
+    @Override
+    public List<Syllabuses> getAllByStatusWithout(List<String> statuses) {
+        return syllabusesRepository.findAllByStatusNotIn(statuses);
+    }
 }

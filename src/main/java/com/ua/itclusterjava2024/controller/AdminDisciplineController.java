@@ -28,8 +28,8 @@ public class AdminDisciplineController {
 
     @GetMapping
     public ResponseEntity<DisciplinePageWrapper> findFilledDisciplines() {
-        List<DisciplinesDTO> disciplinesDTO = syllabusesService.getAllByStatus("Заповнено")
-                .stream()
+        List<DisciplinesDTO> disciplinesDTO = syllabusesService
+                .getAllByStatusWithout(List.of("Не заповнено", "На заповненні")).stream()
                 .map(this::convertSyllabusesToDisciplinesDTO)
                 .toList();
 
