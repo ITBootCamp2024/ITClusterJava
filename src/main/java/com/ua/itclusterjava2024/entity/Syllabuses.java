@@ -24,4 +24,8 @@ public class Syllabuses {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "discipline_id")
     private Disciplines disciplines;
+
+    public Syllabuses(Long id) {
+        this.id = id;
+    }
 }

@@ -82,4 +82,8 @@ public class Specialist {
     @NotNull
     @Formula("(select count(*) from reviews r where r.specialist_id = id and r.accepted = true)")
     private Long syllabusesForReview;
+
+    public Specialist(Long id) {
+        this.id = id;
+    }
 }
