@@ -13,7 +13,7 @@ public interface ReviewsService extends Service<Reviews> {
     List<Reviews> findAcceptedBySpecialistId(Long specialistId);
 
     Optional<Reviews> findAcceptedBySpecialistIdAndSyllabusId(Long specialistId, Long syllabusId);
-
-    Specialist findSpecialistBySyllabusId(Long syllabusId);
     void deleteBySpecialistIdAndSyllabusId(Long specialistId, Long syllabusId);
+    Optional<Specialist> findSpecialistBySyllabusId(Long syllabusId);
+
 }

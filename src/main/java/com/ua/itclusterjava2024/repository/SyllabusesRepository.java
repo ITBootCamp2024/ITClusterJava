@@ -19,5 +19,9 @@ public interface SyllabusesRepository extends JpaRepository<Syllabuses, Long> {
     void updateStatusBySyllabusId(@Param("id") Long id, String status);
 
     List<Syllabuses> findAllByStatus(String status);
+
+    List<Syllabuses> findAllByStatusNot(String status);
+
+    List<Syllabuses> findAllByStatusNotIn(List<String> statuses);
 }
 

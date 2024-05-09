@@ -17,4 +17,6 @@ public interface SyllabusesService extends Service<Syllabuses> {
     void updateStatus(Long id, String status);
 
     List<Syllabuses> getAllByStatus(String status);
+
+    List<Syllabuses> getAllByStatusWithout(List<String> statuses);
 }
