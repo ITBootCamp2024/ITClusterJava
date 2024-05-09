@@ -2,6 +2,7 @@ package com.ua.itclusterjava2024.service.implementation;
 
 import com.ua.itclusterjava2024.entity.Reviews;
 import com.ua.itclusterjava2024.entity.Specialist;
+import com.ua.itclusterjava2024.repository.AnswerRepository;
 import com.ua.itclusterjava2024.repository.ReviewsRepository;
 import com.ua.itclusterjava2024.repository.SpecialistRepository;
 import com.ua.itclusterjava2024.repository.SyllabusesRepository;
@@ -21,34 +22,51 @@ public class ReviewsServiceImpl implements ReviewsService {
     private final ReviewsRepository reviewsRepository;
     private final SyllabusesRepository syllabusesRepository;
     private final SpecialistRepository specialistRepository;
+    private final AnswerRepository answerRepository;
 
-    public ReviewsServiceImpl(ReviewsRepository reviewsRepository, SyllabusesRepository syllabusesRepository, SpecialistRepository specialistRepository) {
+    public ReviewsServiceImpl(ReviewsRepository reviewsRepository, SyllabusesRepository syllabusesRepository, SpecialistRepository specialistRepository, AnswerRepository answerRepository) {
         this.reviewsRepository = reviewsRepository;
         this.syllabusesRepository = syllabusesRepository;
         this.specialistRepository = specialistRepository;
+        this.answerRepository = answerRepository;
     }
 
     @Override
+    @Transactional
     public Reviews create(Reviews review) {
         Long syllabusId = review.getSyllabus().getId();
         Long specialistId = review.getSpecialist().getId();
 
-        if (!syllabusesRepository.existsById(syllabusId))
-            throw new EntityNotFoundException("Syllabus with id " + syllabusId + " not found");
-        if (!specialistRepository.existsById(specialistId))
-            throw new EntityNotFoundException("Specialist with id " + specialistId + " not found");
+        validateEntitiesExistence(syllabusId, specialistId);
 
         Optional<Reviews> existingReviewOptional = reviewsRepository.findBySyllabusId(syllabusId);
         if (existingReviewOptional.isPresent()) {
             Reviews existingReview = existingReviewOptional.get();
             if (!existingReview.getSpecialist().getId().equals(specialistId)) {
-                existingReview.setSpecialist(review.getSpecialist());
+                updateExistingReview(existingReview, review);
                 return reviewsRepository.save(existingReview);
-            } else
+            } else {
                 throw new EntityNotFoundException("Review with specialist_id " + specialistId + " and syllabus_id " + syllabusId + " already exists");
+            }
         }
         return reviewsRepository.save(review);
     }
+
+    private void validateEntitiesExistence(Long syllabusId, Long specialistId) {
+        if (!syllabusesRepository.existsById(syllabusId)) {
+            throw new EntityNotFoundException("Syllabus with id " + syllabusId + " not found");
+        }
+        if (!specialistRepository.existsById(specialistId)) {
+            throw new EntityNotFoundException("Specialist with id " + specialistId + " not found");
+        }
+    }
+
+    private void updateExistingReview(Reviews existingReview, Reviews newReview) {
+        existingReview.setSpecialist(newReview.getSpecialist());
+        existingReview.setAccepted(false);
+        answerRepository.deleteAllByReviewId(existingReview.getId());
+    }
+
 
     @Override
     public Optional<Reviews> readById(long id) {
