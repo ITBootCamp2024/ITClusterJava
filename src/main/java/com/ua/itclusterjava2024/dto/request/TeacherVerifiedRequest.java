@@ -11,5 +11,6 @@ import lombok.NoArgsConstructor;
 public class TeacherVerifiedRequest {
     @JsonProperty("teacher_id")
     private Long teacherId;
+    @JsonProperty("verified")
     private Boolean verified;
 }
