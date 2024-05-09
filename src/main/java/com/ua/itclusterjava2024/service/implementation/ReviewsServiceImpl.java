@@ -113,6 +113,11 @@ public class ReviewsServiceImpl implements ReviewsService {
     }
 
     @Override
+    public Optional<Reviews> findBySpecialistIdAndSyllabusId(Long specialistId, Long syllabusId) {
+        return reviewsRepository.findBySpecialistIdAndSyllabusId(specialistId, syllabusId);
+    }
+
+    @Override
     public Optional<Specialist> findSpecialistBySyllabusId(Long syllabusId) {
         return reviewsRepository.findSpecialistBySyllabusId(syllabusId);
     }
