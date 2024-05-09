@@ -20,7 +20,6 @@ public class SpecialistPageWrapper {
     @JsonProperty("verified_specialist")
     private long verifiedSpecialist;
 
-
     @AllArgsConstructor
     @NoArgsConstructor
     @Data

@@ -33,4 +33,6 @@ public interface ReviewsRepository extends JpaRepository<Reviews, Long> {
 
     @Query("SELECT r.specialist FROM Reviews r WHERE r.syllabus.id = :syllabusId")
     Optional<Specialist> findSpecialistBySyllabusId(Long syllabusId);
+
+    void deleteBySpecialistIdAndSyllabusId(Long specialistId, Long syllabusId);
 }

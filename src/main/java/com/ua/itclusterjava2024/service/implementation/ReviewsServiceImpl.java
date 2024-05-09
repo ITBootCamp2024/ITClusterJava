@@ -98,4 +98,11 @@ public class ReviewsServiceImpl implements ReviewsService {
     public Optional<Specialist> findSpecialistBySyllabusId(Long syllabusId) {
         return reviewsRepository.findSpecialistBySyllabusId(syllabusId);
     }
+
+    @Override
+    @Transactional
+    public void deleteBySpecialistIdAndSyllabusId(Long specialistId, Long syllabusId) {
+        reviewsRepository.deleteBySpecialistIdAndSyllabusId(specialistId, syllabusId);
+    }
+
 }
