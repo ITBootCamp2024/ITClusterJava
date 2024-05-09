@@ -15,4 +15,5 @@ public interface ReviewsService extends Service<Reviews> {
     Optional<Reviews> findAcceptedBySpecialistIdAndSyllabusId(Long specialistId, Long syllabusId);
 
     Specialist findSpecialistBySyllabusId(Long syllabusId);
+    void deleteBySpecialistIdAndSyllabusId(Long specialistId, Long syllabusId);
 }

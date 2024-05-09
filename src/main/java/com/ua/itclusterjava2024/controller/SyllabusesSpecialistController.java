@@ -4,6 +4,7 @@ import com.ua.itclusterjava2024.dto.AnswersDTO;
 import com.ua.itclusterjava2024.dto.SyllabusAnswersDTO;
 import com.ua.itclusterjava2024.dto.SyllabusReviewDTO;
 import com.ua.itclusterjava2024.dto.request.AnswersRequest;
+import com.ua.itclusterjava2024.dto.request.DeleteReviewRequest;
 import com.ua.itclusterjava2024.entity.Answer;
 import com.ua.itclusterjava2024.entity.Reviews;
 import com.ua.itclusterjava2024.entity.Syllabuses;
@@ -64,6 +65,12 @@ public class SyllabusesSpecialistController {
         return getProposedSyllabuses(specialistId);
     }
 
+    @DeleteMapping("/proposed")
+    public PageWrapper<SyllabusReviewDTO> deleteReview(@RequestBody DeleteReviewRequest deleteReviewRequest) {
+        reviewsService.deleteBySpecialistIdAndSyllabusId(deleteReviewRequest.getSpecialistId(), deleteReviewRequest.getSyllabusId());
+        syllabusesService.updateStatus(deleteReviewRequest.getSyllabusId(), "Заповнено");
+        return getProposedSyllabuses(deleteReviewRequest.getSpecialistId());
+    }
 
     @GetMapping("/answers/{specialist_id}")
     public PageWrapper<SyllabusAnswersDTO> getSyllabusAnswers(@PathVariable("specialist_id") Long specialistId) {
@@ -88,7 +95,7 @@ public class SyllabusesSpecialistController {
         Reviews review = reviewsService.findAcceptedBySpecialistIdAndSyllabusId(specialistId, answersRequest.getSyllabusId())
                 .orElseThrow(() -> new EntityNotFoundException("Прийнятий відгук не знайдено для фахівця " + specialistId + " та сілабусу " + answersRequest.getSyllabusId()));
 
-        for (AnswersDTO answersDTO: answersRequest.getAnswers()){
+        for (AnswersDTO answersDTO : answersRequest.getAnswers()) {
             Answer answer = modelMapper.map(answersDTO, Answer.class);
             answer.setReview(review);
             answerService.create(answer);
