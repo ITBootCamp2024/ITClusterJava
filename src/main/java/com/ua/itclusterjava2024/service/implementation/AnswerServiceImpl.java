@@ -6,6 +6,7 @@ import com.ua.itclusterjava2024.service.interfaces.AnswerService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -61,6 +62,7 @@ public class AnswerServiceImpl implements AnswerService {
     }
 
     @Override
+    @Transactional
     public void deleteAllByReviewId(Long reviewId) {
         answerRepository.deleteAllByReviewId(reviewId);
     }
