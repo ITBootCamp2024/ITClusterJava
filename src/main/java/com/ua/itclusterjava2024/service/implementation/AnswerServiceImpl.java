@@ -59,4 +59,9 @@ public class AnswerServiceImpl implements AnswerService {
     public Long countAllByReviewId(Long reviewId) {
         return answerRepository.countAllByReviewId(reviewId);
     }
+
+    @Override
+    public void deleteAllByReviewId(Long reviewId) {
+        answerRepository.deleteAllByReviewId(reviewId);
+    }
 }

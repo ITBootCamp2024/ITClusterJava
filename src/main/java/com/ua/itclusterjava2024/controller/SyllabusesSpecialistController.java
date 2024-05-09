@@ -67,6 +67,9 @@ public class SyllabusesSpecialistController {
 
     @DeleteMapping("/proposed")
     public PageWrapper<SyllabusReviewDTO> deleteReview(@RequestBody DeleteReviewRequest deleteReviewRequest) {
+        answerService.deleteAllByReviewId(reviewsService
+                .findAcceptedBySpecialistIdAndSyllabusId(deleteReviewRequest.getSpecialistId(),
+                        deleteReviewRequest.getSyllabusId()).orElseThrow().getId());
         reviewsService.deleteBySpecialistIdAndSyllabusId(deleteReviewRequest.getSpecialistId(), deleteReviewRequest.getSyllabusId());
         syllabusesService.updateStatus(deleteReviewRequest.getSyllabusId(), "Заповнено");
         return getProposedSyllabuses(deleteReviewRequest.getSpecialistId());
