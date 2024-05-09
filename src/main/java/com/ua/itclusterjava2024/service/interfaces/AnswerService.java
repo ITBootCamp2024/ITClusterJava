@@ -8,4 +8,5 @@ public interface AnswerService extends Service<Answer> {
     List<Answer> findAllByReviewId(Long reviewId);
 
     Long countAllByReviewId(Long reviewId);
+    void deleteAllByReviewId(Long reviewId);
 }

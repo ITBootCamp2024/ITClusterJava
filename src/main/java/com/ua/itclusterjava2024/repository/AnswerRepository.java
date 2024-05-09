@@ -10,4 +10,5 @@ import java.util.List;
 public interface AnswerRepository extends JpaRepository<Answer, Long> {
     List<Answer> findAllByReviewId(Long reviewId);
     Long countAllByReviewId(Long reviewId);
+    void deleteAllByReviewId(Long reviewId);
 }
