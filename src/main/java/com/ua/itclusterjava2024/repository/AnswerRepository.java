@@ -11,4 +11,5 @@ public interface AnswerRepository extends JpaRepository<Answer, Long> {
     List<Answer> findAllByReviewId(Long reviewId);
     Long countAllByReviewId(Long reviewId);
     void deleteAllByReviewId(Long reviewId);
+    Answer findOneByReviewIdAndTableNumberAndQuestionNumber(Long reviewId, Integer tableNumberQ, Integer questionNumber);
 }
