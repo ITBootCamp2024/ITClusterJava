@@ -101,6 +101,11 @@ public class SyllabusesSpecialistController {
         for (AnswersDTO answersDTO : answersRequest.getAnswers()) {
             Answer answer = modelMapper.map(answersDTO, Answer.class);
             answer.setReview(review);
+            Answer answerId=answerService.findByReviewIdAndTableNumberAndQuestionNumber(review.getId(),
+                    answersDTO.getTableNumber(),answersDTO.getQuestionNumber());
+            if(answerId!=null){
+                answer.setId(answerId.getId());
+            }
             answerService.create(answer);
         }
 

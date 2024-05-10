@@ -66,4 +66,9 @@ public class AnswerServiceImpl implements AnswerService {
     public void deleteAllByReviewId(Long reviewId) {
         answerRepository.deleteAllByReviewId(reviewId);
     }
+
+    @Override
+    public Answer findByReviewIdAndTableNumberAndQuestionNumber(Long reviewId, Integer tableNumber, Integer questionNumber) {
+        return answerRepository.findOneByReviewIdAndTableNumberAndQuestionNumber(reviewId,tableNumber,questionNumber);
+    }
 }

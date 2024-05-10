@@ -9,4 +9,5 @@ public interface AnswerService extends Service<Answer> {
 
     Long countAllByReviewId(Long reviewId);
     void deleteAllByReviewId(Long reviewId);
+    Answer findByReviewIdAndTableNumberAndQuestionNumber(Long reviewId, Integer tableNumber, Integer questionNumber);
 }
