@@ -65,14 +65,14 @@ public class SyllabusesSpecialistController {
         return getProposedSyllabuses(specialistId);
     }
 
-    @DeleteMapping("/proposed")
-    public PageWrapper<SyllabusReviewDTO> deleteReview(@RequestBody DeleteReviewRequest deleteReviewRequest) {
+    @DeleteMapping("/proposed/{specialist_id}")
+    public PageWrapper<SyllabusReviewDTO> deleteReview(@PathVariable("specialist_id") Long specialistId, @RequestParam("syllabus_id") Long syllabus_id) {
         answerService.deleteAllByReviewId(reviewsService
-                .findBySpecialistIdAndSyllabusId(deleteReviewRequest.getSpecialistId(),
-                        deleteReviewRequest.getSyllabusId()).orElseThrow(() -> new EntityNotFoundException("Review not found")).getId());
-        reviewsService.deleteBySpecialistIdAndSyllabusId(deleteReviewRequest.getSpecialistId(), deleteReviewRequest.getSyllabusId());
-        syllabusesService.updateStatus(deleteReviewRequest.getSyllabusId(), "Заповнено");
-        return getProposedSyllabuses(deleteReviewRequest.getSpecialistId());
+                .findBySpecialistIdAndSyllabusId(specialistId, syllabus_id)
+                .orElseThrow(() -> new EntityNotFoundException("Review not found")).getId());
+        reviewsService.deleteBySpecialistIdAndSyllabusId(specialistId, syllabus_id);
+        syllabusesService.updateStatus(syllabus_id, "Заповнено");
+        return getProposedSyllabuses(specialistId);
     }
 
     @GetMapping("/answers/{specialist_id}")
